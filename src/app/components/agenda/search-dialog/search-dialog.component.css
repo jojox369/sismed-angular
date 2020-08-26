@@ -1,0 +1,12 @@
+.mat-dialog-title {
+    color: #0087cd;
+}
+
+/* Classe que define o tamanho da div. Ela ocupara toda a div principal*/
+.container{
+    width: 100%;
+}
+
+.buttons{
+    margin-top: 190px;
+}

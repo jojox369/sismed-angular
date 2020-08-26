@@ -1,0 +1,297 @@
+<form [formGroup]="formPaciente" #frm="ngForm" (ngSubmit)="update(frm)" *ngIf="formPaciente">
+  <mat-card-title class="mat-card-title">
+    <div>
+      <span> <strong>Edição | </strong> Paciênte </span>
+
+      <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar paciênte"
+        [disabled]="frm.invalid" *ngIf="isEditing">
+        <fa-icon [icon]="faCheck"></fa-icon> Salvar
+      </button>
+
+      <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição" *ngIf="isEditing"
+        (click)="cancelEditing()">
+        <fa-icon [icon]="faBan"></fa-icon> Cancelar
+      </button>
+
+      <button mat-stroked-button class="btn-success float-right" title="Editar paciênte" *ngIf="!isEditing"
+        (click)="unblockFields()">
+        <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
+      </button>
+
+      <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir paciênte" (click)="delete()"
+        *ngIf="!isEditing">
+        <fa-icon [icon]="faTimes"></fa-icon> Excluir
+      </a>
+
+      <a mat-stroked-button [routerLink]="['/pacientes']" title="Listar os pacientes"
+        class="btn-sismed btn-spacer float-right">
+        <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+      </a>
+    </div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <!--Div que ocupa 100% do card-->
+    <div fxLayout="row" fxLayoutAlign="center start ">
+
+      <!-- Column 1 -->
+      <div class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput placeholder="Ex: ANDRÉ SOUZA" (keyup)="toUpperCase($event)" formControlName="nome"
+            autocomplete="off" maxlength="45" required (keypress)="onlyLetters($event)" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput type="date" formControlName="data_nascimento" autocomplete="off" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF</mat-label>
+          <input matInput placeholder="Ex: 000.000.000-0" mask="000.000.000-00" formControlName="cpf"
+            autocomplete="off" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RG</mat-label>
+          <input matInput placeholder="Ex: 00.000.000-0" mask="00.000.000-0" formControlName="rg" autocomplete="off"
+            maxlength="45" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Orgão Emissor</mat-label>
+          <input matInput placeholder="Ex: DETRANRJ" formControlName="orgao_emissor" (keypress)="onlyLetters($event)"
+            autocomplete="off" maxlength="45" (keyup)="toUpperCase($event)" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Emissão</mat-label>
+          <input matInput type="date" formControlName="data_emissao" autocomplete="off" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Naturalidade</mat-label>
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keypress)="onlyLetters($event)"
+            (keyup)="toUpperCase($event)" formControlName="naturalidade" autocomplete="off" maxlength="45" />
+
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nacionalidade</mat-label>
+          <mat-select formControlName="nacionalidade">
+            <mat-option value="B">BRASILEIRO(A)</mat-option>
+            <mat-option value="E">ESTRANGEIRO(A)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <!-- Column 2 -->
+      <div class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone Fixo</mat-label>
+          <input matInput formControlName="telefone_fixo" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone do Trabalho</mat-label>
+          <input matInput formControlName="telefone_trabalho" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Celular</mat-label>
+          <input matInput placeholder="Ex: (21) 9 8548-3048" mask="(00) 0 0000-0000" formControlName="celular"
+            autocomplete="off" required />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" placeholder="Ex: alana@sismed.com.br" formControlName="email" autocomplete="off"
+            maxlength="45" />
+
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sexo</mat-label>
+          <mat-select formControlName="sexo">
+            <mat-option value="M">MASCULINO</mat-option>
+            <mat-option value="F">FEMININO</mat-option>
+            <mat-option value="ND">NÃO DECLARADO</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado Civil</mat-label>
+          <mat-select formControlName="estado_civil">
+            <mat-option value="S">SOLTEIRO(A)</mat-option>
+            <mat-option value="C">CASADO(A)</mat-option>
+            <mat-option value="D">DIVORCIADO(A)</mat-option>
+            <mat-option value="V">VIÚVO(A)</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Escolaridade</mat-label>
+          <mat-select formControlName="escolaridade">
+            <mat-option value="ESC">ENSINO SUPERIOR COMPLETO</mat-option>
+            <mat-option value="ESI">ENSINO SUPERIOR INCOMPLETO</mat-option>
+            <mat-option value="EFC">ENSINO FUNDAMENTAL COMPLETO</mat-option>
+            <mat-option value="EFI">ENSINO FUNDAMENTAL INCOMPLETO</mat-option>
+            <mat-option value="EMC">ENSINO MÉDIO COMPLETO</mat-option>
+            <mat-option value="EMI">ENSINO MÉDIO INCOMPLETO</mat-option>
+            <mat-option value="M">MESTRADO</mat-option>
+            <mat-option value="D">DOUTORADO</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Profissão</mat-label>
+          <input matInput placeholder="Ex: DESENVOLVEDOR" (keyup)="toUpperCase($event)" formControlName="profissao"
+            autocomplete="off" maxlength="45" (keypress)="onlyLetters($event)" />
+
+        </mat-form-field>
+      </div>
+
+      <!-- Column 3-->
+      <div class="form">
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Recomedação</mat-label>
+          <input matInput placeholder="Ex: PRIMO, AMIGO, NAMORADA, ETC" (keyup)="toUpperCase($event)"
+            formControlName="recomendacao" autocomplete="off" maxlength="45" (keypress)="onlyLetters($event)" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Convênio</mat-label>
+          <mat-select [formControl]="convenioFormControl" (selectionChange)="getTipos()" required>
+            <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">{{convenio.nome}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Plano</mat-label>
+          <mat-select formControlName="tipo_convenio" required>
+            <mat-option *ngFor="let tipo of tiposConvenio" [value]="tipo.id">{{tipo.nome}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Carteira Convênio</mat-label>
+          <input matInput placeholder="Ex: 09706001161459812" formControlName="carteira_convenio" autocomplete="off"
+            maxlength="45" mask="00000000000000000000" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Validade</mat-label>
+          <input matInput type="date" formControlName="validade" autocomplete="off" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Situação do Paciênte</mat-label>
+          <mat-select formControlName="situacao">
+            <mat-option value="A">ATIVO</mat-option>
+            <mat-option value="I">INVATIVO</mat-option>
+            <mat-option value="F">FALECIDO</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <!-- Column 4 -->
+      <div class="form" formGroupName="endereco">
+        <mat-form-field appearance="outline">
+          <mat-label>CEP</mat-label>
+          <input matInput placeholder="Ex: 20021-120" formControlName="cep" mask="00000-000" autocomplete="off"
+            maxlength="9" (focusout)="getEndereco()" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Logradouro</mat-label>
+          <input matInput placeholder="Ex: AV. FRANKLIN ROOSEVELT" (keyup)="toUpperCase($event)"
+            formControlName="logradouro" autocomplete="off" maxlength="45" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Numero</mat-label>
+          <input matInput #numberInput placeholder="Ex: 166" formControlName="numero" autocomplete="off"
+            maxlength="6" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Complemento</mat-label>
+          <input matInput placeholder="Ex: 20021-120" formControlName="complemento" (keyup)="toUpperCase($event)"
+            autocomplete="off" maxlength="45" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Bairro</mat-label>
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="bairro"
+            autocomplete="off" maxlength="45" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cidade</mat-label>
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="cidade"
+            autocomplete="off" maxlength="45" />
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            <mat-option value="AC">ACRE</mat-option>
+            <mat-option value="AL">ALAGOAS</mat-option>
+            <mat-option value="AP">AMAPÁ</mat-option>
+            <mat-option value="AM">AMAZONAS</mat-option>
+            <mat-option value="BA">BAHIA</mat-option>
+            <mat-option value="CE">CEARÁ</mat-option>
+            <mat-option value="DF">DISTRITO FEDERAL</mat-option>
+            <mat-option value="ES">ESPÍRITO SANTO</mat-option>
+            <mat-option value="GO">GOIÁS</mat-option>
+            <mat-option value="MA">MARANHÃO</mat-option>
+            <mat-option value="MT">MATO GROSSO</mat-option>
+            <mat-option value="MS">MATO GROSSO DO SUL</mat-option>
+            <mat-option value="MG">MINAS GERAIS</mat-option>
+            <mat-option value="PA">PARÁ</mat-option>
+            <mat-option value="PB">PARAÍBA</mat-option>
+            <mat-option value="PR">PARANÁ</mat-option>
+            <mat-option value="PE">PERNAMBUCO</mat-option>
+            <mat-option value="PI">PIAUÍ</mat-option>
+            <mat-option value="RJ">RIO DE JANEIRO</mat-option>
+            <mat-option value="RN">RIO GRANDE DO NORTE</mat-option>
+            <mat-option value="RS">RIO GRANDE DO SUL</mat-option>
+            <mat-option value="RO">RONDÔNIA</mat-option>
+            <mat-option value="RR">RORAIMA</mat-option>
+            <mat-option value="SC">SANTA CATARINA</mat-option>
+            <mat-option value="SP">SÃO PAULO</mat-option>
+            <mat-option value="SE">SERGIPE</mat-option>
+            <mat-option value="TO">TOCANTINS</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
+
+</form>

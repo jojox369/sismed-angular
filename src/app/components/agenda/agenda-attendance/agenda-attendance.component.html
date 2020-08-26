@@ -1,0 +1,95 @@
+<form [formGroup]="registroForm" *ngIf="registroForm" #formDirective="ngForm" (ngSubmit)="finishAttendance(frm)"
+    #frm="ngForm">
+    <mat-card-title>
+        <button mat-stroked-button class="btn-success float-right" title="Finalizar atendimento do paciente"
+            [disabled]="frm.invalid">
+            <fa-icon [icon]="faCheck"></fa-icon> Finalizar
+        </button>
+        <a mat-stroked-button [routerLink]="['/agenda']" title="Voltar à Agenda"
+            class="btn-sismed btn-spacer float-right">
+            <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+        </a>
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row" fxLayoutAlign="center start">
+
+            <!-- Column 1-->
+            <div class="form">
+                <h5 fxLayoutAlign="center start">Médico</h5>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Médico</mat-label>
+                    <input matInput value="{{medico.nome}}" disabled />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>CRM</mat-label>
+                    <input matInput value={{medico.crm}} disabled />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Especialidade</mat-label>
+                    <input matInput value={{medico.especialidade}} disabled />
+                </mat-form-field>
+
+            </div>
+
+            <!-- Column 2 -->
+            <div class="form">
+                <h5 fxLayoutAlign="center start">Paciênte</h5>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Selecione um paciente</mat-label>
+                    <mat-select (selectionChange)=" getPacienteDetails()"
+                        [formControl]="registroForm.controls.agendamento" autofocus="autofocus" required>
+                        <mat-option *ngFor="let agendamento of agendamentos" [value]="agendamento.id">
+                            {{agendamento.paciente.nome}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="showPacienteDetails" class="pacienteDetails">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Prontuário</mat-label>
+                        <input matInput value="{{paciente.prontuario}}" disabled />
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cônvenio</mat-label>
+                        <input matInput
+                            value="{{paciente.tipo_convenio.convenio.nome === 'PARTICULAR' ? paciente.tipo_convenio.convenio.nome : paciente.tipo_convenio.convenio.nome + ' - ' + paciente.tipo_convenio.nome}}"
+                            disabled />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Data de Nascimento</mat-label>
+                        <input matInput value="{{paciente.data_nascimento | date: 'dd/MM/yyyy'}}" disabled />
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+
+            <!-- Column 2 -->
+            <div class="form">
+                <h5 fxLayoutAlign="center start">Atêndimento</h5>
+                <mat-form-field appearance="outline">
+                    <mat-label>Data do Atêndimento</mat-label>
+                    <input matInput type="date" value="{{registroForm.controls.data.value}}" disabled />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Data do Atêndimento</mat-label>
+                    <input matInput type="time" value="{{registroForm.controls.hora.value}}" disabled />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Registro do Atêndimento</mat-label>
+                    <textarea matInput formControlName="descricao" (keyup)="toUpperCase($event)" cdkTextareaAutosize
+                        cdkAutosizeMinRows="15" cdkAutosizeMaxRows="5" required></textarea>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </mat-card-content>
+
+</form>

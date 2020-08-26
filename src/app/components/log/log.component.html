@@ -1,0 +1,66 @@
+<div *ngIf="user.perfil !== 2">
+
+  <mat-card-title>
+    <span fxLayoutAlign="center center">
+      <strong>Registro de eventos</strong>
+    </span>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" *ngIf="!logIsEmpty">
+        <ng-container matColumnDef="data">
+          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <td mat-cell *matCellDef="let element" title="Data do evento">
+            {{element.data | date: 'dd/MM/yyyy'}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hora">
+          <th mat-header-cell *matHeaderCellDef>Hora</th>
+          <td mat-cell *matCellDef="let element" title="Hora do evento">
+            {{element.hora}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="funcionario">
+          <th mat-header-cell *matHeaderCellDef>Funcionário</th>
+          <td mat-cell *matCellDef="let element" title="Funcionário que realizou">{{element.funcionario.nome}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="evento">
+          <th mat-header-cell *matHeaderCellDef>Evento</th>
+          <td mat-cell *matCellDef="let element" title="Tipo de evento">{{element.evento}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="detalhes">
+          <th mat-header-cell *matHeaderCellDef>Detalhes</th>
+          <td mat-cell *matCellDef="let element" title="Tipo de evento">
+            <a (click)="openDetailsDialog(element.descricao)">Detalhes</a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <!--Mensagem que aparece quando a pesquisa retorna nula-->
+        <span *ngIf="showEmptyMessage" class="message">
+          Nenhum dado encontrado
+        </span>
+
+        <!-- Mensagem que aparece quando ocorre um erro ao recuperar os dados do back-end-->
+        <span *ngIf="hasError && !isLoading" class="message-danger">
+          Erro ao tentar carregar a lista de dados
+        </span>
+        <div>
+          <!--Spinner que aparece enquando a lista não é carregada-->
+          <mat-spinner *ngIf="isLoading"></mat-spinner>
+          <span style="margin-top: 10px;" *ngIf="isLoading">Carregando dados</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+</div>

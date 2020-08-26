@@ -1,0 +1,10 @@
+/* Define o tamanho da tabela */
+table {
+    width: 100%;
+}
+
+/* Retira o underline do link*/
+a{
+    text-decoration: none;
+    
+}

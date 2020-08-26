@@ -1,0 +1,12 @@
+button{
+  margin-top: 2rem;
+}
+
+h1{
+  color: var(--color-danger);
+  font-size: 5rem;
+}
+
+span{
+  font-size: 1.8rem;
+}

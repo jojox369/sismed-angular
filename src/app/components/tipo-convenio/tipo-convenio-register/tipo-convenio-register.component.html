@@ -1,0 +1,39 @@
+<form [formGroup]="formTipoConvenio" #frm="ngForm" (ngSubmit)="save(frm)" *ngIf="formTipoConvenio">
+    <mat-card-title class="mat-card-title">
+        <div>
+
+            <span>
+                <strong>{{convenioNome}} | </strong> Cadastro de plano
+            </span>
+
+
+            <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar convênio"
+                [disabled]="frm.invalid">
+                <fa-icon [icon]="faCheck"></fa-icon> Salvar
+            </button>
+
+
+            <a mat-stroked-button [routerLink]="['/convenio', convenioId]"
+                title="Voltar a pagina de detalhes de {{convenioNome}}" class="btn-sismed btn-spacer float-right">
+                <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+            </a>
+
+
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+
+        <!--Div que ocupa 100% do card-->
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
+            <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nome</mat-label>
+                    <input id="nome" matInput placeholder="Ex:amil" (keyup)="toUpperCase($event)" formControlName="nome"
+                        autocomplete="off" maxlength="45" required>
+
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+
+</form>

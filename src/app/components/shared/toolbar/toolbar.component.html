@@ -1,0 +1,21 @@
+<mat-toolbar class="toolbar">
+  <div class="dateTime">
+    <span class="date">{{ date }}</span>
+    <span class="time">{{ clock }}</span>
+  </div>
+  <span class="fill-remaining-space"></span>
+  <span>SISMED</span>
+  <span class="fill-remaining-space"></span>
+  <button mat-icon-button (click)="openUserDialog()" class="userButton">
+    <fa-icon [icon]="faUserCircle"></fa-icon>
+  </button>
+
+</mat-toolbar>
+
+
+<nav mat-tab-nav-bar class="menu" mat-align-tabs="center">
+  <a mat-tab-link *ngFor="let link of navLinks" (click)="activeLink = link" [active]="activeLink == link"
+    [routerLink]="link.path" title="{{link.title}}">
+    <fa-icon [icon]="link.icon"></fa-icon> {{link.label}}
+  </a>
+</nav>

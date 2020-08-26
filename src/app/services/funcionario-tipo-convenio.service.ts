@@ -1,0 +1,56 @@
+import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { TipoConvenio } from '../models/tipo-convenio';
+import { map } from 'rxjs/operators';
+import { UserService } from './user.service';
+import { Convenio } from '../models/convenio';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FuncionarioTipoConvenioService {
+
+  token = this.userService.token;
+  baseUrl = 'http://localhost:8000/';
+  httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
+  constructor(private http: HttpClient, private userService: UserService) { }
+
+
+  // Retorna uma lista de convenios aceitos pelo medico
+  getAcceptedConvenios(funcionarioId): Observable<Convenio[]> {
+    return this.http.get<Convenio[]>(this.baseUrl + 'convenios/accepted/' + funcionarioId + '/', { headers: this.httpHeaders });
+  }
+
+  // Retorna uma lista de convenios não aceitos pelo medico
+  getUnAccpetedConvenios(funcionarioId): Observable<Convenio[]> {
+    return this.http.get<Convenio[]>(this.baseUrl + 'convenios/unaccepted/' + funcionarioId + '/', { headers: this.httpHeaders });
+  }
+
+
+  // função para buscar os tipos de convenios não aceitos pelo medico
+  getUnresgisteredTiposConveio(funcionarioId, convenioId): Observable<any> {
+    return this.http.get(this.baseUrl + 'tiposUnregistered/funcionario/' + funcionarioId + '/' + convenioId + '/',
+      { headers: this.httpHeaders });
+  }
+
+  // Função que salva os novos tipos de convenio aceitos pelo medico
+  saveTiposFuncionario(funcionarioTipos): Observable<any> {
+    return this.http.post(this.baseUrl + 'funcionarioTipos/', funcionarioTipos, { headers: this.httpHeaders });
+  }
+
+  // Função que retorna a lista de tipos de convenios aceitos pelo medico
+  getAcceptedTipos(funcionarioId, convenioId): Observable<any> {
+    return this.http.get(this.baseUrl + 'tiposAccepted/' + funcionarioId + '/' + convenioId + '/', { headers: this.httpHeaders });
+  }
+
+  // recupera a lista de tipos a ser excluida
+  getFuncionarioTipoDetail(funcionarioId, tipoConvenioId): Observable<any> {
+    return this.http.get(this.baseUrl + 'funcionarioTipo/' + funcionarioId + '/' + tipoConvenioId + '/', { headers: this.httpHeaders });
+  }
+
+  // deleta os tipos selecionados
+  deleteTiposFuncionario(funcionarioTipoId): Observable<any> {
+    return this.http.delete(this.baseUrl + 'funcionarioTipos/' + funcionarioTipoId + '/', { headers: this.httpHeaders });
+  }
+}

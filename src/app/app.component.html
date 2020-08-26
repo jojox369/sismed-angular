@@ -1,0 +1,23 @@
+<div *ngIf="logged && !changePassword">
+  <div class="topnav">
+    <app-toolbar></app-toolbar>
+  </div>
+  <div style="padding: 2%;">
+    <ng-container style="margin: 0.5%">
+      <mat-card>
+        <router-outlet></router-outlet>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>
+
+
+<div style="padding: 2%;" *ngIf="!logged">
+  <ng-container style="margin: 0.5%">
+    <mat-card>
+      <app-login *ngIf="!logged && !changePassword"></app-login>
+
+      <app-forgot-password *ngIf="!logged && changePassword"></app-forgot-password>
+    </mat-card>
+  </ng-container>
+</div>

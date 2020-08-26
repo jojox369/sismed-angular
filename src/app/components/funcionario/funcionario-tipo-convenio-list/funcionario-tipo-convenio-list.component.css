@@ -1,0 +1,15 @@
+h5{
+    margin-bottom: 15px; 
+    margin-top: 15px;
+    padding-bottom: 10px; 
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 15px;
+    position: top;
+}
+
+.listData h5{
+    width: 100%;
+}
+
+
+

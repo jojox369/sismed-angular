@@ -1,0 +1,157 @@
+<mat-card-title class="mat-card-title">
+
+
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="container-size">
+            <mat-form-field class="agendaField" appearance="outline">
+                <mat-label>Agenda</mat-label>
+                <input matInput type="date" name="agenda" [(ngModel)]="data_agendamento" autocomplete="off" />
+            </mat-form-field>
+            <button mat-icon-button title="Clique para pesquisar pela data selecionada" (click)="getAgendamentoByDate()"
+                matSuffix>
+                <fa-icon [icon]="faSearch"></fa-icon>
+            </button>
+        </div>
+
+
+        <span *ngIf="funcionarioPerfil !== 2"> Dr. {{medicoName}}</span>
+
+        <!-- Select para não medicos -->
+        <div class="container-size" *ngIf="funcionarioPerfil === 2">
+            <mat-form-field apperance="outline">
+                <mat-label>Selecione o Médico</mat-label>
+                <mat-select name="select-medico" [(ngModel)]="selectedMedicoId" (selectionChange)="selectedDoctor()">
+                    <mat-option *ngFor="let medico of medicos" [value]="medico.id">{{medico.nome}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="btnActions">
+            <button class="btn-sismed" mat-stroked-button title="Iniciar os atendimentos"
+                *ngIf="funcionarioPerfil !== 2" [routerLink]="['/agenda/attendence', medicoId]">
+                <fa-icon [icon]="faPencilAlt"></fa-icon> Atender
+            </button>
+            <button class="btn-success" mat-stroked-button title="Realizar novo agendamento" (click)="newAgendamento()">
+                <fa-icon [icon]="faPlus"></fa-icon> Agendar
+            </button>
+        </div>
+    </div>
+
+
+</mat-card-title>
+
+<mat-card-content>
+    <div class="mat-elevation-z8">
+        <!-- Tabela de dados-->
+        <table mat-table [dataSource]="dataSource" *ngIf="!isLoading">
+
+            <!-- Prontuario Column -->
+            <ng-container matColumnDef="prontuario">
+                <th mat-header-cell *matHeaderCellDef>Prontuario</th>
+                <td mat-cell *matCellDef="let element" title="Prontuario do paciente">{{element.paciente.prontuario}}
+                </td>
+            </ng-container>
+
+            <!-- Nome Column -->
+            <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef>Nome</th>
+                <td mat-cell *matCellDef="let element"> <a title="Ver agendamentos anteriores"
+                        (click)="openAgendamentosAnteriosDialog(element.paciente.id)">{{element.paciente.nome}}</a></td>
+            </ng-container>
+
+            <!-- telefone Column -->
+            <ng-container matColumnDef="telefone">
+                <th mat-header-cell *matHeaderCellDef>Telefone</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.paciente.telefone_fixo === null ? 'Não Cadastrado' : element.paciente.telefone_fixo | telefone}}
+                </td>
+            </ng-container>
+
+            <!-- celular Column -->
+            <ng-container matColumnDef="celular">
+                <th mat-header-cell *matHeaderCellDef>Celular</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.paciente.celular === null ? 'Não Cadastrado': element.paciente.celular | celular}}</td>
+            </ng-container>
+
+            <!-- hora Column -->
+            <ng-container matColumnDef="hora">
+                <th mat-header-cell *matHeaderCellDef>Hora</th>
+                <td mat-cell *matCellDef="let element">
+                    <a *ngIf="editable && element.finalizado === 0"
+                        [routerLink]="['/agendamento/details', medicoId, element.id]"
+                        title="Clique aqui para editar o agendamento"> {{ element.hora }}</a>
+                    <span *ngIf="!editable || (editable && element.finalizado === 1) ">{{ element.hora }}</span>
+                <td>
+            </ng-container>
+
+            <!-- Convenio Column -->
+            <ng-container matColumnDef="convenio">
+                <th mat-header-cell *matHeaderCellDef>Convenio</th>
+                <td mat-cell *matCellDef="let element">{{element.paciente.tipo_convenio.convenio.nome}}</td>
+            </ng-container>
+
+            <!-- Primeira Vez Column -->
+            <ng-container matColumnDef="primeira_vez">
+                <th mat-header-cell *matHeaderCellDef>Primeira Vez</th>
+                <td mat-cell *matCellDef="let element">{{element.primeira_vez === 1 ? 'SIM' : 'NÃO'}}</td>
+            </ng-container>
+
+            <!-- Compareceu Column -->
+            <ng-container matColumnDef="compareceu">
+                <th mat-header-cell *matHeaderCellDef>Compareceu</th>
+                <td mat-cell *matCellDef="let element">{{element.compareceu === 1 ? 'SIM' : 'NÃO'}}</td>
+            </ng-container>
+
+            <!-- Pagou Column -->
+            <ng-container matColumnDef="pagou">
+                <th mat-header-cell *matHeaderCellDef>Pagou</th>
+                <td mat-cell *matCellDef="let element">{{element.pagou === 1 ? 'SIM' : 'NÃO'}}</td>
+            </ng-container>
+
+
+            <!-- Idade Column -->
+            <ng-container matColumnDef="idade">
+                <th mat-header-cell *matHeaderCellDef>Idade</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.paciente.data_nascimento !== null ?  pacienteIdade(element.paciente.data_nascimento) : 'Data de Nascimento não cadastrada'}}
+                </td>
+            </ng-container>
+
+
+            <!-- Observação Column -->
+            <ng-container matColumnDef="observacao">
+                <th mat-header-cell *matHeaderCellDef>Observação</th>
+                <td mat-cell *matCellDef="let element">
+                    <a title="Observação do agendamento" (click)="openObservacaoDialog(element.observacao)">OBS</a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Paginação-->
+        <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+        </mat-paginator>
+
+        <!--Mensagens para usuario-->
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <!--Mensagem que aparece quando a pesquisa retorna nula-->
+            <span *ngIf="showEmptyMessage" class="message">
+                Nenhum Agendamento encontrado
+            </span>
+
+            <!-- Mensagem que aparece quando ocorre um erro ao recuperar os dados do back-end-->
+            <span *ngIf="hasError && !isLoading" class="message-danger">
+                Erro ao tentar carregar a lista de dados
+            </span>
+            <div>
+                <!--Spinner que aparece enquando a lista não é carregada-->
+                <mat-spinner *ngIf="isLoading"></mat-spinner>
+                <span style="margin-top: 10px;" *ngIf="isLoading">Carregando dados</span>
+            </div>
+        </div>
+    </div>
+
+</mat-card-content>

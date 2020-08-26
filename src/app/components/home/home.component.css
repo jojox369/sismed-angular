@@ -1,0 +1,15 @@
+
+
+.sismed-text{
+  font-family: 'Montserrat', sans-serif;
+  color: #000;
+  font-size: 5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  background: linear-gradient(to bottom, #0087cd,#00659a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: cover;
+  background-position: center;
+}

@@ -1,0 +1,338 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+:root{
+  --color-danger: #db3437;
+  --color-success: #22bb33;
+  --color-warning: #f0ad4e;
+  --color-sismed: #0087cd;
+
+  --color-success-hover: #408140;
+  --color-sismed-hover: #00659a;
+  --color-danger-hover: #bb2124;
+
+
+  --color-text-button: #ffffff;
+  --color-text-menu: #ffffff;
+  --color-text-menu-active: #ffffff;
+
+  --color-text-snackbar: #ffffff;
+  --color-success-snackbar: #22bb33;
+  --color-danger-snackbar: #bb2124;
+  --color-warning-snackbar: #f0ad4e;
+  
+
+
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f3f3f3;
+}
+
+/* ---------------------------------------------------
+    GENERAL STYLES
+----------------------------------------------------- */
+
+a {
+  font-size: 13px;
+}
+
+/*Define um espaço entre os botões*/
+
+.mat-card .btn-spacer {
+  margin-right: 5px;
+}
+
+/*Define a  altura dos botões*/
+
+.mat-card .btn {
+  height: 50px;
+}
+
+/*Estilo para botões de cadastrar e salvar*/
+
+.mat-card .btn-success {
+  background-color: var(--color-success);
+  color: var(--color-text-button);
+  transition: background-color 0.2s;
+}
+
+
+.mat-card .btn-success:hover {
+  background-color: var(--color-success-hover);
+  
+}
+/*Estilo para botões de voltar*/
+
+.mat-card .btn-sismed {
+  background-color: var(--color-sismed);
+  transition: background-color 0.2s;
+  color: var(--color-text-button);
+}
+
+.mat-card .btn-sismed:hover {
+  background-color: var(--color-sismed-hover);
+}
+
+/*Estilo para botões de cancelar e deletar*/
+
+.mat-card .btn-danger {
+  background-color: var(--color-danger);
+  transition: background-color 0.2s;
+  color: var(--color-text-button);
+}
+
+.mat-card .btn-danger:hover {
+  background-color: var(--color-danger-hover);
+}
+
+
+.mat-card fa-icon{
+  margin-right: 0.5rem;
+}
+/*Posiciona os elementos a direita*/
+
+.mat-card .float-right {
+  float: right;
+}
+
+/*Pisiciona os elementos a esquerda*/
+
+.mat-card .float-left {
+  float: left;
+}
+
+/* Estilo para as mensagens sem mudar a cor*/
+
+.mat-card .message {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+/* Estilo para as mensagens adiciona a cor vermelha a font*/
+
+.mat-card .message-danger {
+  font-weight: bold;
+  font-size: 17px;
+  color: var(--color-danger);
+}
+
+/*Estilo para o titulo do card*/
+
+.mat-card-title {
+  padding-left: 10px;
+  padding-top: 0px;
+  padding-right: 15px;
+  margin-bottom: 0px;
+  min-height: 70px;
+}
+
+/*Separa o icone do texto nos botões e links*/
+
+.mat-card-title fa-icon {
+    margin-right: 15px;
+  }
+
+
+
+/*Desabilita informação da paginação*/
+.mat-paginator-range-label {
+  display: none;
+}
+
+
+
+
+
+/* Retira o foco dos botoões de icone*/
+.mat-button-focus-overlay {
+  background-color: transparent!important;
+}
+
+
+/* ---------------------------------------------------
+    DIALOG STYLE
+----------------------------------------------------- */
+
+/*Estilo para botões de cadastrar e salvar*/
+
+.mat-dialog-actions .btn-success {
+  background-color: var(--color-success);
+  color: var(--color-text-button);
+}
+
+.mat-dialog-actions .btn-success:hover {
+  background-color: var(--color-success-hover);
+  
+}
+/*Estilo para botões de voltar*/
+
+.mat-dialog-actions .btn-sismed {
+  background-color: var(--color-sismed);
+  color: var(--color-text-button);
+}
+
+/*Estilo para botões de cancelar e deletar*/
+
+.mat-dialog-actions .btn-danger {
+  background-color: var(--color-danger);
+  color: var(--color-text-button);
+}
+
+.mat-dialog-actions fa-icon{
+  margin-right: 5px;
+}
+
+.mat-dialog-title {
+  color: var(--color-danger);
+}
+
+
+
+
+/* ---------------------------------------------------
+    SEARCH FIELD STYLE
+----------------------------------------------------- */
+
+#divBusca {
+  margin-bottom: 15px;
+  background-color: #eee;
+  border-radius: 50px;
+  width: 445px;
+  height: 35px;
+}
+
+#txtBusca {
+  background-color: transparent;
+  font-size: 13px;
+  border: none;
+  height: 25px;
+  width: 375px;
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+  margin-top: 5px;
+}
+
+#btn_search {
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+  color: gray;
+  margin-left: 5px;
+}
+
+#btn_dropDown {
+  margin-left: 91%;
+  margin-top: -44px;
+}
+
+#divBusca .dropdown-toggle:focus {
+  box-shadow: none;
+}
+
+.mat-menu-item {
+  color: #5d6266;
+}
+
+.mat-menu-item.active {
+  background-color: var(--color-sismed);
+  color: var(--color-text-menu-active);
+}
+
+.mat-menu-item.active:hover {
+  background-color: var(--color-sismed-hover);
+}
+
+.mat-menu-item:hover {
+  background-color: #eee;
+}
+
+.mat-menu-item:focus {
+  background-color: #eee;
+}
+
+.mat-menu-item.active:focus {
+  background-color: var(--color-sismed-hover) ;
+}
+
+.mat-menu-item {
+  font-size: 14px;
+}
+
+.mat-menu-item.active:hover {
+  background-color: var(--color-sismed-hover) ;
+}
+
+/* ---------------------------------------------------
+    ALERT STYLE
+----------------------------------------------------- */
+
+/*Estilo para snackbar sucesso*/
+
+.success-snackbar {
+  color: var(--color-text-snackbar);
+  background: var(--color-success-snackbar);
+}
+
+/*Estilo para snackbar erro*/
+
+.danger-snackbar {
+  color: var(--color-text-snackbar);
+  background: var(--color-danger-snackbar);
+}
+
+/*Estilo para snackbar aviso*/
+
+.warning-snackbar {
+  color: var(--color-text-snackbar);
+  background: var(--color-warning-snackbar);
+}
+
+/*Centraliza o texto dentro da snackbar*/
+
+.mat-simple-snackbar span {
+  margin: auto;
+  text-align: center;
+}
+
+/* ---------------------------------------------------
+    TALBE STYLE
+----------------------------------------------------- */
+
+/*Tamanho da tabela*/
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+table a {
+  cursor: pointer;
+}
+
+/*Tamanho da fonte do nome da coluna*/
+
+.mat-header-cell {
+  font-size: 18px;
+}
+
+/*Centraliza os nomes dos titulos nas tabelas*/
+.mat-header-cell {
+  text-align: center !important;
+}
+
+/*Centraliza os dados na tabela com o header*/
+
+td {
+  text-align: center;
+}
+
+/*Retira o estilo de link*/
+
+td a {
+  text-decoration: none;
+}

@@ -1,0 +1,89 @@
+<div>
+    <div id="divBusca">
+        <button id="btn_search">
+            <fa-icon [icon]="faSearch"></fa-icon>
+        </button>
+        <input [(ngModel)]="searchText" (input)="onChooseSearchMethod()" #searchInput type="text" id="txtBusca"
+            placeholder="{{ placeholder }}" autocomplete="off" />
+        <div class="dropdown" id="btn_dropDown">
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="btn dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown">
+                <fa-icon [icon]="faSortDown"></fa-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="dropdown-menu">
+                <button mat-menu-item [ngClass]="{active: input === 1}" type="button" value="1"
+                    (click)="onChangeSearchSelector(1)">
+                    <span>Nome</span>
+                </button>
+                <button mat-menu-item [ngClass]="{active: input === 2}" type="button" value="2"
+                    (click)="onChangeSearchSelector(2)">
+                    <span>CNPJ</span>
+                </button>
+                <button mat-menu-item [ngClass]="{active: input === 3}" type="button" value="3"
+                    (click)="onChangeSearchSelector(3)">
+                    <span>ANS</span>
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+
+    <mat-card-title class="mat-card-title">
+
+        <span> <strong>Lista | </strong> Convênios </span>
+
+        <a class="btn-success float-right" mat-stroked-button [routerLink]="['/convenio/register']"
+            title="Cadastrar convênio">
+            <fa-icon [icon]="faPlus"></fa-icon> Cadastrar
+        </a>
+
+    </mat-card-title>
+
+    <mat-card-content>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" *ngIf="!convenioIsEmpty">
+                <!-- Nome Column -->
+                <ng-container matColumnDef="nome">
+                    <th mat-header-cell *matHeaderCellDef>Nome</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a [routerLink]="['/convenio', element.id]"
+                            title="Clique para editar o convenio {{element.nome}}">{{element.nome}}</a>
+                    </td>
+                </ng-container>
+
+                <!-- CNPJ Column -->
+                <ng-container matColumnDef="cnpj">
+                    <th mat-header-cell *matHeaderCellDef>CNPJ</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.cnpj === null ? 'Não Cadastrado' : element.cnpj | CNPJ}}</td>
+                </ng-container>
+
+                <!-- Adesão Column -->
+                <ng-container matColumnDef="adesao">
+                    <th mat-header-cell *matHeaderCellDef>Adesão</th>
+                    <td mat-cell *matCellDef="let element">{{element.data_adesao | date: 'dd/MM/yyyy'}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+
+            <div fxLayout="column" fxLayoutAlign="space-around center">
+                <!--Mensagem que aparece quando a pesquisa retorna nula-->
+                <span *ngIf="showEmptyMessage" class="message">
+                    Nenhum dado encontrado
+                </span>
+
+                <!-- Mensagem que aparece quando ocorre um erro ao recuperar os dados do back-end-->
+                <span *ngIf="hasError && !isLoading" class="message-danger">
+                    Erro ao tentar carregar a lista de dados
+                </span>
+                <div>
+                    <!--Spinner que aparece enquando a lista não é carregada-->
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+                    <span style="margin-top: 10px;" *ngIf="isLoading">Carregando dados</span>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</div>

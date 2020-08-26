@@ -1,0 +1,44 @@
+#page-content > *{
+  margin-right: 1rem;
+  width: 15%;
+}
+
+#page-content button {
+  margin-top: -20px;
+}
+
+.dateFields > mat-form-field:first-child{
+  margin-right: 0.5rem;
+}
+
+.dateFields > * {
+  width: 100%;
+}
+
+.mat-paginator{
+  display: none;
+}
+
+.showPaginator{
+  display: inline;
+}
+
+.firstMessage{
+  margin: 1rem 0;
+}
+
+.total-value{
+  margin: 2rem 0;
+  padding: 1rem;
+  
+}
+
+.total-value span{
+  font-size: 1rem;
+  border: solid 0.5rem #999999;
+  background-color: #999999;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+

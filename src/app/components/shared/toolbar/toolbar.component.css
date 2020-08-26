@@ -1,0 +1,59 @@
+/*div.container{
+    margin: 0px 40px;
+}*/
+
+.toolbar{
+    /* Cor da toolbar*/
+    background: #0087cd;
+    /* arredondamento da toolbar */
+    border-radius: 10px;
+}
+
+/*Define o espaço entre os elementos na toolbar*/
+.fill-remaining-space{
+    flex: 1 1 auto;
+}
+
+/*Muda a cor dos textos na toolbar*/
+span{
+    color: #ffffff;
+}
+
+/*Define o tamanho do icone de usuario na toolbar*/
+
+.userButton{
+    color: #ffffff;
+    font-size: larger;
+}
+
+/*Define a posição do menu*/
+.menu{
+    padding-top: 40px;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+/*Define o espaço entre o icone e o texto no menu*/
+.menu fa-icon{
+    margin-right: 15px;
+}
+
+/*Muda a cor do label no meu*/
+.mat-tab-label-active {
+    color: #0087cd !important;
+}
+
+/* muda a cor da barra no menu*/
+::ng-deep .mat-ink-bar {
+    background-color:#0087cd !important;
+}
+
+/*Define o tamanho da data e da hora */
+.dateTime span{
+    font-size: 15px;
+}
+
+/*Define o espaço entre a data e a hora*/
+.dateTime .date{
+    padding-right: 3px;
+}

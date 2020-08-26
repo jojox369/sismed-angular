@@ -1,0 +1,12 @@
+.container-size{
+    font-size: 15px
+}
+
+.btnActions > * {
+    margin: 0.5px;
+}
+
+
+#spiner{
+    margin-bottom: 2rem;
+}

@@ -1,0 +1,42 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="center start">
+  <span>
+    <strong>Usuário: </strong>{{userName}}
+  </span>
+
+  <div class="spacer">
+
+  </div>
+
+  <span>
+    <strong>Função: </strong> {{userFunction}}
+  </span>
+</div>
+
+<div mat-dialog-content>
+  <h5 fxLayoutAlign="center center">
+    O que Deseja fazer?
+  </h5>
+</div>
+
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="center start">
+  <a mat-stroked-button [routerLink]="['/funcionario', user.id]" mat-dialog-close>
+    <fa-icon [icon]="faUserCircle"></fa-icon> Abrir meu perfil
+  </a>
+
+  <div id="adminButtons" fxLayout="column" fxLayoutAlign="center start" *ngIf="user.perfil === 3">
+    <a mat-stroked-button [routerLink]="['/backup-restore']" mat-dialog-close>
+      <fa-icon [icon]="faDataBase"></fa-icon> Realizar backup/restore
+    </a>
+
+    <a mat-stroked-button [routerLink]="['/log']" mat-dialog-close>
+      <fa-icon [icon]="faScroll"></fa-icon> Abrir Registros de Eventos
+    </a>
+
+    <a mat-stroked-button [routerLink]="['/relatorio']" mat-dialog-close>
+      <fa-icon [icon]="faStream"></fa-icon> Realizar um Relatório
+    </a>
+  </div>
+  <button mat-stroked-button (click)="logout()" mat-dialog-close>
+    <fa-icon [icon]="faIdCard"></fa-icon> Sair
+  </button>
+</div>

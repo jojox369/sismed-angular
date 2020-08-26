@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="end start">
+    <button mat-dialog-close mat-icon-button class="closeButton" title="Fechar">
+        <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+</div>
+<div fxLayout="row" fxLayoutAlign="center center" class="convenioSelect">
+
+
+    <mat-form-field appearance="outline" style="width: 90%;">
+        <mat-label>Selecione o Convênio</mat-label>
+        <mat-select [(ngModel)]="convenioSelected" (selectionChange)="getTipos()">
+            <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">
+                {{convenio.nome}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+</div>
+
+
+<div fxLayout="column" fxLayoutAlign="space-evenly center" *ngIf="hasData">
+
+    <ul>
+        <li>
+            <mat-checkbox [checked]="allSelected" (change)="selectedAll();" [indeterminate]="someComplete()">
+                {{allSelected ? 'Desmarcar Todos' : 'Selecionar Todos'}}
+            </mat-checkbox>
+        </li>
+        <li *ngFor="let tipo of tipos">
+            <mat-checkbox [(ngModel)]="tipo.selected">
+                {{tipo.nome}}
+            </mat-checkbox>
+        </li>
+    </ul>
+
+    <div fxLayout="row">
+        <mat-dialog-actions>
+            <button class="btn-success" mat-stroked-button (click)="save()">
+                <fa-icon [icon]="faCheck"></fa-icon> Cadastrar
+            </button>
+            <button class="btn-danger" mat-stroked-button>
+                <fa-icon [icon]="faBan"></fa-icon> Cancelar
+            </button>
+        </mat-dialog-actions>
+    </div>
+</div>

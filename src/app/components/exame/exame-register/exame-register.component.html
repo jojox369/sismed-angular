@@ -1,0 +1,145 @@
+<form [formGroup]="exameForm" #frm="ngForm" (ngSubmit)="save(frm)">
+  <mat-card-title class="mat-card-title">
+    <div>
+      <span> <strong>Novo | </strong> Exame </span>
+
+      <button mat-stroked-button class="btn-success float-right" title="Salvar informações" [disabled]="frm.invalid">
+        <fa-icon [icon]="faCheck"></fa-icon> Salvar
+      </button>
+      <a mat-stroked-button [routerLink]="['/exames']" title="Lista Exames" class="btn-sismed btn-spacer float-right">
+        <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+      </a>
+    </div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <!--Div que ocupa 100% do card-->
+    <div fxLayout="row" fxLayoutAlign="center start">
+
+      <!-- Column 1 -->
+      <div class="form">
+        <h5 fxLayoutAlign="center start">Informações do Paciênte</h5>
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input type="text" placeholder="Insira o nome do paciente" #searchInput matInput [formControl]="pacienteName"
+            [matAutocomplete]="auto" (keyup)="toUpperCase($event)" (keypress)="onlyLetters($event)">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let paciente of filteredPacientes | async" [value]="paciente.nome"
+              (onSelectionChange)="getPacienteDetails(paciente.id)">
+              {{paciente.nome}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Prontuário</mat-label>
+          <input [value]="paciente.prontuario !== undefined ?  paciente.prontuario : '' " matInput disabled />
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cônvenio</mat-label>
+          <input [value]="paciente.tipo_convenio !== undefined ? 
+            (paciente.tipo_convenio.convenio.nome === 'PARTICULAR' ? paciente.tipo_convenio.convenio.nome : paciente.tipo_convenio.convenio.nome + ' - ' + paciente.tipo_convenio.nome) 
+            : '' " matInput disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF</mat-label>
+          <input [value]="paciente.cpf !== undefined ? (paciente.cpf === null ? 'Não Cadastrado' : paciente.cpf) : '' "
+            matInput disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RG</mat-label>
+          <input [value]="paciente.rg !== undefined ? (paciente.rg === null ? 'Não Cadastrado' : paciente.rg) : '' "
+            matInput disabled />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento</mat-label>
+          <input
+            [value]="paciente.data_nascimento !==undefined ? (paciente.data_nascimento | date: 'dd/MM/yyyy') : 'Não cadastrado' "
+            matInput disabled />
+        </mat-form-field>
+      </div>
+
+      <!-- Column 2-->
+      <div class=" form">
+        <h5 fxLayoutAlign="center start">Informações do Laboratório</h5>
+        <mat-form-field appearance="outline">
+          <mat-label>Laboratório</mat-label>
+          <mat-select formControlName="laboratorio" required (selectionChange)="getLaboratorioDetails()">
+            <mat-option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.id">{{laboratorio.nome}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input [value]="laboratorio.telefone_fixo !== undefined ? (laboratorio.telefone_fixo | telefone) : '' "
+            matInput disabled>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input [value]="laboratorio.email !== undefined ? laboratorio.email : '' " matInput disabled>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Convênio</mat-label>
+          <mat-select formControlName="tipo_convenio" required>
+            <mat-option *ngFor="let tipo of laboratorioTipos" [value]="tipo.id">
+              {{ tipo.id === 1 ? tipo.nome : tipo.convenio.nome + ' - ' + tipo.nome}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <!-- Column 3-->
+      <div class="form">
+        <h5 fxLayoutAlign="center start">Informações do Exame</h5>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Exame</mat-label>
+          <input (keyup)="toUpperCase($event)" (keypress)="onlyLetters($event)" matInput formControlName="nome"
+            autocomplete="off" required>
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quem Recebeu</mat-label>
+          <input (keyup)="toUpperCase($event)" matInput formControlName="funcionario_laboratorio" autocomplete="off"
+            required>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Coleta</mat-label>
+          <input type="date" matInput formControlName="data_coleta" required>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de envio</mat-label>
+          <input type="date" matInput formControlName="data_envio" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Valor</mat-label>
+          <input matInput formControlName="valor" autocomplete="off" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput (keyup)="toUpperCase($event)" cdkTextareaAutosize cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="5" formControlName="descricao" autocomplete="off" required></textarea>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </mat-card-content>
+</form>

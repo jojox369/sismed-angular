@@ -1,0 +1,24 @@
+.convenioButtons > *{
+    margin-right: 5px;
+}
+
+.convenioButtons fa-icon{
+    margin-right: 5px;
+}
+
+
+/*Define o tamanho do formulário*/
+.form {
+    width: 25%;
+}
+
+
+/*Todos os componentes dentro da grid irão ocupar 100% da grid*/
+
+.form > * {
+    width: 100%;
+}
+
+.dadosBancariosFields > * {
+    width: 100%;
+}

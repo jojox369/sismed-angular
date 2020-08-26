@@ -1,0 +1,35 @@
+.mat-dialog-title{
+  color: #000000;
+}
+
+.mat-dialog-actions .mat-stroked-button{
+  margin-left: 5px;
+}
+
+.mat-dialog-actions .mat-stroked-button + .mat-stroked-button{
+  margin-top: 20px;
+}
+
+.mat-dialog-actions .mat-stroked-button + div{
+  margin-top: 20px;
+}
+
+.mat-dialog-actions .mat-stroked-button + div + .mat-stroked-button{
+  margin-top: 20px;
+}
+
+.mat-dialog-actions:last-child{
+  margin-bottom: 20px;
+}
+
+h5{
+  margin-bottom: 15px; 
+  margin-top: 15px;
+  padding-bottom: 10px; 
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 15px;
+}
+
+.spacer {
+  margin: 10px 10px;
+}

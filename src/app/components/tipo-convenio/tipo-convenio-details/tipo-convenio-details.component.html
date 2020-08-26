@@ -1,0 +1,54 @@
+<form [formGroup]="formTipoConvenio" #frm="ngForm" (ngSubmit)="update(frm)" *ngIf="formTipoConvenio">
+    <mat-card-title class="mat-card-title">
+        <div>
+
+            <span>
+                <strong>Edição | </strong> Tipo de convênio
+            </span>
+
+
+            <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar convênio"
+                [disabled]="frm.invalid" *ngIf="isEditing">
+                <fa-icon [icon]="faCheck"></fa-icon> Salvar
+            </button>
+
+            <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição"
+                *ngIf="isEditing" (click)="cancelEditing()">
+                <fa-icon [icon]="faBan"></fa-icon> Cancelar
+
+            </button>
+
+            <button mat-stroked-button class="btn-success float-right" title="Editar Convênio" *ngIf="!isEditing"
+                (click)="unblockFields()">
+                <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
+            </button>
+
+            <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir Convênio"
+                (click)="deleteTipoConvenio()" *ngIf="!isEditing">
+                <fa-icon [icon]="faTimes"></fa-icon> Excluir
+            </a>
+
+            <a mat-stroked-button [routerLink]="['/tiposConvenio', this.formTipoConvenio.value.convenio]"
+                title="Listar os convênios" class="btn-sismed btn-spacer float-right">
+                <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+            </a>
+
+
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+
+        <!--Div que ocupa 100% do card-->
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
+            <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nome</mat-label>
+                    <input id="nome" matInput placeholder="Ex:amil" (keyup)="toUpperCase($event)" formControlName="nome"
+                        autocomplete="off" maxlength="45" required>
+
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+
+</form>

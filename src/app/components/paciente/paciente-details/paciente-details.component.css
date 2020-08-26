@@ -1,0 +1,12 @@
+/* Tamanho do formulario*/
+.form {
+  width: 25%;
+  padding: 3px;
+}
+
+
+/*Todos os componentes dentro da grid irão ocupar 100% da grid*/
+
+.form > * {
+  width: 100%;
+}
