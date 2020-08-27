@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 export class LaboratorioService {
 
   token = this.userService.token;
-  baseUrl = 'http://localhost:8000/';
+  baseUrl = 'https://sismed-api.herokuapp.com/';
   message: string;
   httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
   constructor(private http: HttpClient, private userService: UserService) { }

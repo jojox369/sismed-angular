@@ -10,7 +10,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class PacienteService {
-  baseUrl: String = 'http://localhost:8000/';
+  baseUrl = 'https://sismed-api.herokuapp.com/';
   token = this.userService.token;
   message: string;
   httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);

@@ -9,7 +9,7 @@ import { Registroclinico } from '../models/registroclinico';
   providedIn: 'root'
 })
 export class RegistroclinicoService {
-  baseUrl: String = 'http://localhost:8000/';
+  baseUrl = 'https://sismed-api.herokuapp.com/';
   token = this.userService.token;
   httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
 
@@ -22,7 +22,7 @@ export class RegistroclinicoService {
   }
 
   getRegistrosAnteriores(pacienteId: number): Observable<Registroclinico[]> {
-    return this.http.get<Registroclinico[]>(this.baseUrl + "registrosanteriores/" + pacienteId + '/', {headers: this.httpHeaders}).pipe(
+    return this.http.get<Registroclinico[]>(this.baseUrl + "registrosanteriores/" + pacienteId + '/', { headers: this.httpHeaders }).pipe(
       map(data => data.map(data => new Registroclinico().deserializable(data)))
     );
   }

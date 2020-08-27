@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 export class BackupService {
 
   token = this.userService.token;
-  baseUrl = 'http://localhost:8000/';
+  baseUrl = 'https://sismed-api.herokuapp.com/';
   message = '';
   httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
 
