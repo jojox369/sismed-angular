@@ -3,18 +3,25 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --output-path angularapp  --aot --prod"
+  },
+  "engines": {
+    "node": "v12.18.3",
+    "npm": "6.14.6"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~10.0.2",
     "@angular/cdk": "^10.0.1",
+    "@angular/cli": "~10.0.1",
     "@angular/common": "~10.0.2",
     "@angular/compiler": "~10.0.2",
+    "@angular/compiler-cli": "~10.0.2",
     "@angular/core": "~10.0.2",
     "@angular/flex-layout": "^10.0.0-beta.32",
     "@angular/forms": "~10.0.2",
@@ -25,11 +32,14 @@
     "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
+    "express": "^4.17.1",
     "install": "^0.13.0",
     "ngx-mask": "^9.1.2",
     "npm": "^6.14.6",
+    "path": "^0.12.7",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
+    "typescript": "~3.9.5",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
