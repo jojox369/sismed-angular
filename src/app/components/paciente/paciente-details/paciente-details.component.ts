@@ -95,6 +95,7 @@ export class PacienteDetailsComponent implements OnInit {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       data => {
         this.paciente = data;
+        console.log(data);
         this.getTipoConvenioDetails();
       },
       error => {

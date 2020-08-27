@@ -206,7 +206,7 @@ export class ToolbarComponent implements OnInit {
           this.activeLink = this.navLinks[1];
         } else if (
           this.currentUrl.includes('/pacientes') ||
-          this.currentUrl.includes('pacientes/')
+          this.currentUrl.includes('paciente/')
         ) {
           this.activeLink = this.navLinks[2];
         } else if (
