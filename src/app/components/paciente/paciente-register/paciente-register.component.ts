@@ -67,7 +67,7 @@ export class PacienteRegisterComponent implements OnInit {
     this.formPaciente = this.fb.group({
       prontuario: [this.paciente.prontuario],
       nome: [this.paciente.nome, Validators.required],
-      cpf: [this.paciente.cpf],
+      cpf: [this.paciente.cpf, Validators.required],
       rg: [this.paciente.rg],
       orgao_emissor: [this.paciente.orgao_emissor],
       data_emissao: [this.paciente.data_emissao],
