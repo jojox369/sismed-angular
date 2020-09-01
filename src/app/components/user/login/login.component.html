@@ -1,35 +1,59 @@
-<mat-card-title>
+<mat-card-title *ngIf="!isLoading">
   <div fxLayout="column" fxLayoutAlign="center center">
     <div class="header">
       <p fxLayoutAlign="center center">Seja bem-vindo.</p>
       <p>Realize seu login para continuar</p>
     </div>
-
   </div>
 </mat-card-title>
 
-<mat-card-content>
+<mat-card-content *ngIf="!isLoading">
   <form [formGroup]="formUser" (ngSubmit)="login()">
     <div class="fields" fxLayout="column" fxLayoutAlign="center center">
       <mat-form-field appearance="outline">
         <mat-label>Usuário</mat-label>
-        <input class="input" matInput placeholder="Insira o seu CPF" mask="000.000.000-00" formControlName="username"
-          required autocomplete="off">
+        <input
+          class="input"
+          matInput
+          placeholder="Insira o seu CPF"
+          mask="000.000.000-00"
+          formControlName="username"
+          required
+          autocomplete="off"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Senha</mat-label>
-        <input class="input" type="password" matInput placeholder="Insira o seu CPF" formControlName="password"
-          required>
+        <input
+          class="input"
+          type="password"
+          matInput
+          placeholder="Insira o seu CPF"
+          formControlName="password"
+          required
+        />
       </mat-form-field>
 
       <button mat-stroked-button class="btn-success btn-login" type="submit">
         Acessar
       </button>
-      <a class="forgotPassword" fxLayoutAlign="end end" (click)="changePassword()"
-        [routerLink]=" ['/forget-password'] ">Esqueci minha senha</a>
+      <a
+        class="forgotPassword"
+        fxLayoutAlign="end end"
+        (click)="changePassword()"
+        [routerLink]="['/forget-password']"
+        >Esqueci minha senha</a
+      >
     </div>
-
   </form>
-
 </mat-card-content>
+
+<div
+  id="loading-data"
+  fxLayoutAlign="space-between center"
+  fxLayout="column"
+  *ngIf="isLoading"
+>
+  <app-loading-data [message]="loadingDataMessage"></app-loading-data>
+</div>

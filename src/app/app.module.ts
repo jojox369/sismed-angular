@@ -88,6 +88,7 @@ import { BackupRestoreComponent } from './components/backup-restore/backup-resto
 import { DetailsDialogComponent } from './components/log/details-dialog/details-dialog.component';
 import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { AccessDeniedComponent } from './components/shared/access-denied/access-denied.component';
+import { LoadingDataComponent } from './components/shared/loading-data/loading-data.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -145,7 +146,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     BackupRestoreComponent,
     DetailsDialogComponent,
     ForgotPasswordComponent,
-    AccessDeniedComponent
+    AccessDeniedComponent,
+    LoadingDataComponent
   ],
   entryComponents: [DeleteDialogComponent],
   imports: [

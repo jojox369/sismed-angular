@@ -3,7 +3,7 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
-:root{
+:root {
   --color-danger: #db3437;
   --color-success: #22bb33;
   --color-warning: #f0ad4e;
@@ -13,7 +13,6 @@
   --color-sismed-hover: #00659a;
   --color-danger-hover: #bb2124;
 
-
   --color-text-button: #ffffff;
   --color-text-menu: #ffffff;
   --color-text-menu-active: #ffffff;
@@ -22,9 +21,6 @@
   --color-success-snackbar: #22bb33;
   --color-danger-snackbar: #bb2124;
   --color-warning-snackbar: #f0ad4e;
-  
-
-
 }
 
 body {
@@ -38,6 +34,10 @@ body {
 
 a {
   font-size: 13px;
+}
+
+.mat-spinner {
+  margin: 0 auto;
 }
 
 /*Define um espaço entre os botões*/
@@ -54,67 +54,64 @@ a {
 
 /*Estilo para botões de cadastrar e salvar*/
 
-.mat-card .btn-success {
+.btn-success {
   background-color: var(--color-success);
   color: var(--color-text-button);
   transition: background-color 0.2s;
 }
 
-
-.mat-card .btn-success:hover {
+.btn-success:hover {
   background-color: var(--color-success-hover);
-  
 }
 /*Estilo para botões de voltar*/
 
-.mat-card .btn-sismed {
+.btn-sismed {
   background-color: var(--color-sismed);
   transition: background-color 0.2s;
   color: var(--color-text-button);
 }
 
-.mat-card .btn-sismed:hover {
+.btn-sismed:hover {
   background-color: var(--color-sismed-hover);
 }
 
 /*Estilo para botões de cancelar e deletar*/
 
-.mat-card .btn-danger {
+.btn-danger {
   background-color: var(--color-danger);
   transition: background-color 0.2s;
   color: var(--color-text-button);
 }
 
-.mat-card .btn-danger:hover {
+.btn-danger:hover {
   background-color: var(--color-danger-hover);
 }
 
-
-.mat-card fa-icon{
+fa-icon {
   margin-right: 0.5rem;
 }
 /*Posiciona os elementos a direita*/
 
-.mat-card .float-right {
+.float-right {
   float: right;
 }
 
 /*Pisiciona os elementos a esquerda*/
 
-.mat-card .float-left {
+.float-left {
   float: left;
 }
 
 /* Estilo para as mensagens sem mudar a cor*/
 
-.mat-card .message {
+.message {
   font-weight: bold;
   font-size: 17px;
 }
 
 /* Estilo para as mensagens adiciona a cor vermelha a font*/
 
-.mat-card .message-danger {
+.message-danger {
   font-weight: bold;
   font-size: 17px;
   color: var(--color-danger);
@@ -133,65 +130,26 @@ a {
 /*Separa o icone do texto nos botões e links*/
 
 .mat-card-title fa-icon {
-    margin-right: 15px;
-  }
-
-
+  margin-right: 15px;
+}
 
 /*Desabilita informação da paginação*/
 .mat-paginator-range-label {
   display: none;
 }
 
-
-
-
-
 /* Retira o foco dos botoões de icone*/
 .mat-button-focus-overlay {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
-
 
 /* ---------------------------------------------------
     DIALOG STYLE
 ----------------------------------------------------- */
 
-/*Estilo para botões de cadastrar e salvar*/
-
-.mat-dialog-actions .btn-success {
-  background-color: var(--color-success);
-  color: var(--color-text-button);
-}
-
-.mat-dialog-actions .btn-success:hover {
-  background-color: var(--color-success-hover);
-  
-}
-/*Estilo para botões de voltar*/
-
-.mat-dialog-actions .btn-sismed {
-  background-color: var(--color-sismed);
-  color: var(--color-text-button);
-}
-
-/*Estilo para botões de cancelar e deletar*/
-
-.mat-dialog-actions .btn-danger {
-  background-color: var(--color-danger);
-  color: var(--color-text-button);
-}
-
-.mat-dialog-actions fa-icon{
-  margin-right: 5px;
-}
-
 .mat-dialog-title {
   color: var(--color-danger);
 }
-
-
-
 
 /* ---------------------------------------------------
     SEARCH FIELD STYLE
@@ -256,7 +214,7 @@ a {
 }
 
 .mat-menu-item.active:focus {
-  background-color: var(--color-sismed-hover) ;
+  background-color: var(--color-sismed-hover);
 }
 
 .mat-menu-item {
@@ -264,7 +222,7 @@ a {
 }
 
 .mat-menu-item.active:hover {
-  background-color: var(--color-sismed-hover) ;
+  background-color: var(--color-sismed-hover);
 }
 
 /* ---------------------------------------------------

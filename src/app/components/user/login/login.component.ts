@@ -5,20 +5,17 @@ import { AppComponent } from 'src/app/app.component';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
-
-
-
 export class LoginComponent implements OnInit {
-
   formUser: FormGroup;
 
+  isLoading: boolean;
 
+  loadingDataMessage: string;
 
   constructor(
     private userService: UserService,
@@ -26,53 +23,57 @@ export class LoginComponent implements OnInit {
     private appComponent: AppComponent,
     private router: Router,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
-
   }
 
   createForm() {
-
     this.formUser = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
   // função responsavel por realizar o login;
   login() {
-
+    this.isLoading = true;
+    this.loadingDataMessage = 'Verificando credenciais';
     this.userService.login(this.formUser.value).subscribe(
-      data => {
+      (data) => {
         const token = data.token;
         // pega o token da resposta e coloca na variavel token do service
         sessionStorage.setItem('token', 'Token ' + token);
-        this.userService.createSession(this.formUser.controls.username.value).subscribe(
-          data => {
-            const user = { id: data[0].id, perfil: data[0].perfil, nome: data[0].nome, cpf: data[0].cpf }
-            sessionStorage.setItem('user', JSON.stringify(user));
-            sessionStorage.setItem('logged', 'true');
-            this.appComponent.verifyLogged();
-            this.router.navigate(['/']);
-
-          },
-          error => {
-            console.log(error);
-          }
-        );
+        this.userService
+          .createSession(this.formUser.controls.username.value)
+          .subscribe(
+            (data) => {
+              const user = {
+                id: data[0].id,
+                perfil: data[0].perfil,
+                nome: data[0].nome,
+                cpf: data[0].cpf,
+              };
+              sessionStorage.setItem('user', JSON.stringify(user));
+              sessionStorage.setItem('logged', 'true');
+              this.appComponent.verifyLogged();
+              this.router.navigate(['/']);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
       },
-      error => {
+      (error) => {
         this.buildMessage('Usuário e senha inválidos', 1);
       }
-    )
+    );
   }
 
   changePassword() {
     this.appComponent.changePassword = true;
   }
-
 
   // monta a mensagem que vai ser exibida na pagina
   buildMessage(message: string, type: number) {
@@ -80,8 +81,8 @@ export class LoginComponent implements OnInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso

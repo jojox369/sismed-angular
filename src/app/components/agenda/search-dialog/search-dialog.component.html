@@ -1,65 +1,95 @@
 <div fxLayout="row" fxLayoutAlign="end start">
-    <button mat-dialog-close mat-icon-button title="Fechar">
-        <fa-icon [icon]="faTimes"></fa-icon>
-    </button>
+  <button mat-dialog-close mat-icon-button title="Fechar">
+    <fa-icon [icon]="faTimes"></fa-icon>
+  </button>
 </div>
 
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
+  <h2 mat-dialog-title>Novo Agendamento</h2>
 
-    <h2 mat-dialog-title>Novo Agendamento</h2>
+  <form fxLayout="row" fxLayoutAlign="start center" class="container">
+    <mat-form-field style="width: 90%" appearance="fill">
+      <span matPrefix> <fa-icon [icon]="faSearch"></fa-icon> &nbsp; </span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" matSuffix>
+        <fa-icon [icon]="faSortDown"></fa-icon>
+      </button>
+      <input
+        type="text"
+        [placeholder]="placeholder"
+        #searchInput
+        matInput
+        [formControl]="myControl"
+        [matAutocomplete]="auto"
+        (keyup)="toUpperCase($event)"
+        (keypress)="onlyLetters($event)"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+          [routerLink]="['/agenda/agendar', option.id]"
+          mat-dialog-close
+        >
+          {{
+            option.nome +
+              " - " +
+              (option.cpf === null ? "CPF não cadastrado" : (option.cpf | CPF))
+          }}
+        </mat-option>
 
-    <form fxLayout="row" fxLayoutAlign="start center" class="container">
+        <mat-option
+          *ngIf="preCadastro"
+          [routerLink]="['/agenda/preCadastro']"
+          mat-dialog-close
+          [value]="0"
+        >
+          Pre cadastro
+        </mat-option>
+        <span> </span>
+      </mat-autocomplete>
+    </mat-form-field>
 
-
-        <mat-form-field style="width: 90%;">
-            <span matPrefix>
-                <fa-icon [icon]="faSearch"></fa-icon> &nbsp;
-            </span>
-            <button mat-icon-button [matMenuTriggerFor]="menu" matSuffix>
-                <fa-icon [icon]="faSortDown"></fa-icon>
-            </button>
-            <input type="text" [placeholder]="placeholder" #searchInput matInput [formControl]="myControl"
-                [matAutocomplete]="auto" (keyup)="toUpperCase($event)" (keypress)=" onlyLetters($event)">
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
-                    [routerLink]="['/agenda/agendar', option.id]" mat-dialog-close>
-                    {{option.nome + ' - ' +  (option.cpf === null ? 'CPF não cadastrado' : option.cpf | CPF)}}
-                </mat-option>
-
-                <mat-option *ngIf="preCadastro" [routerLink]="['/agenda/preCadastro']" mat-dialog-close>
-                    Pre cadastro
-                </mat-option>
-                <span>
-
-                </span>
-            </mat-autocomplete>
-        </mat-form-field>
-
-        <div>
-
-            <div>
-
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item [ngClass]="{active: input === 1}" type="button" value="1"
-                        (click)="onChangeSearchSelector(1)">
-                        <span>Nome</span>
-                    </button>
-                    <button mat-menu-item [ngClass]="{active: input === 2}" type="button" value="2"
-                        (click)="onChangeSearchSelector(2)">
-                        <span>Prontuario</span>
-                    </button>
-                    <button mat-menu-item [ngClass]="{active: input === 3}" type="button" value="3"
-                        (click)="onChangeSearchSelector(3)">
-                        <span>CPF</span>
-                    </button>
-                    <button mat-menu-item [ngClass]="{active: input === 4}" type="button" value="4"
-                        (click)="onChangeSearchSelector(4)">
-                        <span>Celular</span>
-                    </button>
-
-                </mat-menu>
-            </div>
-        </div>
-
-    </form>
+    <div>
+      <div>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            [ngClass]="{ active: input === 1 }"
+            type="button"
+            value="1"
+            (click)="onChangeSearchSelector(1)"
+          >
+            <span>Nome</span>
+          </button>
+          <button
+            mat-menu-item
+            [ngClass]="{ active: input === 2 }"
+            type="button"
+            value="2"
+            (click)="onChangeSearchSelector(2)"
+          >
+            <span>Prontuario</span>
+          </button>
+          <button
+            mat-menu-item
+            [ngClass]="{ active: input === 3 }"
+            type="button"
+            value="3"
+            (click)="onChangeSearchSelector(3)"
+          >
+            <span>CPF</span>
+          </button>
+          <button
+            mat-menu-item
+            [ngClass]="{ active: input === 4 }"
+            type="button"
+            value="4"
+            (click)="onChangeSearchSelector(4)"
+          >
+            <span>Celular</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </form>
 </div>
