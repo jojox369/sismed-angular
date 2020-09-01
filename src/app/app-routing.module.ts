@@ -35,49 +35,56 @@ import { AgendaAttendanceComponent } from './components/agenda/agenda-attendance
 import { BackupRestoreComponent } from './components/backup-restore/backup-restore.component';
 import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { AccessDeniedComponent } from './components/shared/access-denied/access-denied.component';
-
+import { ErrorPageComponent } from './components/shared/error-page/error-page.component';
 
 const routes: Routes = [
   // Abre a pagina de listagem de convenio
   { path: 'convenios', component: ConvenioListComponent },
 
-
   // abre a pagina de cadastro de convenio
   { path: 'convenio/register', component: ConvenioRegisterComponent },
-
 
   // abre a pagina de detalhes de convenio
   { path: 'convenio/:convenioId', component: ConvenioDetailsComponent },
 
-
   // abre a pagina de listagem de tipos de convenio
   { path: 'tiposConvenio/:convenioId', component: TipoConvenioListComponent },
 
-
   // abre a pagina de listagem de tipos de convenio
-  { path: 'tiposConvenio/register/:convenioId', component: TipoConvenioRegisterComponent },
-
+  {
+    path: 'tiposConvenio/register/:convenioId',
+    component: TipoConvenioRegisterComponent,
+  },
 
   // abre a pagina de detalhes de tipos de convenio
-  { path: 'tipoConvenio/details/:tipoConvenioId', component: TipoConvenioDetailsComponent },
-
+  {
+    path: 'tipoConvenio/details/:tipoConvenioId',
+    component: TipoConvenioDetailsComponent,
+  },
 
   // abre a pagina de listagem dos procedimentos de um convenio
   { path: 'procedimentos/:convenioId', component: ProcedimentoListComponent },
 
-
   // abre a pagina de detalhes do procedimento
-  { path: 'procedimento/details/:procedimentoId', component: ProcedimentoDetailsComponent },
-
+  {
+    path: 'procedimento/details/:procedimentoId',
+    component: ProcedimentoDetailsComponent,
+  },
 
   // abre a pagina de cadastro de procedimento
-  { path: 'procedimento/register/:convenioId', component: ProcedimentoRegisterComponent },
+  {
+    path: 'procedimento/register/:convenioId',
+    component: ProcedimentoRegisterComponent,
+  },
 
   // abre a pagina de listagem de funcionarios
   { path: 'funcionarios', component: FuncionarioListComponent },
 
   // abre a pagina de detalhes do funcionario
-  { path: 'funcionario/:funcionarioId', component: FuncionarioDetailsComponent },
+  {
+    path: 'funcionario/:funcionarioId',
+    component: FuncionarioDetailsComponent,
+  },
 
   // abre a pagina de cadastro de funcionarios
   { path: 'funcionarios/register', component: FuncionarioRegisterComponent },
@@ -92,7 +99,10 @@ const routes: Routes = [
   { path: 'agenda/preCadastro', component: AgendaPreRegisterComponent },
 
   // abre a pagina de pre cadastro
-  { path: 'agendamento/details/:medicoId/:agendamentoId', component: AgendaDetailsComponent },
+  {
+    path: 'agendamento/details/:medicoId/:agendamentoId',
+    component: AgendaDetailsComponent,
+  },
 
   // abre a pagina de pre cadastro
   { path: 'agenda/attendence/:medicoId', component: AgendaAttendanceComponent },
@@ -107,7 +117,10 @@ const routes: Routes = [
   { path: 'laboratorios', component: LaboratorioListComponent },
 
   // abre a pagina de detalhes do laboratorio
-  { path: 'laboratorio/:laboratorioId', component: LaboratorioDetailsComponent },
+  {
+    path: 'laboratorio/:laboratorioId',
+    component: LaboratorioDetailsComponent,
+  },
 
   // abre a pagina de cadastro do laboratorio
   { path: 'laboratorios/register', component: LaboratorioRegisterComponent },
@@ -124,10 +137,12 @@ const routes: Routes = [
   // abre a pagina de backup e restore
   { path: 'backup-restore', component: BackupRestoreComponent },
 
-
   { path: 'registroclinico', component: RegistroClinicoListComponent },
 
-  { path: 'registroclinico/:direc/:id', component: RegistroClinicoRegisterComponent },
+  {
+    path: 'registroclinico/:direc/:id',
+    component: RegistroClinicoRegisterComponent,
+  },
 
   // abre a pagina inicial
   { path: 'home', component: HomeComponent },
@@ -145,6 +160,8 @@ const routes: Routes = [
 
   { path: 'access-denied', component: AccessDeniedComponent },
 
+  { path: 'error', component: ErrorPageComponent },
+
   // abre a pagina home com a url raiz é chamada
   { path: '', component: HomeComponent },
 
@@ -154,6 +171,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

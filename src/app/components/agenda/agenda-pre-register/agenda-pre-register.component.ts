@@ -7,7 +7,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { Paciente, PacientePost } from 'src/app/models/paciente';
+import { PacientePost } from 'src/app/models/paciente';
 import { Funcionario } from 'src/app/models/funcionario';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
@@ -18,7 +18,6 @@ import { PacienteService } from 'src/app/services/paciente.service';
 import { ProcedimentoService } from 'src/app/services/procedimento.service';
 import { FuncionarioService } from 'src/app/services/funcionario.service';
 import { FuncionarioTipoConvenioService } from 'src/app/services/funcionario-tipo-convenio.service';
-import { ConvenioService } from 'src/app/services/convenio.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Endereco } from 'src/app/models/endereco';
 

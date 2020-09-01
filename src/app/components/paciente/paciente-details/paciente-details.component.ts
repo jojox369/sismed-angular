@@ -1,6 +1,19 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { faTimes, faCheck, faChevronLeft, faPencilAlt, faBan, faPlus, faList } from '@fortawesome/free-solid-svg-icons';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  faTimes,
+  faCheck,
+  faChevronLeft,
+  faPencilAlt,
+  faBan,
+  faPlus,
+  faList,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { PacientePost } from 'src/app/models/paciente';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
@@ -18,10 +31,9 @@ import { LogService } from 'src/app/services/log.service';
 @Component({
   selector: 'app-paciente-details',
   templateUrl: './paciente-details.component.html',
-  styleUrls: ['./paciente-details.component.css']
+  styleUrls: ['./paciente-details.component.css'],
 })
 export class PacienteDetailsComponent implements OnInit {
-
   // Icone de exluir
   faTimes = faTimes;
 
@@ -47,7 +59,7 @@ export class PacienteDetailsComponent implements OnInit {
   pacienteId = this.route.snapshot.paramMap.get('id');
 
   // faz o controle dos campos de funcionario
-  formPaciente: FormGroup
+  formPaciente: FormGroup;
 
   // Controla a exibição dos campos de CRM e Especialidade
   isADoctor = false;
@@ -71,6 +83,10 @@ export class PacienteDetailsComponent implements OnInit {
 
   @ViewChild('numberInput') numberInput: ElementRef;
 
+  loadingDataMessage: string = 'Carregando Dados ...';
+
+  isLoading: boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -81,8 +97,8 @@ export class PacienteDetailsComponent implements OnInit {
     private convenioService: ConvenioService,
     private tipoConvenioService: TipoConvenioService,
     private enderecoService: EnderecoService,
-    private logService: LogService,
-  ) { }
+    private logService: LogService
+  ) {}
 
   ngOnInit(): void {
     this.convenioFormControl = new FormControl('', Validators.required);
@@ -90,37 +106,41 @@ export class PacienteDetailsComponent implements OnInit {
     this.getConvenios();
   }
 
-
   getPaciente() {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
-      data => {
+      (data) => {
         this.paciente = data;
         this.getTipoConvenioDetails();
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar carregar as informações do paciênte', 1);
+      (error) => {
+        this.buildMessage(
+          'Erro ao tentar carregar as informações do paciente',
+          1
+        );
+        this.router.navigate(['/error']);
       }
     );
   }
 
   getTipoConvenioDetails() {
     this.tipoConvenioService.getById(this.paciente.tipo_convenio).subscribe(
-      data => {
+      (data) => {
         this.convenioFormControl.setValue(data.convenio);
         this.createForm();
+        this.isLoading = false;
         this.getTipos();
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar recuperar as informações do plano', 1);
+      (error) => {
+        this.buildMessage(
+          'Erro ao tentar recuperar as informações do plano',
+          1
+        );
       }
     );
   }
 
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
-
     this.formPaciente = this.fb.group({
       id: [this.paciente.id],
       prontuario: [this.paciente.prontuario],
@@ -152,23 +172,20 @@ export class PacienteDetailsComponent implements OnInit {
         complemento: [this.paciente.endereco.complemento],
         bairro: [this.paciente.endereco.bairro],
         cidade: [this.paciente.endereco.cidade],
-        estado: [this.paciente.endereco.estado]
-      })
+        estado: [this.paciente.endereco.estado],
+      }),
     });
 
     this.formPaciente.disable();
     this.convenioFormControl.disable();
-
   }
 
   getConvenios() {
     this.convenioService.getAll().subscribe(
-      data => {
+      (data) => {
         this.convenios = data;
-
       },
-      error => {
-        console.log(error);
+      (error) => {
         this.buildMessage('Erro ao tentar carregar a lista de convênios', 1);
       }
     );
@@ -176,22 +193,24 @@ export class PacienteDetailsComponent implements OnInit {
 
   getTipos() {
     this.tipoConvenioService.getAll(this.convenioFormControl.value).subscribe(
-      data => {
+      (data) => {
         this.tiposConvenio = data;
-
-
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar carregar a lista de planos do convênio', 1);
+      (error) => {
+        this.buildMessage(
+          'Erro ao tentar carregar a lista de planos do convênio',
+          1
+        );
       }
     );
   }
 
   update(frm: FormGroup) {
-    this.formPaciente.value.nome = this.formPaciente.value.nome.toUpperCase();
-
-
+    this.isLoading = true;
+    this.loadingDataMessage = 'Atualizando as informações do paciente';
+    this.formPaciente.controls.nome.setValue(
+      this.formPaciente.controls.nome.value.toUpperCase()
+    );
 
     if (this.formPaciente.value.naturalidade !== null) {
       this.formPaciente.value.naturalidade = this.formPaciente.value.naturalidade.toUpperCase();
@@ -202,35 +221,56 @@ export class PacienteDetailsComponent implements OnInit {
     }
 
     if (this.formPaciente.get('endereco.logradouro').value !== null) {
-      this.formPaciente.get('endereco.logradouro').setValue(this.formPaciente.get('endereco.logradouro').value.toUpperCase());
+      this.formPaciente
+        .get('endereco.logradouro')
+        .setValue(
+          this.formPaciente.get('endereco.logradouro').value.toUpperCase()
+        );
     }
 
     if (this.formPaciente.get('endereco.bairro').value !== null) {
-      this.formPaciente.get('endereco.bairro').setValue(this.formPaciente.get('endereco.bairro').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.bairro')
+        .setValue(this.formPaciente.get('endereco.bairro').value.toUpperCase());
     }
 
     if (this.formPaciente.get('endereco.cidade').value !== null) {
-      this.formPaciente.get('endereco.cidade').setValue(this.formPaciente.get('endereco.cidade').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.cidade')
+        .setValue(this.formPaciente.get('endereco.cidade').value.toUpperCase());
     }
 
     if (this.formPaciente.get('endereco.estado').value !== null) {
-      this.formPaciente.get('endereco.estado').setValue(this.formPaciente.get('endereco.estado').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.estado')
+        .setValue(this.formPaciente.get('endereco.estado').value.toUpperCase());
     }
     if (this.formPaciente.get('endereco.complemento').value !== null) {
-      this.formPaciente.get('endereco.complemento').setValue(this.formPaciente.get('endereco.complemento').value.toUpperCase());
+      this.formPaciente
+        .get('endereco.complemento')
+        .setValue(
+          this.formPaciente.get('endereco.complemento').value.toUpperCase()
+        );
     }
 
     this.pacienteService.upadatePaciente(this.formPaciente.value).subscribe(
-      data => {
-        this.cancelEditing();
-        this.buildMessage('Dados do paciênte atualizados com sucesso!', 0);
+      (data) => {
+        this.paciente = data;
+        this.isEditing = false;
+        this.formPaciente.get('endereco.estado').disable();
+        this.formPaciente.controls.nacionalidade.disable();
+        this.formPaciente.controls.sexo.disable();
+        this.formPaciente.controls.estado_civil.disable();
+        this.formPaciente.controls.escolaridade.disable();
+        this.formPaciente.controls.tipo_convenio.disable();
+        this.formPaciente.controls.situacao.disable();
+        this.convenioFormControl.disable();
+        this.formPaciente.disable();
+        this.isLoading = false;
+        this.buildMessage('Dados do paciente atualizados com sucesso!', 0);
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar atualizar dados paciênte', 1);
+      (error) => {
+        this.buildMessage('Erro ao tentar atualizar dados paciente', 1);
       }
     );
   }
@@ -242,31 +282,33 @@ export class PacienteDetailsComponent implements OnInit {
 
   delete() {
     let dialogRef = this.dialog.open(DeleteDialogComponent);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
+      this.isLoading = true;
+      this.loadingDataMessage = 'Excluindo paciente';
       if (result === 'true') {
         this.pacienteService.deletePaciente(Number(this.pacienteId)).subscribe(
           (data) => {
-            let log = new LogSave;
+            let log = new LogSave();
             log.data = this.getDate();
             log.hora = new Date().toLocaleTimeString();
             log.funcionario = this.user.id;
             log.evento = 'EXCLUSÃO';
-            log.descricao = 'EXCLUSÃO DO PACIÊNTE ' + this.paciente.nome;
+            log.descricao = 'EXCLUSÃO DO paciente ' + this.paciente.nome;
             this.logService.save(log).subscribe(
-              data => {
-                console.log('aqui');
-              },
-              error => {
-                console.log(error);
-                this.buildMessage('Erro ao tentar salvar o registro de evento', 1);
-
+              (data) => {},
+              (error) => {
+                this.buildMessage(
+                  'Erro ao tentar salvar o registro de evento',
+                  1
+                );
               }
             );
-            this.pacienteService.message = 'Paciênte excluido com sucesso!';
-            this.router.navigate(['pacientes']);
+            this.pacienteService.message = 'Paciente excluido com sucesso!';
+            this.router.navigate(['/pacientes']);
           },
           (error) => {
             this.buildMessage('Erro ao tentar excluir o paciente', 1);
+            this.isLoading = false;
           }
         );
       }
@@ -276,12 +318,12 @@ export class PacienteDetailsComponent implements OnInit {
   /*função que ao digitar, passa todas as letras para maiusculo*/
   toUpperCase(event: any) {
     event.target.value = event.target.value.toUpperCase();
-
   }
 
   // Varificação de caractere
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (
+      event.charCode == 32 || // espaço
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
       (event.charCode > 191 && event.charCode <= 255) // letras com acentos
@@ -291,9 +333,7 @@ export class PacienteDetailsComponent implements OnInit {
       this.buildMessage('Insira apenas letras', 1);
       return false;
     }
-
   }
-
 
   /*Função para liberar os campos para edição */
   unblockFields() {
@@ -312,25 +352,37 @@ export class PacienteDetailsComponent implements OnInit {
     this.formPaciente.controls.escolaridade.disable();
     this.formPaciente.controls.tipo_convenio.disable();
     this.formPaciente.controls.situacao.disable();
+    this.convenioFormControl.disable();
+    this.formPaciente.disable();
     this.getPaciente();
   }
 
-
   getEndereco() {
-    this.enderecoService.getEndereco(this.formPaciente.value.endereco.cep).subscribe(
-      data => {
-        this.formPaciente.get('endereco.logradouro').setValue(data['logradouro'].toUpperCase());
-        this.formPaciente.get('endereco.bairro').setValue(data['bairro'].toUpperCase());
-        this.formPaciente.get('endereco.cidade').setValue(data['localidade'].toUpperCase());
-        this.formPaciente.get('endereco.estado').setValue(data['uf'].toUpperCase());
-        this.formPaciente.get('endereco.complemento').setValue(data['complemento'].toUpperCase());
-        this.numberInput.nativeElement.focus();
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar carregar dados do endereco', 1);
-      }
-    );
+    this.enderecoService
+      .getEndereco(this.formPaciente.value.endereco.cep)
+      .subscribe(
+        (data) => {
+          this.formPaciente
+            .get('endereco.logradouro')
+            .setValue(data['logradouro'].toUpperCase());
+          this.formPaciente
+            .get('endereco.bairro')
+            .setValue(data['bairro'].toUpperCase());
+          this.formPaciente
+            .get('endereco.cidade')
+            .setValue(data['localidade'].toUpperCase());
+          this.formPaciente
+            .get('endereco.estado')
+            .setValue(data['uf'].toUpperCase());
+          this.formPaciente
+            .get('endereco.complemento')
+            .setValue(data['complemento'].toUpperCase());
+          this.numberInput.nativeElement.focus();
+        },
+        (error) => {
+          this.buildMessage('Erro ao tentar carregar dados do endereco', 1);
+        }
+      );
   }
 
   // monta a mensagem que vai ser exibida na pagina
@@ -339,8 +391,8 @@ export class PacienteDetailsComponent implements OnInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -357,5 +409,4 @@ export class PacienteDetailsComponent implements OnInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
 }

@@ -89,6 +89,7 @@ import { DetailsDialogComponent } from './components/log/details-dialog/details-
 import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { AccessDeniedComponent } from './components/shared/access-denied/access-denied.component';
 import { LoadingDataComponent } from './components/shared/loading-data/loading-data.component';
+import { ErrorPageComponent } from './components/shared/error-page/error-page.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -147,7 +148,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     DetailsDialogComponent,
     ForgotPasswordComponent,
     AccessDeniedComponent,
-    LoadingDataComponent
+    LoadingDataComponent,
+    ErrorPageComponent
   ],
   entryComponents: [DeleteDialogComponent],
   imports: [

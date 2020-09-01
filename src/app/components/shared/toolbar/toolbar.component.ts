@@ -20,14 +20,7 @@ import { UserDialogComponent } from '../../user/user-dialog/user-dialog.componen
   styleUrls: ['./toolbar.component.css'],
 })
 export class ToolbarComponent implements OnInit {
-  navLinks = [
-
-
-
-
-  ];
-
-
+  navLinks = [];
 
   user = JSON.parse(sessionStorage.getItem('user'));
   activeLink;
@@ -35,10 +28,7 @@ export class ToolbarComponent implements OnInit {
   clock: string;
   faUserCircle = faUserCircle;
   currentUrl;
-  constructor(
-    private router: Router,
-    private dialog: MatDialog
-  ) { }
+  constructor(private router: Router, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getDate();
@@ -48,12 +38,13 @@ export class ToolbarComponent implements OnInit {
   }
 
   pushData() {
-    this.navLinks.push({
-      path: '/home',
-      label: 'Inicio',
-      icon: faHome,
-      title: 'Pagina Inicial'
-    },
+    this.navLinks.push(
+      {
+        path: '/home',
+        label: 'Inicio',
+        icon: faHome,
+        title: 'Pagina Inicial',
+      },
       {
         path: '/agenda',
         label: 'Agenda',
@@ -78,7 +69,8 @@ export class ToolbarComponent implements OnInit {
         icon: faNotesMedical,
         title: 'Listar Convenios',
         routers: ['convenio', 'convenios'],
-      });
+      }
+    );
 
     if (this.user.perfil !== 2) {
       this.navLinks.push({
@@ -86,21 +78,23 @@ export class ToolbarComponent implements OnInit {
         label: 'Regsitros Clínicos',
         icon: faFileMedical,
         title: 'Listar Registros Clinícos',
-      })
+      });
     }
 
-    this.navLinks.push({
-      path: '/laboratorios',
-      label: 'Laboratórios',
-      icon: faVial,
-      title: 'Listar Laboratórios',
-    },
+    this.navLinks.push(
+      {
+        path: '/laboratorios',
+        label: 'Laboratórios',
+        icon: faVial,
+        title: 'Listar Laboratórios',
+      },
       {
         path: '/exames',
         label: 'Exames',
         icon: faBriefcaseMedical,
         title: 'Listar exames',
-      })
+      }
+    );
   }
 
   // função para montar a data
@@ -196,7 +190,7 @@ export class ToolbarComponent implements OnInit {
         this.currentUrl = url.url;
       }
       for (const link of this.navLinks) {
-        /*FAZER ISSO PARA TODAS AS ROTAS! 
+        /*FAZER ISSO PARA TODAS AS ROTAS!
           TENTAR USAR REGEX
         */
         if (
@@ -246,8 +240,8 @@ export class ToolbarComponent implements OnInit {
           this.currentUrl.includes('/backup') ||
           this.currentUrl.includes('/relatorio') ||
           this.currentUrl.includes('/log') ||
-          this.currentUrl.includes('/access-denied')
-
+          this.currentUrl.includes('/access-denied') ||
+          this.currentUrl.includes('/error')
         ) {
           this.activeLink = undefined;
         } else {
@@ -258,15 +252,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   openUserDialog() {
-
     const dialogPosition: DialogPosition = {
       top: '75px',
-      right: '0'
+      right: '0',
     };
 
     const dialogRef = this.dialog.open(UserDialogComponent, {
       width: '550px',
-      position: dialogPosition
+      position: dialogPosition,
     });
   }
 }

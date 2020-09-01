@@ -175,11 +175,11 @@ export class AgendaDetailsComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
           this.buildMessage(
             'Erro ao carregar as informações do agendamento',
             1
           );
+          this.router.navigate(['/error']);
         }
       );
   }
@@ -191,7 +191,6 @@ export class AgendaDetailsComponent implements OnInit {
         this.medicos = data;
       },
       (error) => {
-        console.log(error);
         this.buildMessage('Erro ao tentar recuperar a lista de médicos', 1);
       }
     );
@@ -206,7 +205,6 @@ export class AgendaDetailsComponent implements OnInit {
           this.convenios = data;
         },
         (error) => {
-          console.log(error);
           this.buildMessage(
             'Erro ao tentar recuperar a lista de convenios aceitos pelo médico',
             1
@@ -225,7 +223,6 @@ export class AgendaDetailsComponent implements OnInit {
           this.showFields = true;
         },
         (error) => {
-          console.log(error);
           this.buildMessage(
             'Erro ao tentar recuperar as informações do paciente ',
             1
@@ -247,7 +244,6 @@ export class AgendaDetailsComponent implements OnInit {
               this.getProcedimentos();
             },
             (error) => {
-              console.log(error);
               this.buildMessage(
                 'Erro ao tentar recuperar as informações do convenio',
                 1
@@ -256,7 +252,6 @@ export class AgendaDetailsComponent implements OnInit {
           );
         },
         (error) => {
-          console.log(error);
           this.buildMessage(
             'Erro ao tentar recuperar as informações do plano',
             1
@@ -280,7 +275,6 @@ export class AgendaDetailsComponent implements OnInit {
           this.isLoading = false;
         },
         (error) => {
-          console.log(error);
           this.buildMessage(
             'Erro ao tentar recuperar as informações do médico',
             1
@@ -300,9 +294,7 @@ export class AgendaDetailsComponent implements OnInit {
         (data) => {
           this.tipos = data;
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
   }
 
@@ -312,9 +304,7 @@ export class AgendaDetailsComponent implements OnInit {
       (data) => {
         this.procedimentos = data;
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
   }
 
@@ -395,7 +385,6 @@ export class AgendaDetailsComponent implements OnInit {
         }
       },
       (error) => {
-        console.log(error);
         this.buildMessage('Erro ao tentar salvar as informações', 1);
         this.isLoading = false;
       }
@@ -405,6 +394,8 @@ export class AgendaDetailsComponent implements OnInit {
   delete() {
     let dialogRef = this.dialog.open(DeleteDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
+      this.isLoading = true;
+      this.loadingDataMessage = 'Excluindo agendamento';
       if (result === 'true') {
         this.agendaService.deleteAgendamento(this.agendamento.id).subscribe(
           (data) => {
@@ -412,7 +403,7 @@ export class AgendaDetailsComponent implements OnInit {
             this.router.navigate(['/agenda']);
           },
           (error) => {
-            console.log(error);
+            this.isLoading = false;
             this.buildMessage('Erro ao tentar excluir o agendamento', 1);
           }
         );
@@ -447,7 +438,6 @@ export class AgendaDetailsComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
             this.buildMessage(
               'Erro ao tentar verificar a disponibilidade do médico',
               1

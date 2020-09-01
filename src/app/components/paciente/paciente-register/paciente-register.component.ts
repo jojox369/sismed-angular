@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+} from '@angular/forms';
 import { PacientePost } from 'src/app/models/paciente';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Convenio } from 'src/app/models/convenio';
@@ -15,17 +20,17 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-paciente-register',
   templateUrl: './paciente-register.component.html',
-  styleUrls: ['./paciente-register.component.css']
+  styleUrls: ['./paciente-register.component.css'],
 })
 export class PacienteRegisterComponent implements OnInit {
   //Icone de voltar
-  faChevronLeft = faChevronLeft
+  faChevronLeft = faChevronLeft;
 
   // icone de salvar
   faCheck = faCheck;
 
   // faz o controle dos campos de paciente
-  formPaciente: FormGroup
+  formPaciente: FormGroup;
 
   // Recebe os dados informados no formulario
   paciente: PacientePost;
@@ -39,6 +44,10 @@ export class PacienteRegisterComponent implements OnInit {
   // controla o select de convenio
   convenioFormControl: FormControl;
 
+  loadingDataMessage: string;
+
+  isLoading: boolean;
+
   @ViewChild('numberInput') numberInput: ElementRef;
 
   constructor(
@@ -49,7 +58,7 @@ export class PacienteRegisterComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.paciente = new PacientePost();
@@ -58,12 +67,10 @@ export class PacienteRegisterComponent implements OnInit {
     this.getConvenios();
     this.getLastProntuario();
     this.createForm();
-
   }
 
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
-
     this.formPaciente = this.fb.group({
       prontuario: [this.paciente.prontuario],
       nome: [this.paciente.nome, Validators.required],
@@ -93,17 +100,18 @@ export class PacienteRegisterComponent implements OnInit {
         complemento: [this.paciente.endereco.complemento],
         bairro: [this.paciente.endereco.bairro],
         cidade: [this.paciente.endereco.cidade],
-        estado: [this.paciente.endereco.estado]
-      })
+        estado: [this.paciente.endereco.estado],
+      }),
     });
-
   }
 
   save(frm: FormGroup) {
-    this.formPaciente.value.nome = this.formPaciente.value.nome.toUpperCase();
+    this.isLoading = true;
+    this.loadingDataMessage = 'Cadastrando paciente';
 
-
-
+    this.formPaciente.controls.nome.setValue(
+      this.formPaciente.controls.nome.value.toUpperCase()
+    );
     if (this.formPaciente.value.naturalidade !== null) {
       this.formPaciente.value.naturalidade = this.formPaciente.value.naturalidade.toUpperCase();
     }
@@ -113,49 +121,72 @@ export class PacienteRegisterComponent implements OnInit {
     }
 
     if (this.formPaciente.get('endereco.logradouro').value !== null) {
-      this.formPaciente.get('endereco.logradouro').setValue(this.formPaciente.get('endereco.logradouro').value.toUpperCase());
+      this.formPaciente
+        .get('endereco.logradouro')
+        .setValue(
+          this.formPaciente.get('endereco.logradouro').value.toUpperCase()
+        );
     }
 
     if (this.formPaciente.get('endereco.bairro').value !== null) {
-      this.formPaciente.get('endereco.bairro').setValue(this.formPaciente.get('endereco.bairro').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.bairro')
+        .setValue(this.formPaciente.get('endereco.bairro').value.toUpperCase());
     }
 
     if (this.formPaciente.get('endereco.cidade').value !== null) {
-      this.formPaciente.get('endereco.cidade').setValue(this.formPaciente.get('endereco.cidade').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.cidade')
+        .setValue(this.formPaciente.get('endereco.cidade').value.toUpperCase());
     }
 
     if (this.formPaciente.get('endereco.estado').value !== null) {
-      this.formPaciente.get('endereco.estado').setValue(this.formPaciente.get('endereco.estado').value.toUpperCase());
-
+      this.formPaciente
+        .get('endereco.estado')
+        .setValue(this.formPaciente.get('endereco.estado').value.toUpperCase());
     }
     if (this.formPaciente.get('endereco.complemento').value !== null) {
-      this.formPaciente.get('endereco.complemento').setValue(this.formPaciente.get('endereco.complemento').value.toUpperCase());
+      this.formPaciente
+        .get('endereco.complemento')
+        .setValue(
+          this.formPaciente.get('endereco.complemento').value.toUpperCase()
+        );
     }
 
     this.pacienteService.savePaciente(this.formPaciente.value).subscribe(
-      data => {
+      (data) => {
         this.router.navigate(['pacientes']);
         this.pacienteService.message = 'Paciente cadastrado com sucesso';
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar cadastrar o paciênte', 1);
+      (error) => {
+        this.isLoading = false;
+        this.buildMessage('Erro ao tentar cadastrar o paciente', 1);
       }
     );
+  }
 
+  verifyCPF() {
+    this.pacienteService
+      .getPacienteByCpf(this.formPaciente.controls.cpf.value)
+      .subscribe(
+        (data) => {
+          if (Object.keys(data).length > 0) {
+            this.buildMessage('CPF já cadastrado', 1);
+          }
+        },
+        (error) => {}
+      );
   }
 
   /*função que ao digitar, passa todas as letras para maiusculo*/
   toUpperCase(event: any) {
     event.target.value = event.target.value.toUpperCase();
-
   }
 
   // Varificação de caractere
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (
+      event.charCode == 32 || // espaço
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
       (event.charCode > 191 && event.charCode <= 255) // letras com acentos
@@ -165,64 +196,69 @@ export class PacienteRegisterComponent implements OnInit {
       this.buildMessage('Insira apenas letras', 1);
       return false;
     }
-
   }
 
   getConvenios() {
     this.convenioService.getAll().subscribe(
-      data => {
+      (data) => {
         this.convenios = data;
       },
-      error => {
-        console.log(error);
+      (error) => {
         this.buildMessage('Erro ao tentar carregar a lista de convênios', 1);
       }
     );
   }
 
   getLastProntuario() {
-    this.pacienteService.lastId().subscribe(
-      data => {
-        if (Object.keys(data).length === 0) {
-          this.formPaciente.controls.prontuario.setValue(1);
-
-        } else {
-          this.formPaciente.controls.prontuario.setValue(data[0].prontuario + 1);
-        }
-
+    this.pacienteService.lastId().subscribe((data) => {
+      if (Object.keys(data).length === 0) {
+        this.formPaciente.controls.prontuario.setValue(1);
+      } else {
+        this.formPaciente.controls.prontuario.setValue(data[0].prontuario + 1);
       }
-    );
+    });
   }
 
   getTipos() {
     this.tipoConvenioService.getAll(this.convenioFormControl.value).subscribe(
-      data => {
+      (data) => {
         this.tiposConvenio = data;
-
-
       },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar carregar a lista de planos do convênio', 1);
+      (error) => {
+        this.buildMessage(
+          'Erro ao tentar carregar a lista de planos do convênio',
+          1
+        );
       }
     );
   }
 
   getEndereco() {
-    this.enderecoService.getEndereco(this.formPaciente.value.endereco.cep).subscribe(
-      data => {
-        this.formPaciente.get('endereco.logradouro').setValue(data['logradouro'].toUpperCase());
-        this.formPaciente.get('endereco.bairro').setValue(data['bairro'].toUpperCase());
-        this.formPaciente.get('endereco.cidade').setValue(data['localidade'].toUpperCase());
-        this.formPaciente.get('endereco.estado').setValue(data['uf'].toUpperCase());
-        this.formPaciente.get('endereco.complemento').setValue(data['complemento'].toUpperCase());
-        this.numberInput.nativeElement.focus();
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar carregar dados do endereco', 1);
-      }
-    );
+    this.enderecoService
+      .getEndereco(this.formPaciente.value.endereco.cep)
+      .subscribe(
+        (data) => {
+          this.formPaciente
+            .get('endereco.logradouro')
+            .setValue(data['logradouro'].toUpperCase());
+          this.formPaciente
+            .get('endereco.bairro')
+            .setValue(data['bairro'].toUpperCase());
+          this.formPaciente
+            .get('endereco.cidade')
+            .setValue(data['localidade'].toUpperCase());
+          this.formPaciente
+            .get('endereco.estado')
+            .setValue(data['uf'].toUpperCase());
+          this.formPaciente
+            .get('endereco.complemento')
+            .setValue(data['complemento'].toUpperCase());
+          this.numberInput.nativeElement.focus();
+        },
+        (error) => {
+          this.buildMessage('Erro ao tentar carregar dados do endereco', 1);
+        }
+      );
   }
 
   // monta a mensagem que vai ser exibida na pagina
@@ -231,8 +267,8 @@ export class PacienteRegisterComponent implements OnInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -249,5 +285,4 @@ export class PacienteRegisterComponent implements OnInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
 }
