@@ -3,13 +3,7 @@ ul {
   margin-top: 4px;
 }
 
-
-.list-tables ul li + li{
-  margin-top: 0.5rem;
-  font-size: 15px;
-}
-
- .buttons > * {
+.buttons > * {
   width: 10%;
 }
 
@@ -17,18 +11,17 @@ ul {
   margin-right: 5px;
 }
 
-.tables-name{
-  margin: 1rem 0; 
-  font-size: 20px
+.tables-name {
+  margin: 1rem 0;
+  font-size: 20px;
 }
 
-.tables-name span fa-icon{
+.tables-name span fa-icon {
   border: 0;
   margin: 0, 0, 0, 5px;
   font-size: 15px;
 }
 
-fa-icon{
+fa-icon {
   margin-right: 1rem;
 }
-

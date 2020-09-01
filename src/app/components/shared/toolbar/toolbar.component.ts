@@ -59,13 +59,13 @@ export class ToolbarComponent implements OnInit {
       },
       {
         path: '/funcionarios',
-        label: 'Funcionarios',
+        label: 'Funcionários',
         icon: faUserMd,
         title: 'Listar Funcionarios',
       },
       {
         path: '/convenios',
-        label: 'Convenios',
+        label: 'Convênios',
         icon: faNotesMedical,
         title: 'Listar Convenios',
         routers: ['convenio', 'convenios'],

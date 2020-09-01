@@ -60,13 +60,12 @@ export class LoginComponent implements OnInit {
               this.appComponent.verifyLogged();
               this.router.navigate(['/']);
             },
-            (error) => {
-              console.log(error);
-            }
+            (error) => {}
           );
       },
       (error) => {
         this.buildMessage('Usuário e senha inválidos', 1);
+        this.isLoading = false;
       }
     );
   }

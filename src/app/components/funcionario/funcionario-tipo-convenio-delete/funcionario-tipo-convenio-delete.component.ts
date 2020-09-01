@@ -8,7 +8,7 @@ import { FuncionarioTipoConvenioService } from 'src/app/services/funcionario-tip
 @Component({
   selector: 'app-funcionario-tipo-convenio-delete',
   templateUrl: './funcionario-tipo-convenio-delete.component.html',
-  styleUrls: ['./funcionario-tipo-convenio-delete.component.css']
+  styleUrls: ['./funcionario-tipo-convenio-delete.component.css'],
 })
 export class FuncionarioTipoConvenioDeleteComponent implements OnInit {
   faBan = faBan;
@@ -33,68 +33,74 @@ export class FuncionarioTipoConvenioDeleteComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private funcionarioTipoConvenioService: FuncionarioTipoConvenioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getConvenios();
   }
 
   getConvenios() {
-    this.funcionarioTipoConvenioService.getAcceptedConvenios(this.funcionarioId).subscribe(
-      data => {
-        this.convenios = data;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.funcionarioTipoConvenioService
+      .getAcceptedConvenios(this.funcionarioId)
+      .subscribe(
+        (data) => {
+          this.convenios = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   getTipos() {
-    this.funcionarioTipoConvenioService.getAcceptedTipos(this.funcionarioId, this.convenioSelected).subscribe(
-      data => {
-        this.tipos = data;
-        this.hasData = true;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.funcionarioTipoConvenioService
+      .getAcceptedTipos(this.funcionarioId, this.convenioSelected)
+      .subscribe(
+        (data) => {
+          this.tipos = data;
+          this.hasData = true;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   selectedAll() {
     if (this.allSelected) {
       this.allSelected = false;
-      this.tipos.forEach(element => {
+      this.tipos.forEach((element) => {
         element.selected = false;
       });
-
     } else {
       this.allSelected = true;
-      this.tipos.forEach(element => {
+      this.tipos.forEach((element) => {
         element.selected = true;
       });
     }
   }
 
   updateAllComplete() {
-    this.allSelected = this.tipos.every(e => e.selected);
+    this.allSelected = this.tipos.every((e) => e.selected);
   }
 
   someComplete() {
     if (this.tipos == null) {
       return false;
     }
-    return this.tipos.filter(t => t.selected).length > 0 && !this.allSelected;
+    return this.tipos.filter((t) => t.selected).length > 0 && !this.allSelected;
   }
 
   delete() {
-    const tiposSelected = this.tipos.filter((ch) => {
-      return ch.selected;
-    }).map((ch) => {
-      return ch.id;
-    });
+    const tiposSelected = this.tipos
+      .filter((ch) => {
+        return ch.selected;
+      })
+      .map((ch) => {
+        return ch.id;
+      });
 
+    let count;
     /*
       Como não consegui sobresvecer o metodo delete no django, eu criei uma url e uma view que me retornasse o objeto que eu quero excluir
       Assim, eu recupero os id's dos tipos de convenio dentro do for, dai passo o id do funcionario e o id do tipo para o metodo que me
@@ -104,23 +110,36 @@ export class FuncionarioTipoConvenioDeleteComponent implements OnInit {
       para eu poder ter o id do objeto,para entãopassar para o metodo de exclusao de tipo*/
 
     for (const tipo of tiposSelected) {
-      this.funcionarioTipoConvenioService.getFuncionarioTipoDetail(this.funcionarioId, tipo).subscribe(
-        data => {
-          const id = data[0].id;
-          this.funcionarioTipoConvenioService.deleteTiposFuncionario(id).subscribe(
-            data => {
-              this.buildMessage('Tipos de Convenio excluido com sucesso', 0);
-              this.dialog.closeAll();
-            },
-            error => {
-              this.buildMessage('Erro ao tentar excluir tipo de convenio', 1);
-            }
-          );
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      this.funcionarioTipoConvenioService
+        .getFuncionarioTipoDetail(this.funcionarioId, tipo)
+        .subscribe(
+          (data) => {
+            const id = data[0].id;
+            this.funcionarioTipoConvenioService
+              .deleteTiposFuncionario(id)
+              .subscribe(
+                (data) => {
+                  count++;
+                  if (count === tiposSelected.length) {
+                    this.buildMessage(
+                      'Tipos de Convenio excluido com sucesso',
+                      0
+                    );
+                    this.dialog.closeAll();
+                  }
+                },
+                (error) => {
+                  this.buildMessage(
+                    'Erro ao tentar excluir tipo de convenio',
+                    1
+                  );
+                }
+              );
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
 
@@ -164,7 +183,7 @@ export class FuncionarioTipoConvenioDeleteComponent implements OnInit {
       com o objeto que eu quero excluir dentro(não consegui fazer retornar o objeto puro)
       Então, para cada id na variavel tiposSelected, eu tenho que fazer uma requisição para buscar o objeto,
       para eu poder ter o id do objeto,para entãopassar para o metodo de exclusao de tipo
-    
+
    for (const tipos of tiposSelected) {
     this.funcionarioTipoConvenioService.getFuncionarioTipoDetail(this.funcionarioId, tipos).subscribe(
       data => {

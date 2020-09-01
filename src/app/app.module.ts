@@ -90,6 +90,8 @@ import { ForgotPasswordComponent } from './components/user/forgot-password/forgo
 import { AccessDeniedComponent } from './components/shared/access-denied/access-denied.component';
 import { LoadingDataComponent } from './components/shared/loading-data/loading-data.component';
 import { ErrorPageComponent } from './components/shared/error-page/error-page.component';
+import { RgPipe } from './pipes/rg.pipe';
+import { ChangePasswordComponent } from './components/funcionario/change-password/change-password.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -149,7 +151,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ForgotPasswordComponent,
     AccessDeniedComponent,
     LoadingDataComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    RgPipe,
+    ChangePasswordComponent
   ],
   entryComponents: [DeleteDialogComponent],
   imports: [

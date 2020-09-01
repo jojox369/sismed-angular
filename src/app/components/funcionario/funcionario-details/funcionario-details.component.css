@@ -1,33 +1,22 @@
 /* Tamanho do formulario*/
-.form {
-    width: 25%;
-    padding: 3px;
+
+.row {
+  margin-top: 30px;
 }
 
-
-/*Todos os componentes dentro da grid irão ocupar 100% da grid*/
-
-.form > * {
-    width: 100%;
+h5 {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 15px;
 }
 
-.row{
-    margin-top: 30px;
+.convenioButtons a {
+  width: 30%;
+  margin: 5px;
 }
 
-h5{
-    margin-bottom: 15px; 
-    margin-top: 15px;
-    padding-bottom: 10px; 
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 15px;
-}
-
-.convenioButtons a{
-    width: 30%;
-    margin: 5px;
-}
-
-.convenioButtons fa-icon{
-    margin-right: 15px;
+.convenioButtons fa-icon {
+  margin-right: 15px;
 }

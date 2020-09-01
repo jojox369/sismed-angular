@@ -49,8 +49,14 @@ a {
   font-size: 13px;
 }
 
+/* Centraliza o spinner*/
 .mat-spinner {
   margin: 0 auto;
+}
+
+ul li + li {
+  margin-top: 0.5rem;
+  font-size: 15px;
 }
 
 /*Define um espaço entre os botões*/
