@@ -394,9 +394,9 @@ export class AgendaDetailsComponent implements OnInit {
   delete() {
     let dialogRef = this.dialog.open(DeleteDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      this.isLoading = true;
-      this.loadingDataMessage = 'Excluindo agendamento';
       if (result === 'true') {
+        this.isLoading = true;
+        this.loadingDataMessage = 'Excluindo agendamento';
         this.agendaService.deleteAgendamento(this.agendamento.id).subscribe(
           (data) => {
             this.agendaService.message = 'Agendamento Excluído Com Sucesso!';

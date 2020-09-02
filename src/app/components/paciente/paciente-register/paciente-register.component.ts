@@ -107,17 +107,33 @@ export class PacienteRegisterComponent implements OnInit {
 
   save(frm: FormGroup) {
     this.isLoading = true;
-    this.loadingDataMessage = 'Cadastrando paciente';
-
+    this.loadingDataMessage = 'Atualizando as informações do paciente';
     this.formPaciente.controls.nome.setValue(
       this.formPaciente.controls.nome.value.toUpperCase()
     );
-    if (this.formPaciente.value.naturalidade !== null) {
-      this.formPaciente.value.naturalidade = this.formPaciente.value.naturalidade.toUpperCase();
+
+    if (this.formPaciente.controls.naturalidade.value !== null) {
+      this.formPaciente.controls.naturalidade.setValue(
+        this.formPaciente.controls.naturalidade.value.toUpperCase()
+      );
     }
 
-    if (this.formPaciente.value.orgao_emissor !== null) {
-      this.formPaciente.value.orgao_emissor = this.formPaciente.value.orgao_emissor.toUpperCase();
+    if (this.formPaciente.controls.orgao_emissor.value !== null) {
+      this.formPaciente.controls.orgao_emissor.setValue(
+        this.formPaciente.controls.orgao_emissor.value.toUpperCase()
+      );
+    }
+
+    if (this.formPaciente.controls.profissao.value !== null) {
+      this.formPaciente.controls.profissao.setValue(
+        this.formPaciente.controls.profissao.value.toUpperCase()
+      );
+    }
+
+    if (this.formPaciente.controls.recomendacao.value !== null) {
+      this.formPaciente.controls.recomendacao.setValue(
+        this.formPaciente.controls.recomendacao.value.toUpperCase()
+      );
     }
 
     if (this.formPaciente.get('endereco.logradouro').value !== null) {

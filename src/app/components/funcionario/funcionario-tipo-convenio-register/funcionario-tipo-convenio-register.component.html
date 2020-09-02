@@ -45,9 +45,6 @@
       <button class="btn-success" mat-stroked-button (click)="save()">
         <fa-icon [icon]="faCheck"></fa-icon> Cadastrar
       </button>
-      <button class="btn-danger" mat-stroked-button>
-        <fa-icon [icon]="faBan"></fa-icon> Cancelar
-      </button>
     </mat-dialog-actions>
   </div>
 </div>
@@ -89,6 +86,7 @@
     class="btn-sismed btn-spacer"
     style="margin-top: 1rem"
     (click)="newOperation()"
+    *ngIf="showNewOperationButton"
   >
     <fa-icon [icon]="faPlus"></fa-icon> Realizar nova operação
   </button>

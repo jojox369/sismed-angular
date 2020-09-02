@@ -20,6 +20,7 @@
       </button>
 
       <button
+        type="button"
         mat-stroked-button
         class="btn-danger btn-spacer float-right"
         title="Cancelar edição"
@@ -30,6 +31,7 @@
       </button>
 
       <button
+        type="button"
         mat-stroked-button
         class="btn-success float-right"
         title="Editar funcionario"
@@ -39,7 +41,8 @@
         <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
       </button>
 
-      <a
+      <button
+        type="button"
         mat-stroked-button
         class="btn-danger btn-spacer float-right"
         title="Excluir funcionario"
@@ -47,9 +50,10 @@
         *ngIf="!isEditing"
       >
         <fa-icon [icon]="faTimes"></fa-icon> Excluir
-      </a>
+      </button>
 
-      <a
+      <button
+        type="button"
         mat-stroked-button
         class="btn-sismed float-right btn-spacer"
         title="Clique para alterar a senha"
@@ -57,7 +61,7 @@
         *ngIf="user.id === 3 || user.cpf === funcionario.cpf"
       >
         <fa-icon [icon]="faKey"></fa-icon> Alterar Senha
-      </a>
+      </button>
 
       <a
         mat-stroked-button
@@ -325,7 +329,8 @@
 
         <div *ngIf="isADoctor" class="convenioButtons">
           <h5 fxLayoutAlign="center center">Convênios</h5>
-          <a
+          <button
+            type="button"
             mat-stroked-button
             class="btn-sismed"
             (click)="listTiposConvenio()"
@@ -333,8 +338,9 @@
             [disabled]="!isEditing"
           >
             <fa-icon [icon]="faList"></fa-icon> Listar
-          </a>
-          <a
+          </button>
+          <button
+            type="button"
             mat-stroked-button
             class="btn-success"
             (click)="registerTiposConvenio()"
@@ -342,8 +348,9 @@
             [disabled]="!isEditing"
           >
             <fa-icon [icon]="faPlus"></fa-icon> Cadastrar
-          </a>
-          <a
+          </button>
+          <button
+            type="button"
             mat-stroked-button
             class="btn-danger"
             (click)="deleteTiposConvenio()"
@@ -351,7 +358,7 @@
             [disabled]="!isEditing"
           >
             <fa-icon [icon]="faTimes"></fa-icon> Excluir
-          </a>
+          </button>
         </div>
       </div>
 

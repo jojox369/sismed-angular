@@ -27,6 +27,7 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
   faCheck = faCheck;
 
   faTimes = faTimes;
+
   faPlus = faPlus;
 
   convenios: Convenio[];
@@ -45,12 +46,15 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
 
   showLoadingData: boolean;
 
+  showNewOperationButton: boolean;
+
   // Recebe as informações dos tipos de convenio
   tipos: TiposConvenio[];
 
   hasData = false;
 
   tablesSelectedNames = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public funcionarioId: string,
     private snackBar: MatSnackBar,
@@ -124,14 +128,14 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
     this.showSelect = false;
 
     const tiposSelected = this.tipos
-      .filter((ch) => {
-        return ch.selected;
+      .filter((tipo) => {
+        return tipo.selected;
       })
-      .map((ch) => {
-        return { id: ch.id, nome: ch.nome, hasError: false };
+      .map((tipo) => {
+        return { id: tipo.id, nome: tipo.nome, hasError: false };
       });
 
-    let count;
+    let count = 0;
 
     const funcionarioTipos = {
       funcionario: this.funcionarioId,
@@ -149,12 +153,12 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
             count++;
             this.awaitResponse = false;
             if (count === tiposSelected.length) {
-              this.buildMessage('Tipos de Convenio salvos com sucesso', 0);
-              this.dialog.closeAll();
+              this.showNewOperationButton = true;
             }
           },
           (error) => {
             tipos.hasError = true;
+            this.showNewOperationButton = true;
           }
         );
     }

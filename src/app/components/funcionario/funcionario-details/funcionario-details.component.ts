@@ -339,9 +339,9 @@ export class FuncionarioDetailsComponent implements OnInit {
   delete() {
     let dialogRef = this.dialog.open(DeleteDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      this.isLoading = true;
-      this.loadingDataMessage = 'Excluindo funcionário';
       if (result === 'true') {
+        this.isLoading = true;
+        this.loadingDataMessage = 'Excluindo funcionário';
         this.funcionarioService.deleteFuncionario(this.funcionarioId).subscribe(
           (data) => {
             this.log = new LogSave();
@@ -396,8 +396,8 @@ export class FuncionarioDetailsComponent implements OnInit {
 
   listTiposConvenio() {
     const dialogRef = this.dialog.open(FuncionarioTipoConvenioListComponent, {
-      height: '500px',
-      width: '600px',
+      height: '600px',
+      width: '650px',
       data: { id: this.funcionarioId, nome: this.funcionario.nome },
     });
   }
@@ -406,8 +406,8 @@ export class FuncionarioDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(
       FuncionarioTipoConvenioRegisterComponent,
       {
-        height: '500px',
-        width: '600px',
+        height: '600px',
+        width: '650px',
         data: this.funcionarioId,
       }
     );
@@ -415,16 +415,16 @@ export class FuncionarioDetailsComponent implements OnInit {
 
   deleteTiposConvenio() {
     const dialogRef = this.dialog.open(FuncionarioTipoConvenioDeleteComponent, {
-      height: '500px',
-      width: '600px',
+      height: '600px',
+      width: '650px',
       data: this.funcionarioId,
     });
   }
 
   changePassword() {
     const dialogRef = this.dialog.open(ChangePasswordComponent, {
-      height: '500px',
-      width: '600px',
+      height: '600px',
+      width: '650px',
       data: this.funcionario.cpf,
     });
   }

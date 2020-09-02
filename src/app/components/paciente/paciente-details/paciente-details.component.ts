@@ -212,12 +212,28 @@ export class PacienteDetailsComponent implements OnInit {
       this.formPaciente.controls.nome.value.toUpperCase()
     );
 
-    if (this.formPaciente.value.naturalidade !== null) {
-      this.formPaciente.value.naturalidade = this.formPaciente.value.naturalidade.toUpperCase();
+    if (this.formPaciente.controls.naturalidade.value !== null) {
+      this.formPaciente.controls.naturalidade.setValue(
+        this.formPaciente.controls.naturalidade.value.toUpperCase()
+      );
     }
 
-    if (this.formPaciente.value.orgao_emissor !== null) {
-      this.formPaciente.value.orgao_emissor = this.formPaciente.value.orgao_emissor.toUpperCase();
+    if (this.formPaciente.controls.orgao_emissor.value !== null) {
+      this.formPaciente.controls.orgao_emissor.setValue(
+        this.formPaciente.controls.orgao_emissor.value.toUpperCase()
+      );
+    }
+
+    if (this.formPaciente.controls.profissao.value !== null) {
+      this.formPaciente.controls.profissao.setValue(
+        this.formPaciente.controls.profissao.value.toUpperCase()
+      );
+    }
+
+    if (this.formPaciente.controls.recomendacao.value !== null) {
+      this.formPaciente.controls.recomendacao.setValue(
+        this.formPaciente.controls.recomendacao.value.toUpperCase()
+      );
     }
 
     if (this.formPaciente.get('endereco.logradouro').value !== null) {
@@ -283,9 +299,9 @@ export class PacienteDetailsComponent implements OnInit {
   delete() {
     let dialogRef = this.dialog.open(DeleteDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      this.isLoading = true;
-      this.loadingDataMessage = 'Excluindo paciente';
       if (result === 'true') {
+        this.isLoading = true;
+        this.loadingDataMessage = 'Excluindo paciente';
         this.pacienteService.deletePaciente(Number(this.pacienteId)).subscribe(
           (data) => {
             let log = new LogSave();
