@@ -11,7 +11,7 @@
   class="convenioSelect"
   *ngIf="showSelect"
 >
-  <mat-form-field appearance="outline" style="width: 90%">
+  <mat-form-field appearance="fill" style="width: 90%">
     <mat-label>Selecione o Convênio</mat-label>
     <mat-select [(ngModel)]="convenioSelected" (selectionChange)="getTipos()">
       <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">

@@ -244,7 +244,7 @@ export class ToolbarComponent implements OnInit {
           this.currentUrl.includes('/error')
         ) {
           this.activeLink = undefined;
-        } else {
+        } else if (this.currentUrl.includes('/home')) {
           this.activeLink = this.navLinks[0];
         }
       }

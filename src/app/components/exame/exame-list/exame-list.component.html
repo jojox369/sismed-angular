@@ -3,59 +3,101 @@
     <button id="btn_search">
       <fa-icon [icon]="faSearch"></fa-icon>
     </button>
-    <input [type]="inputType" [(ngModel)]="searchText" (input)="onChooseSearchMethod()" #searchInput type="text"
-      id="txtBusca" [placeholder]="placeholder" autocomplete="off" />
+    <input
+      [type]="inputType"
+      [(ngModel)]="searchText"
+      (input)="onChooseSearchMethod()"
+      #searchInput
+      type="text"
+      id="txtBusca"
+      [placeholder]="placeholder"
+      autocomplete="off"
+    />
     <div fxLayout="row" fxLayoutAlign="start center" id="btn_dropDown">
-      <button mat-icon-button [matMenuTriggerFor]="menu" class="btn dropdown-toggle dropdown-toggle-split"
-        data-toggle="dropdown">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        class="btn dropdown-toggle dropdown-toggle-split"
+        data-toggle="dropdown"
+      >
         <fa-icon [icon]="faSortDown"></fa-icon>
       </button>
       <mat-menu #menu="matMenu" class="dropdown-menu">
-        <button mat-menu-item [ngClass]="{active: input === 1}" type="button" value="1"
-          (click)="onChangeSearchSelector(1)">
+        <button
+          mat-menu-item
+          [ngClass]="{ active: input === 1 }"
+          type="button"
+          value="1"
+          (click)="onChangeSearchSelector(1)"
+        >
           <span>Paciente</span>
         </button>
-        <button mat-menu-item [ngClass]="{active: input === 2}" type="button" value="2"
-          (click)="onChangeSearchSelector(2)">
+        <button
+          mat-menu-item
+          [ngClass]="{ active: input === 2 }"
+          type="button"
+          value="2"
+          (click)="onChangeSearchSelector(2)"
+        >
           <span>Exame</span>
         </button>
-        <button mat-menu-item [ngClass]="{active: input === 3}" type="button" value="3"
-          (click)="onChangeSearchSelector(3)">
+        <button
+          mat-menu-item
+          [ngClass]="{ active: input === 3 }"
+          type="button"
+          value="3"
+          (click)="onChangeSearchSelector(3)"
+        >
           <span>Data de Coleta</span>
         </button>
       </mat-menu>
-      <button mat-icon-button title="Clique para limpar os campos de pesquisa" (click)="clearSearch()">
+      <button
+        mat-icon-button
+        title="Clique para limpar os campos de pesquisa"
+        (click)="clearSearch()"
+      >
         <fa-icon [icon]="faTimes"></fa-icon>
       </button>
     </div>
-
   </div>
 
   <mat-card-title class="mat-card-title">
-
     <span> <strong>Lista | </strong> Exames </span>
 
-    <a class="btn-success float-right" mat-stroked-button [routerLink]="['/exames/register']" title="Cadastrar Exame">
+    <a
+      class="btn-success float-right"
+      mat-stroked-button
+      [routerLink]="['/exames/register']"
+      title="Cadastrar Exame"
+    >
       <fa-icon [icon]="faPlus"></fa-icon> Cadastrar
     </a>
-
   </mat-card-title>
 
   <mat-card-content>
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" *ngIf="!isLoading && isExameNotEmpty">
-
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        *ngIf="!isLoading && isExameNotEmpty"
+      >
         <!-- Paciente Column -->
         <ng-container matColumnDef="paciente">
-          <th mat-header-cell *matHeaderCellDef>Paciênte</th>
-          <td mat-cell *matCellDef="let element" title="Nome do paciênte">{{element.paciente.nome}}</td>
+          <th mat-header-cell *matHeaderCellDef>Paciente</th>
+          <td mat-cell *matCellDef="let element" title="Nome do paciênte">
+            {{ element.paciente.nome }}
+          </td>
         </ng-container>
 
         <!-- exame Column -->
         <ng-container matColumnDef="exame">
           <th mat-header-cell *matHeaderCellDef>Exame</th>
           <td mat-cell *matCellDef="let element">
-            <a [routerLink]="['/exame', element.id]" title="Abrir detalhes do exame">{{element.nome}}</a>
+            <a
+              [routerLink]="['/exame', element.id]"
+              title="Abrir detalhes do exame"
+              >{{ element.nome }}</a
+            >
           </td>
         </ng-container>
 
@@ -63,28 +105,37 @@
         <ng-container matColumnDef="coleta">
           <th mat-header-cell *matHeaderCellDef>Coleta</th>
           <td mat-cell *matCellDef="let element">
-            {{element.data_coleta | date: 'dd/MM/yyyy'}}</td>
+            {{ element.data_coleta | date: "dd/MM/yyyy" }}
+          </td>
         </ng-container>
 
         <!-- CRM Column -->
         <ng-container matColumnDef="envio">
-          <th mat-header-cell *matHeaderCellDef>envio</th>
-          <td mat-cell *matCellDef="let element"> {{element.data_envio| date: 'dd/MM/yyyy'}}</td>
+          <th mat-header-cell *matHeaderCellDef>Envio</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.data_envio | date: "dd/MM/yyyy" }}
+          </td>
         </ng-container>
 
         <!-- Especialidade Column -->
         <ng-container matColumnDef="retorno">
           <th mat-header-cell *matHeaderCellDef>Retorno</th>
           <td mat-cell *matCellDef="let element">
-            {{element.data_retorno === null ? 'Pendente' : element.data_retorno | date: 'dd/MM/yyyy'}}</td>
+            {{
+              element.data_retorno === null
+                ? "Pendente"
+                : (element.data_retorno | date: "dd/MM/yyyy")
+            }}
+          </td>
         </ng-container>
 
-
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
 
       <div fxLayout="column" fxLayoutAlign="space-around center">
         <!--Mensagem que aparece quando a pesquisa retorna nula-->
@@ -99,7 +150,9 @@
         <div>
           <!--Spinner que aparece enquando a lista não é carregada-->
           <mat-spinner *ngIf="isLoading"></mat-spinner>
-          <span style="margin-top: 10px;" *ngIf="isLoading">Carregando dados</span>
+          <span style="margin-top: 10px" *ngIf="isLoading"
+            >Carregando dados</span
+          >
         </div>
       </div>
     </div>

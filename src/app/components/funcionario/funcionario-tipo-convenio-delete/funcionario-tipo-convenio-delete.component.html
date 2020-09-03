@@ -3,8 +3,13 @@
     <fa-icon [icon]="faTimes"></fa-icon>
   </button>
 </div>
-<div fxLayout="row" fxLayoutAlign="center center" class="convenioSelect">
-  <mat-form-field appearance="outline" style="width: 90%">
+<div
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  class="convenioSelect"
+  *ngIf="showSelect"
+>
+  <mat-form-field appearance="fill" style="width: 90%">
     <mat-label>Selecione o Convênio</mat-label>
     <mat-select [(ngModel)]="convenioSelected" (selectionChange)="getTipos()">
       <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">

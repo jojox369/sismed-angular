@@ -1,109 +1,192 @@
-<form [formGroup]="formConvenio" #frm="ngForm" (ngSubmit)="update(frm)" *ngIf="formConvenio">
-    <mat-card-title class="mat-card-title">
-        <div>
-            <span> <strong>Edição | </strong> Convênio </span>
+<form
+  [formGroup]="formConvenio"
+  #frm="ngForm"
+  (ngSubmit)="update(frm)"
+  *ngIf="formConvenio"
+>
+  <mat-card-title class="mat-card-title">
+    <div>
+      <span> <strong>Edição | </strong> Convênio </span>
 
-            <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar convênio"
-                [disabled]="frm.invalid" *ngIf="isEditing">
-                <fa-icon [icon]="faCheck"></fa-icon> Salvar
-            </button>
+      <button
+        type="submit"
+        mat-stroked-button
+        class="btn-success float-right"
+        title="Atualizar convênio"
+        [disabled]="frm.invalid"
+        *ngIf="isEditing"
+      >
+        <fa-icon [icon]="faCheck"></fa-icon> Salvar
+      </button>
 
-            <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição"
-                *ngIf="isEditing" (click)="cancelEditing()">
-                <fa-icon [icon]="faBan"></fa-icon> Cancelar
-            </button>
+      <button
+        mat-stroked-button
+        class="btn-danger btn-spacer float-right"
+        title="Cancelar edição"
+        *ngIf="isEditing"
+        (click)="cancelEditing()"
+      >
+        <fa-icon [icon]="faBan"></fa-icon> Cancelar
+      </button>
 
-            <button mat-stroked-button class="btn-success float-right" title="Editar Convênio" *ngIf="!isEditing"
-                (click)="unblockFields()">
-                <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
-            </button>
+      <button
+        mat-stroked-button
+        class="btn-success float-right"
+        title="Editar Convênio"
+        *ngIf="!isEditing"
+        (click)="unblockFields()"
+      >
+        <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
+      </button>
 
-            <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir Convênio"
-                (click)="deleteConvenio()" *ngIf="!isEditing">
-                <fa-icon [icon]="faTimes"></fa-icon> Excluir
-            </a>
+      <a
+        mat-stroked-button
+        class="btn-danger btn-spacer float-right"
+        title="Excluir Convênio"
+        (click)="deleteConvenio()"
+        *ngIf="!isEditing"
+      >
+        <fa-icon [icon]="faTimes"></fa-icon> Excluir
+      </a>
 
-            <a mat-stroked-button [routerLink]="['/convenios']" title="Listar os convênios"
-                class="btn-sismed btn-spacer float-right">
-                <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
-            </a>
+      <a
+        mat-stroked-button
+        [routerLink]="['/convenios']"
+        title="Listar os convênios"
+        class="btn-sismed btn-spacer float-right"
+      >
+        <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+      </a>
+    </div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <!--Div que ocupa 100% do card-->
+    <div fxLayout="column" fxLayoutAlign="space-evenly center">
+      <!--Div do formulario-->
+      <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <mat-form-field appearance="fill">
+          <mat-label>Nome</mat-label>
+          <input
+            id="nome"
+            matInput
+            placeholder="Ex:amil"
+            (keypress)="onlyLetters($event)"
+            (keyup)="toUpperCase($event)"
+            formControlName="nome"
+            autocomplete="off"
+            maxlength="45"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CNPJ</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 29.309.127/0001-79"
+            (keyup)="toUpperCase($event)"
+            [specialCharacters]="['-', '.', '/']"
+            [dropSpecialCharacters]="false"
+            mask="00.000.000/0000-00"
+            formControlName="cnpj"
+            autocomplete="off"
+            maxlength="45"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>ANS</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 321321"
+            formControlName="registro_ans"
+            mask="000000"
+            autocomplete="off"
+            maxlength="45"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Data de Adesão</mat-label>
+          <input matInput type="date" formControlName="data_adesao" required />
+        </mat-form-field>
+
+        <div formGroupName="dados_bancarios" class="dadosBancariosFields">
+          <mat-form-field appearance="fill">
+            <mat-label>Banco</mat-label>
+            <input
+              matInput
+              placeholder="Ex:123"
+              formControlName="banco"
+              autocomplete="off"
+              maxlength="3"
+              mask="000"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Agência</mat-label>
+            <input
+              matInput
+              placeholder="Ex:1234"
+              formControlName="agencia"
+              autocomplete="off"
+              maxlength="4"
+              mask="0000"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Conta</mat-label>
+            <input
+              matInput
+              placeholder="Ex:12345-6"
+              formControlName="conta"
+              autocomplete="off"
+              maxlength="7"
+              mask="00000-0"
+              required
+            />
+          </mat-form-field>
         </div>
-    </mat-card-title>
-
-    <mat-card-content>
-        <!--Div que ocupa 100% do card-->
-        <div fxLayout="column" fxLayoutAlign="space-evenly center">
-            <!--Div do formulario-->
-            <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
-                <mat-form-field appearance="outline">
-                    <mat-label>Nome</mat-label>
-                    <input id="nome" matInput placeholder="Ex:amil" (keypress)="onlyLetters($event)"
-                        (keyup)="toUpperCase($event)" formControlName="nome" autocomplete="off" maxlength="45"
-                        required />
-
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>CNPJ</mat-label>
-                    <input matInput placeholder="Ex. 29.309.127/0001-79" (keyup)="toUpperCase($event)"
-                        [specialCharacters]="['-', '.', '/']" [dropSpecialCharacters]="false" mask="00.000.000/0000-00"
-                        formControlName="cnpj" autocomplete="off" maxlength="45" />
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>ANS</mat-label>
-                    <input matInput placeholder="Ex. 321321" formControlName="registro_ans" mask="000000"
-                        autocomplete="off" maxlength="45" />
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Data de Adesão</mat-label>
-                    <input matInput type="date" formControlName="data_adesao" required />
-
-                </mat-form-field>
-
-                <div formGroupName="dados_bancarios" class="dadosBancariosFields">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Banco</mat-label>
-                        <input matInput placeholder="Ex:123" formControlName="banco" autocomplete="off" maxlength="3"
-                            mask="000" required />
-
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Agência</mat-label>
-                        <input matInput placeholder="Ex:1234" formControlName="agencia" autocomplete="off" maxlength="4"
-                            mask="0000" required />
-
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Conta</mat-label>
-                        <input matInput placeholder="Ex:12345-6" formControlName="conta" autocomplete="off"
-                            maxlength="7" mask="00000-0" required />
-
-                    </mat-form-field>
-                </div>
-
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" class="convenioButtons">
-                <a mat-stroked-button class="btn-success" [routerLink]="['/tiposConvenio/register', convenioId]"
-                    title="Cadastrar Tipo de convênio">
-                    <fa-icon [icon]="faPlus"></fa-icon>Cadastrar Tipo
-                </a>
-                <a mat-stroked-button class="btn-success" [routerLink]="['/procedimento/register', convenioId]"
-                    title="Cadastrar Procedimento">
-                    <fa-icon [icon]="faPlus"></fa-icon>Cadastrar Procedimento
-                </a>
-                <a mat-stroked-button class="btn-sismed" [routerLink]="['/tiposConvenio', convenioId]"
-                    title="Listar todos os tipos de convenio">
-                    <fa-icon [icon]="faList"></fa-icon>Listar Tipos
-                </a>
-                <a mat-stroked-button class="btn-sismed" [routerLink]="['/procedimentos', convenioId]"
-                    title="Listar todos os procedimento">
-                    <fa-icon [icon]="faList"></fa-icon> Listar Procedimentos
-                </a>
-            </div>
-        </div>
-    </mat-card-content>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="convenioButtons">
+        <a
+          mat-stroked-button
+          class="btn-success"
+          [routerLink]="['/tiposConvenio/register', convenioId]"
+          title="Cadastrar Tipo de convênio"
+        >
+          <fa-icon [icon]="faPlus"></fa-icon>Cadastrar Tipo
+        </a>
+        <a
+          mat-stroked-button
+          class="btn-success"
+          [routerLink]="['/procedimento/register', convenioId]"
+          title="Cadastrar Procedimento"
+        >
+          <fa-icon [icon]="faPlus"></fa-icon>Cadastrar Procedimento
+        </a>
+        <a
+          mat-stroked-button
+          class="btn-sismed"
+          [routerLink]="['/tiposConvenio', convenioId]"
+          title="Listar todos os tipos de convenio"
+        >
+          <fa-icon [icon]="faList"></fa-icon>Listar Tipos
+        </a>
+        <a
+          mat-stroked-button
+          class="btn-sismed"
+          [routerLink]="['/procedimentos', convenioId]"
+          title="Listar todos os procedimento"
+        >
+          <fa-icon [icon]="faList"></fa-icon> Listar Procedimentos
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
 </form>

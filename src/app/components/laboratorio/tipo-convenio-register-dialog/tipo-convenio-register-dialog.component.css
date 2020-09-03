@@ -3,7 +3,16 @@ ul {
   margin-top: 4px;
 }
 
-.convenioSelect{
-  width: 100%; 
+.convenioSelect {
+  width: 100%;
   margin: 10px;
+}
+
+h5 {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.3rem;
+  width: 100%;
 }

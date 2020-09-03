@@ -2,21 +2,27 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { LaboratorioTipoConvenioService } from 'src/app/services/laboratorio-tipo-convenio.service';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Convenio } from 'src/app/models/convenio';
-import { faBan, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faCheck,
+  faTimes,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tipo-convenio-delete-dialog',
   templateUrl: './tipo-convenio-delete-dialog.component.html',
-  styleUrls: ['./tipo-convenio-delete-dialog.component.css']
+  styleUrls: ['./tipo-convenio-delete-dialog.component.css'],
 })
 export class TipoConvenioDeleteDialogComponent implements OnInit {
-
   faBan = faBan;
 
   faCheck = faCheck;
 
   faTimes = faTimes;
+
+  faPlus = faPlus;
 
   convenios: Convenio[];
 
@@ -28,53 +34,74 @@ export class TipoConvenioDeleteDialogComponent implements OnInit {
   tipos = [{ id: '', nome: '', selected: false }];
 
   hasData = false;
+
+  isLoading: boolean;
+
+  loadingDataMessage: string;
+
+  awaitResponse: boolean;
+
+  showLoadingData: boolean;
+
+  showNewOperationButton: boolean;
+
+  showSelect: boolean = true;
+
+  tablesSelectedNames = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public laboratorioId: string,
     private laboratorioTipoConvenioService: LaboratorioTipoConvenioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) { }
-
-
+  ) {}
 
   ngOnInit(): void {
     this.getConvenios();
-
   }
 
   getConvenios() {
-    this.laboratorioTipoConvenioService.getAcceptedConvenios(this.laboratorioId).subscribe(
-      data => {
-        this.convenios = data;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.laboratorioTipoConvenioService
+      .getAcceptedConvenios(this.laboratorioId)
+      .subscribe(
+        (data) => {
+          this.convenios = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   getTipos() {
-    this.laboratorioTipoConvenioService.getTiposAccepted(this.laboratorioId, this.convenioSelected).subscribe(
-      data => {
-        this.tipos = data;
-        this.hasData = true;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.isLoading = true;
+    if (this.hasData) {
+      this.hasData = false;
+    }
+    this.loadingDataMessage = 'Carregando os planos disponíveis';
+    this.laboratorioTipoConvenioService
+      .getTiposAccepted(this.laboratorioId, this.convenioSelected)
+      .subscribe(
+        (data) => {
+          this.tipos = data;
+          this.isLoading = false;
+          this.hasData = true;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   selectedAll() {
     if (this.allSelected) {
       this.allSelected = false;
-      this.tipos.forEach(element => {
+      this.tipos.forEach((element) => {
         element.selected = false;
       });
-
     } else {
       this.allSelected = true;
-      this.tipos.forEach(element => {
+      this.tipos.forEach((element) => {
         element.selected = true;
       });
     }
@@ -84,34 +111,60 @@ export class TipoConvenioDeleteDialogComponent implements OnInit {
     if (this.tipos == null) {
       return false;
     }
-    return this.tipos.filter(t => t.selected).length > 0 && !this.allSelected;
+    return this.tipos.filter((t) => t.selected).length > 0 && !this.allSelected;
   }
 
   delete() {
-    const tiposSelected = this.tipos.filter((ch) => {
-      return ch.selected;
-    }).map((ch) => {
-      return ch.id;
-    });
+    this.awaitResponse = true;
+    this.showLoadingData = true;
+    this.hasData = false;
+    this.showSelect = false;
+    const tiposSelected = this.tipos
+      .filter((tipo) => {
+        return tipo.selected;
+      })
+      .map((tipo) => {
+        return { id: tipo.id, nome: tipo.nome, hasError: false };
+      });
+
+    let count = 0;
 
     for (const tipo of tiposSelected) {
-      this.laboratorioTipoConvenioService.getLabTaconvenioDetails(this.laboratorioId, tipo).subscribe(
-        data => {
-          const id = data[0].id;
-          this.laboratorioTipoConvenioService.delete(id).subscribe(
-            data => {
-              this.buildMessage('Convênio cadastrado com sucesso', 0);
-              this.dialog.closeAll();
-
-            },
-            error => {
-              console.log(error);
-              this.buildMessage('Erro ao tentar cadastrar o convênio', 1)
-            }
-          );
-        }
-      );
+      this.tablesSelectedNames.push(tipo);
+      this.laboratorioTipoConvenioService
+        .getLabTaconvenioDetails(this.laboratorioId, tipo.id)
+        .subscribe(
+          (data) => {
+            const id = data[0].id;
+            this.laboratorioTipoConvenioService.delete(id).subscribe(
+              (data) => {
+                count++;
+                this.awaitResponse = false;
+                if (count === tiposSelected.length) {
+                  this.showNewOperationButton = true;
+                }
+              },
+              (error) => {
+                tipo.hasError = true;
+                this.showNewOperationButton = true;
+              }
+            );
+          },
+          (error) => {
+            this.buildMessage('Erro ao tentar excluir os planos', 1);
+          }
+        );
     }
+  }
+
+  newOperation() {
+    this.getConvenios();
+    this.tablesSelectedNames = [];
+    this.tipos = undefined;
+    this.showSelect = true;
+    this.allSelected = false;
+    this.showLoadingData = false;
+    this.convenioSelected = 0;
   }
 
   // monta a mensagem que vai ser exibida na pagina

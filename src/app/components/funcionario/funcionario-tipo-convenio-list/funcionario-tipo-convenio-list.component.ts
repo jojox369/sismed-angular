@@ -8,50 +8,70 @@ import { Convenio } from 'src/app/models/convenio';
 @Component({
   selector: 'app-funcionario-tipo-convenio-list',
   templateUrl: './funcionario-tipo-convenio-list.component.html',
-  styleUrls: ['./funcionario-tipo-convenio-list.component.css']
+  styleUrls: ['./funcionario-tipo-convenio-list.component.css'],
 })
 export class FuncionarioTipoConvenioListComponent implements OnInit {
-
   faTimes = faTimes;
 
   faList = faList;
+
   convenios: Convenio[];
-  tipos: [{ id: number, nome: string }];
-  hasTipos = false;
+
+  tipos: [{ id: number; nome: string }];
+
+  hasTipos: boolean;
+
+  isLoading: boolean;
+
+  loadingDataMessage: string;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public funcionario: { id: string, nome: string },
+    @Inject(MAT_DIALOG_DATA) public funcionario: { id: string; nome: string },
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private funcionarioTipoConvenioService: FuncionarioTipoConvenioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getConvenios();
   }
 
   getConvenios() {
-    this.funcionarioTipoConvenioService.getAcceptedConvenios(this.funcionario.id).subscribe(
-      data => {
-        this.convenios = data;
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar recuperar a lista de convênios aceitos pelo médico', 1);
-      }
-    );
+    this.funcionarioTipoConvenioService
+      .getAcceptedConvenios(this.funcionario.id)
+      .subscribe(
+        (data) => {
+          this.convenios = data;
+        },
+        (error) => {
+          console.log(error);
+          this.buildMessage(
+            'Erro ao tentar recuperar a lista de convênios aceitos pelo médico',
+            1
+          );
+        }
+      );
   }
 
   getTipos(convenioId) {
-    this.funcionarioTipoConvenioService.getAcceptedTipos(this.funcionario.id, convenioId).subscribe(
-      data => {
-        this.tipos = data;
-        this.hasTipos = true;
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar recuperar a lista de plano aceitos', 1);
-      }
-    );
+    this.tipos = [{ id: 0, nome: '' }];
+    this.isLoading = true;
+    this.loadingDataMessage = 'Carregando dados ...';
+    this.funcionarioTipoConvenioService
+      .getAcceptedTipos(this.funcionario.id, convenioId)
+      .subscribe(
+        (data) => {
+          this.tipos = data;
+          this.hasTipos = true;
+        },
+        (error) => {
+          console.log(error);
+          this.buildMessage(
+            'Erro ao tentar recuperar a lista de plano aceitos',
+            1
+          );
+        }
+      );
   }
 
   // monta a mensagem que vai ser exibida na pagina

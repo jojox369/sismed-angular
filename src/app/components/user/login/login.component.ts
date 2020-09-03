@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
               sessionStorage.setItem('user', JSON.stringify(user));
               sessionStorage.setItem('logged', 'true');
               this.appComponent.verifyLogged();
-              this.router.navigate(['/']);
+              this.router.navigate(['/home']);
             },
             (error) => {}
           );

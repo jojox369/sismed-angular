@@ -1,35 +1,42 @@
 <div fxLayout="row" fxLayoutAlign="end start">
-    <button mat-dialog-close mat-icon-button class="closeButton" title="Fechar">
-        <fa-icon [icon]="faTimes"></fa-icon>
-    </button>
+  <button mat-dialog-close mat-icon-button class="closeButton" title="Fechar">
+    <fa-icon [icon]="faTimes"></fa-icon>
+  </button>
 </div>
 <div fxLayout="row" fxLayoutAlign="center center">
-
-
-    <mat-form-field appearance="outline" style="width: 90%;">
-        <mat-label>Médico</mat-label>
-        <input matInput disabled value="{{funcionario.nome}}">
-    </mat-form-field>
-
-
+  <mat-form-field appearance="fill" style="width: 90%">
+    <mat-label>Médico</mat-label>
+    <input matInput disabled value="{{ funcionario.nome }}" />
+  </mat-form-field>
 </div>
 
 <div fxLayout="column" fxLayoutAlign="center center" class="listData">
+  <h5 fxLayoutAlign="center center">Convênios Aceitos</h5>
 
-    <h5 fxLayoutAlign="center center">Convênios Aceitos</h5>
-
-    <span *ngFor="let convenio of convenios" mat-button style="margin-top: 3px;">
-        {{convenio.nome}}
-        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="getTipos(convenio.id)"
-            title="Listar os planos aceitos">
-            <fa-icon [icon]="faList"></fa-icon>
-        </button>
-    </span>
-    <mat-menu #menu="matMenu" yPosition="below">
-        <span mat-menu-item *ngFor="let tipo of tipos"> {{hasTipos ? tipo.nome : ''}} </span>
-    </mat-menu>
-
-
-
-
+  <span *ngFor="let convenio of convenios" mat-button style="margin-top: 3px">
+    {{ convenio.nome }}
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      (click)="getTipos(convenio.id)"
+      title="Listar os planos aceitos"
+    >
+      <fa-icon [icon]="faList"></fa-icon>
+    </button>
+  </span>
+  <mat-menu #menu="matMenu" yPosition="below">
+    <div mat-menu-item *ngFor="let tipo of tipos">
+      <span *ngIf="hasTipos">
+        {{ tipo.nome }}
+      </span>
+      <div
+        id="loading-data"
+        fxLayoutAlign="space-between center"
+        fxLayout="column"
+        *ngIf="isLoading"
+      >
+        <span>Carregando dados</span>
+      </div>
+    </div>
+  </mat-menu>
 </div>

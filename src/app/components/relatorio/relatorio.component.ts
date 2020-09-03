@@ -19,10 +19,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-relatorio',
   templateUrl: './relatorio.component.html',
-  styleUrls: ['./relatorio.component.css']
+  styleUrls: ['./relatorio.component.css'],
 })
 export class RelatorioComponent implements OnInit {
-
   faCheck = faCheck;
   faPencilAlt = faPencilAlt;
   convenios: Convenio[];
@@ -43,7 +42,7 @@ export class RelatorioComponent implements OnInit {
   convenioSelectedName;
   funcionarioSelectedName;
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError: boolean = false;
 
   // Variavel que controla a mensagem de dado não encontrado
@@ -60,7 +59,13 @@ export class RelatorioComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: any;
-  displayedColumns: string[] = ['paciente', 'convenio', 'funcionario', 'data', 'valor'];
+  displayedColumns: string[] = [
+    'paciente',
+    'convenio',
+    'funcionario',
+    'data',
+    'valor',
+  ];
 
   constructor(
     private funcionarioService: FuncionarioService,
@@ -70,7 +75,7 @@ export class RelatorioComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (this.user.perfil === 3) {
@@ -78,43 +83,40 @@ export class RelatorioComponent implements OnInit {
     } else {
       this.router.navigate(['access-denied']);
     }
-
   }
 
   getAllData() {
     this.funcionarioService.getMedicos().subscribe(
-      data => {
+      (data) => {
         this.funcionarios = data;
       },
-      error => {
+      (error) => {
         console.log(error);
         this.buildMessage('Erro ao tentar carregar lista de médicos', 1);
-      },
+      }
     );
 
     this.pacienteService.getAllPacientes().subscribe(
-      data => {
+      (data) => {
         this.pacientes = data;
         this.filterPacientes();
       },
-      error => {
+      (error) => {
         console.log(error);
         this.buildMessage('Erro ao tentar carregar lista de pacientes', 1);
-      },
+      }
     );
 
     this.convenioService.getAll().subscribe(
-      data => {
+      (data) => {
         this.convenios = data;
         this.createForm();
       },
-      error => {
+      (error) => {
         console.log(error);
         this.buildMessage('Erro ao tentar carregar lista de convênios', 1);
-      },
+      }
     );
-
-
   }
 
   createForm() {
@@ -128,24 +130,20 @@ export class RelatorioComponent implements OnInit {
     });
   }
 
-
-
   filterPacientes() {
-
-    this.filteredPacientes = this.pacienteName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => value.length >= 1 ? this.filter(value) : [])
-      )
+    this.filteredPacientes = this.pacienteName.valueChanges.pipe(
+      startWith(''),
+      map((value) => (value.length >= 1 ? this.filter(value) : []))
+    );
   }
 
   filter(value: string) {
-
     const filterValue = value.toLowerCase();
-    const results = this.pacientes.filter(option => option.nome.toLowerCase().includes(filterValue));
+    const results = this.pacientes.filter((option) =>
+      option.nome.toLowerCase().includes(filterValue)
+    );
     return results;
   }
-
 
   // monta a lista de cfuncionarios
   buildTable() {
@@ -173,47 +171,64 @@ export class RelatorioComponent implements OnInit {
   }
 
   generate() {
-
     this.isLoading = true;
     this.showFirstMessage = false;
     this.showNewReportButton = true;
     let query = 'SELECT * FROM sismed_custos ';
 
-    if (this.relatorioForm.controls.data_inicio.value !== '' && this.relatorioForm.controls.data_fim.value === '') {
-
-      this.buildMessage('Insira a data final do periodo para gerar o relatorio', 1);
-
-    }
-    else if (this.relatorioForm.controls.data_inicio.value === '' && this.relatorioForm.controls.data_fim.value !== '') {
-
-      this.buildMessage('Insira a data inicial do periodo para gerar o relatorio', 1);
-    }
-    else if (this.relatorioForm.controls.funcionario.value === null && this.relatorioForm.controls.convenio.value === null &&
-      this.relatorioForm.controls.data_inicio.value === '' && this.relatorioForm.controls.data_fim.value === '' &&
-      this.relatorioForm.controls.paciente.value === null) {
-
+    if (
+      this.relatorioForm.controls.data_inicio.value !== '' &&
+      this.relatorioForm.controls.data_fim.value === ''
+    ) {
+      this.buildMessage(
+        'Insira a data final do periodo para gerar o relatorio',
+        1
+      );
+    } else if (
+      this.relatorioForm.controls.data_inicio.value === '' &&
+      this.relatorioForm.controls.data_fim.value !== ''
+    ) {
+      this.buildMessage(
+        'Insira a data inicial do periodo para gerar o relatorio',
+        1
+      );
+    } else if (
+      this.relatorioForm.controls.funcionario.value === null &&
+      this.relatorioForm.controls.convenio.value === null &&
+      this.relatorioForm.controls.data_inicio.value === '' &&
+      this.relatorioForm.controls.data_fim.value === '' &&
+      this.relatorioForm.controls.paciente.value === null
+    ) {
       this.buildMessage('Selecione algum campo para  gerar o relatorio', 1);
-
-    }
-    else if (this.relatorioForm.controls.convenio.value === null && this.relatorioForm.controls.data_inicio.value === ''
-      && this.relatorioForm.controls.data_fim.value === '' && this.relatorioForm.controls.funcionario.value === null) {
+    } else if (
+      this.relatorioForm.controls.convenio.value === null &&
+      this.relatorioForm.controls.data_inicio.value === '' &&
+      this.relatorioForm.controls.data_fim.value === '' &&
+      this.relatorioForm.controls.funcionario.value === null
+    ) {
       // busca so por paciente
 
       query += 'WHERE paciente = ' + this.relatorioForm.controls.paciente.value;
 
-
       this.relatorioService.getAllReport(query).subscribe(
-        data => {
+        (data) => {
           this.relatorios = data;
           if (Object.keys(data).length === 0) {
-            this.totalValue = 'O paciente ' + this.pacienteSelectedName + ' não gerou nenhum rendimento';
+            this.totalValue =
+              'O paciente ' +
+              this.pacienteSelectedName +
+              ' não gerou nenhum rendimento';
             this.totalValue = this.totalValue.toUpperCase();
             this.hasReport = false;
             this.showEmptyMessage = true;
             this.showTotalValueMessage = true;
             this.isLoading = false;
           } else {
-            this.totalValue = 'O paciente ' + this.pacienteSelectedName + ' gerou um rendimento de R$ ' + this.calculateYield();
+            this.totalValue =
+              'O paciente ' +
+              this.pacienteSelectedName +
+              ' gerou um rendimento de R$ ' +
+              this.calculateYield();
             this.totalValue = this.totalValue.toUpperCase();
             this.hasReport = true;
             this.isLoading = false;
@@ -221,24 +236,23 @@ export class RelatorioComponent implements OnInit {
             this.buildTable();
           }
         },
-        error => {
+        (error) => {
           console.log(error);
           this.buildMessage('Erro ao tentar gerar o relatorio', 1);
         }
       );
-
-
-    }
-    else if (this.relatorioForm.controls.paciente.value === null && this.relatorioForm.controls.data_inicio.value === ''
-      && this.relatorioForm.controls.data_fim.value === '' && this.relatorioForm.controls.funcionario.value === null) {
-
+    } else if (
+      this.relatorioForm.controls.paciente.value === null &&
+      this.relatorioForm.controls.data_inicio.value === '' &&
+      this.relatorioForm.controls.data_fim.value === '' &&
+      this.relatorioForm.controls.funcionario.value === null
+    ) {
       // busca só por convenio
       if (this.relatorioForm.controls.convenio.value === 0) {
-
         // Todos os convenios
         query += 'ORDER BY convenio';
         this.relatorioService.getAllReport(query).subscribe(
-          data => {
+          (data) => {
             this.relatorios = data;
             if (Object.keys(data).length === 0) {
               this.totalValue = 'Os convenios não geraram nenhum rendimento';
@@ -248,7 +262,9 @@ export class RelatorioComponent implements OnInit {
               this.showTotalValueMessage = true;
               this.isLoading = false;
             } else {
-              this.totalValue = 'Os convenios geraram um rendimento de R$ ' + this.calculateYield();
+              this.totalValue =
+                'Os convenios geraram um rendimento de R$ ' +
+                this.calculateYield();
               this.totalValue = this.totalValue.toUpperCase();
               this.hasReport = true;
               this.isLoading = false;
@@ -256,28 +272,35 @@ export class RelatorioComponent implements OnInit {
               this.buildTable();
             }
           },
-          error => {
+          (error) => {
             console.log(error);
             this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
         );
       } else {
         // um convenio especifico
-        query += 'WHERE convenio = ' + this.relatorioForm.controls.convenio.value;
-
+        query +=
+          'WHERE convenio = ' + this.relatorioForm.controls.convenio.value;
 
         this.relatorioService.getAllReport(query).subscribe(
-          data => {
+          (data) => {
             this.relatorios = data;
             if (Object.keys(data).length == 0) {
-              this.totalValue = 'O convenio ' + this.convenioSelectedName + ' não gerou nenhum rendimento';
+              this.totalValue =
+                'O convenio ' +
+                this.convenioSelectedName +
+                ' não gerou nenhum rendimento';
               this.totalValue = this.totalValue.toUpperCase();
               this.hasReport = false;
               this.showEmptyMessage = true;
               this.showTotalValueMessage = true;
               this.isLoading = false;
             } else {
-              this.totalValue = 'O convenio ' + this.convenioSelectedName + ' gerou um rendimento de R$ ' + this.calculateYield();
+              this.totalValue =
+                'O convenio ' +
+                this.convenioSelectedName +
+                ' gerou um rendimento de R$ ' +
+                this.calculateYield();
               this.totalValue = this.totalValue.toUpperCase();
               this.hasReport = true;
               this.isLoading = false;
@@ -285,31 +308,40 @@ export class RelatorioComponent implements OnInit {
               this.buildTable();
             }
           },
-          error => {
+          (error) => {
             console.log(error);
             this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
         );
-
-
       }
-    }
-    else if (this.relatorioForm.controls.paciente.value === null && this.relatorioForm.controls.data_inicio.value === ''
-      && this.relatorioForm.controls.data_fim.value === '' && this.relatorioForm.controls.convenio.value === null) {
+    } else if (
+      this.relatorioForm.controls.paciente.value === null &&
+      this.relatorioForm.controls.data_inicio.value === '' &&
+      this.relatorioForm.controls.data_fim.value === '' &&
+      this.relatorioForm.controls.convenio.value === null
+    ) {
       // só por funcionario
-      query += 'WHERE funcionario = ' + this.relatorioForm.controls.funcionario.value;
+      query +=
+        'WHERE funcionario = ' + this.relatorioForm.controls.funcionario.value;
       this.relatorioService.getAllReport(query).subscribe(
-        data => {
+        (data) => {
           this.relatorios = data;
           if (Object.keys(data).length === 0) {
-            this.totalValue = 'O funcionario ' + this.funcionarioSelectedName + ' não gerou nenhum rendimento';
+            this.totalValue =
+              'O funcionario ' +
+              this.funcionarioSelectedName +
+              ' não gerou nenhum rendimento';
             this.totalValue = this.totalValue.toUpperCase();
             this.hasReport = false;
             this.showEmptyMessage = true;
             this.showTotalValueMessage = true;
             this.isLoading = false;
           } else {
-            this.totalValue = 'O funcionario ' + this.funcionarioSelectedName + ' gerou um rendimento de R$ ' + this.calculateYield();
+            this.totalValue =
+              'O funcionario ' +
+              this.funcionarioSelectedName +
+              ' gerou um rendimento de R$ ' +
+              this.calculateYield();
             this.totalValue = this.totalValue.toUpperCase();
             this.hasReport = true;
             this.isLoading = false;
@@ -317,203 +349,290 @@ export class RelatorioComponent implements OnInit {
             this.buildTable();
           }
         },
-        error => {
+        (error) => {
           console.log(error);
           this.buildMessage('Erro ao tentar gerar o relatório', 1);
         }
       );
-
-
-
-    }
-    else if (this.relatorioForm.controls.paciente.value === null && this.relatorioForm.controls.convenio.value === null
-      && this.relatorioForm.controls.funcionario.value === null) {
+    } else if (
+      this.relatorioForm.controls.paciente.value === null &&
+      this.relatorioForm.controls.convenio.value === null &&
+      this.relatorioForm.controls.funcionario.value === null
+    ) {
       // periodo
-      this.relatorioService.getAllReportByPeriodo(this.relatorioForm.controls.data_inicio.value, this.relatorioForm.controls.data_fim.value).subscribe(
-        data => {
-          this.relatorios = data;
-          if (Object.keys(data).length === 0) {
-            this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e ' + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' não foi gerado nenhum rendimento';
-            this.totalValue = this.totalValue.toUpperCase();
-            this.hasReport = false;
-            this.showEmptyMessage = true;
-            this.showTotalValueMessage = true;
-            this.isLoading = false;
-          } else {
-            this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e ' + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' foi gerado um rendimento de R$ ' + this.calculateYield();
-            this.totalValue = this.totalValue.toUpperCase();
-            this.hasReport = true;
-            this.isLoading = false;
-            this.showTotalValueMessage = true;
-            this.buildTable();
+      this.relatorioService
+        .getAllReportByPeriodo(
+          this.relatorioForm.controls.data_inicio.value,
+          this.relatorioForm.controls.data_fim.value
+        )
+        .subscribe(
+          (data) => {
+            this.relatorios = data;
+            if (Object.keys(data).length === 0) {
+              this.totalValue =
+                'Entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ' +
+                this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' não foi gerado nenhum rendimento';
+              this.totalValue = this.totalValue.toUpperCase();
+              this.hasReport = false;
+              this.showEmptyMessage = true;
+              this.showTotalValueMessage = true;
+              this.isLoading = false;
+            } else {
+              this.totalValue =
+                'Entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ' +
+                this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' foi gerado um rendimento de R$ ' +
+                this.calculateYield();
+              this.totalValue = this.totalValue.toUpperCase();
+              this.hasReport = true;
+              this.isLoading = false;
+              this.showTotalValueMessage = true;
+              this.buildTable();
+            }
+          },
+          (error) => {
+            console.log(error);
+            this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
-        },
-        error => {
-          console.log(error);
-          this.buildMessage('Erro ao tentar gerar o relatório', 1);
-        }
-      );
-    }
-    else if (this.relatorioForm.controls.convenio.value === null && this.relatorioForm.controls.funcionario.value === null) {
+        );
+    } else if (
+      this.relatorioForm.controls.convenio.value === null &&
+      this.relatorioForm.controls.funcionario.value === null
+    ) {
       // Paciente e periodo
 
-      this.relatorioService.getAllReportByPeriodEPaciente(this.relatorioForm.controls.data_inicio.value, this.relatorioForm.controls.data_fim.value, this.relatorioForm.controls.paciente.value).subscribe(
-        data => {
-          this.relatorios = data;
-          if (Object.keys(data).length == 0) {
-            this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e ' + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' o paciente ' + this.pacienteName + ' não gerou nenhum rendimento';
-            this.totalValue = this.totalValue.toUpperCase();
-            this.hasReport = false;
-            this.showEmptyMessage = true;
-            this.showTotalValueMessage = true;
-            this.isLoading = false;
-          } else {
-            this.totalValue = 'O paciente ' + this.pacienteName + ' entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e ' + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' gerou uma receita de R$ ' + this.calculateYield();
-            this.totalValue = this.totalValue.toUpperCase();
-            this.hasReport = true;
-            this.isLoading = false;
-            this.showTotalValueMessage = true;
-            this.buildTable();
+      this.relatorioService
+        .getAllReportByPeriodEPaciente(
+          this.relatorioForm.controls.data_inicio.value,
+          this.relatorioForm.controls.data_fim.value,
+          this.relatorioForm.controls.paciente.value
+        )
+        .subscribe(
+          (data) => {
+            this.relatorios = data;
+            if (Object.keys(data).length == 0) {
+              this.totalValue =
+                'Entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ' +
+                this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' o paciente ' +
+                this.pacienteName +
+                ' não gerou nenhum rendimento';
+              this.totalValue = this.totalValue.toUpperCase();
+              this.hasReport = false;
+              this.showEmptyMessage = true;
+              this.showTotalValueMessage = true;
+              this.isLoading = false;
+            } else {
+              this.totalValue =
+                'O paciente ' +
+                this.pacienteName +
+                ' entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ' +
+                this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' gerou uma receita de R$ ' +
+                this.calculateYield();
+              this.totalValue = this.totalValue.toUpperCase();
+              this.hasReport = true;
+              this.isLoading = false;
+              this.showTotalValueMessage = true;
+              this.buildTable();
+            }
+          },
+          (error) => {
+            console.log(error);
+            this.buildMessage('Erro ao tentar gerar relatório', 1);
           }
-        },
-        error => {
-          console.log(error);
-          this.buildMessage('Erro ao tentar gerar relatório', 1);
-        }
-      );
-
-
-
-    }
-    else if (this.relatorioForm.controls.funcionario.value === null && this.relatorioForm.controls.paciente.value === null) {
+        );
+    } else if (
+      this.relatorioForm.controls.funcionario.value === null &&
+      this.relatorioForm.controls.paciente.value === null
+    ) {
       // convenio e periodo
       if (this.relatorioForm.controls.convenio.value === 0) {
         // todos os convenios
-        this.relatorioService.getAllReportByPeriodo(this.relatorioForm.controls.data_inicio.value, this.relatorioForm.controls.data_fim.value).subscribe(
-          data => {
-            this.relatorios = data;
-            if (Object.keys(data).length === 0) {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
-              this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' os convenios não geraram nenhum rendimento';
-              this.hasReport = false;
-              this.showEmptyMessage = true;
-              this.showTotalValueMessage = true;
-              this.isLoading = false;
-            } else {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
-              this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' os convenios geraram um rendimento de R$ ' + this.calculateYield();
-              this.hasReport = true;
-              this.isLoading = false;
-              this.showTotalValueMessage = true;
-              this.buildTable();
+        this.relatorioService
+          .getAllReportByPeriodo(
+            this.relatorioForm.controls.data_inicio.value,
+            this.relatorioForm.controls.data_fim.value
+          )
+          .subscribe(
+            (data) => {
+              this.relatorios = data;
+              if (Object.keys(data).length === 0) {
+                this.totalValue =
+                  'Entre as datas ' +
+                  this.formatDate(
+                    this.relatorioForm.controls.data_inicio.value
+                  ) +
+                  ' e ';
+                this.totalValue = this.totalValue.toUpperCase();
+                +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                  ' os convenios não geraram nenhum rendimento';
+                this.hasReport = false;
+                this.showEmptyMessage = true;
+                this.showTotalValueMessage = true;
+                this.isLoading = false;
+              } else {
+                this.totalValue =
+                  'Entre as datas ' +
+                  this.formatDate(
+                    this.relatorioForm.controls.data_inicio.value
+                  ) +
+                  ' e ';
+                this.totalValue = this.totalValue.toUpperCase();
+                +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                  ' os convenios geraram um rendimento de R$ ' +
+                  this.calculateYield();
+                this.hasReport = true;
+                this.isLoading = false;
+                this.showTotalValueMessage = true;
+                this.buildTable();
+              }
+            },
+            (error) => {
+              console.log(error);
+              this.buildMessage('Erro ao tentar gerar o relatorio', 1);
             }
-          },
-          error => {
-            console.log(error);
-            this.buildMessage('Erro ao tentar gerar o relatorio', 1);
-          }
-        );
-      }
-      else {
+          );
+      } else {
         // um convenio especifico
 
-
-        this.relatorioService.getAllReportByPeriodEConvenio(this.relatorioForm.controls.data_inicio.value, this.relatorioForm.controls.data_fim.value, this.relatorioForm.controls.convenio.value).subscribe(
-          data => {
-            this.relatorios = data;
-            if (Object.keys(data).length === 0) {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
-              this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' o convenio ' + this.convenioSelectedName +
-                ' não gerou nenhum rendimento';
-              this.hasReport = false;
-              this.showEmptyMessage = true;
-              this.showTotalValueMessage = true;
-              this.isLoading = false;
-            } else {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
-              this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' o convenio ' + this.convenioSelectedName +
-                ' gerou um rendimento de R$ ' + this.calculateYield();
-              this.hasReport = true;
-              this.isLoading = false;
-              this.showTotalValueMessage = true;
-              this.buildTable();
+        this.relatorioService
+          .getAllReportByPeriodEConvenio(
+            this.relatorioForm.controls.data_inicio.value,
+            this.relatorioForm.controls.data_fim.value,
+            this.relatorioForm.controls.convenio.value
+          )
+          .subscribe(
+            (data) => {
+              this.relatorios = data;
+              if (Object.keys(data).length === 0) {
+                this.totalValue =
+                  'Entre as datas ' +
+                  this.formatDate(
+                    this.relatorioForm.controls.data_inicio.value
+                  ) +
+                  ' e ';
+                this.totalValue = this.totalValue.toUpperCase();
+                +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                  ' o convenio ' +
+                  this.convenioSelectedName +
+                  ' não gerou nenhum rendimento';
+                this.hasReport = false;
+                this.showEmptyMessage = true;
+                this.showTotalValueMessage = true;
+                this.isLoading = false;
+              } else {
+                this.totalValue =
+                  'Entre as datas ' +
+                  this.formatDate(
+                    this.relatorioForm.controls.data_inicio.value
+                  ) +
+                  ' e ';
+                this.totalValue = this.totalValue.toUpperCase();
+                +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                  ' o convenio ' +
+                  this.convenioSelectedName +
+                  ' gerou um rendimento de R$ ' +
+                  this.calculateYield();
+                this.hasReport = true;
+                this.isLoading = false;
+                this.showTotalValueMessage = true;
+                this.buildTable();
+              }
+            },
+            (error) => {
+              console.log(error);
+              this.buildMessage('Erro ao tentar gerar relatorio', 1);
             }
-          },
-          error => {
-            console.log(error);
-            this.buildMessage('Erro ao tentar gerar relatorio', 1);
-          }
-        );
-
-
+          );
       }
-    }
-    else if (this.relatorioForm.controls.paciente.value === null && this.relatorioForm.controls.convenio.value === null) {
+    } else if (
+      this.relatorioForm.controls.paciente.value === null &&
+      this.relatorioForm.controls.convenio.value === null
+    ) {
       // funcionario e periodo
 
-      this.relatorioService.getAllReportByPeriodoEFuncinario(this.relatorioForm.controls.data_inicio.value,
-        this.relatorioForm.controls.data_fim.value, this.relatorioForm.controls.funcionario.value).subscribe(
-          data => {
+      this.relatorioService
+        .getAllReportByPeriodoEFuncinario(
+          this.relatorioForm.controls.data_inicio.value,
+          this.relatorioForm.controls.data_fim.value,
+          this.relatorioForm.controls.funcionario.value
+        )
+        .subscribe(
+          (data) => {
             this.relatorios = data;
             if (Object.keys(data).length === 0) {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
+              this.totalValue =
+                'Entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ';
               this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' o funcionario ' + this.funcionarioSelectedName +
+              +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' o funcionario ' +
+                this.funcionarioSelectedName +
                 ' não gerou nenhum rendimento';
               this.hasReport = false;
               this.showEmptyMessage = true;
               this.showTotalValueMessage = true;
               this.isLoading = false;
             } else {
-              this.totalValue = 'Entre as datas ' + this.formatDate(this.relatorioForm.controls.data_inicio.value) + ' e '
+              this.totalValue =
+                'Entre as datas ' +
+                this.formatDate(this.relatorioForm.controls.data_inicio.value) +
+                ' e ';
               this.totalValue = this.totalValue.toUpperCase();
-              + this.formatDate(this.relatorioForm.controls.data_fim.value) + ' o funcionario ' + this.funcionarioSelectedName
-                + ' gerou um rendimento de R$ ' + this.calculateYield();
+              +this.formatDate(this.relatorioForm.controls.data_fim.value) +
+                ' o funcionario ' +
+                this.funcionarioSelectedName +
+                ' gerou um rendimento de R$ ' +
+                this.calculateYield();
               this.hasReport = true;
               this.isLoading = false;
               this.showTotalValueMessage = true;
               this.buildTable();
             }
           },
-          error => {
+          (error) => {
             console.log(error);
             this.buildMessage('Erro ao tentar gerar o relatorio', 1);
           }
         );
-
-
     }
   }
 
   /*função que ao digitar, passa todas as letras para maiusculo*/
   toUpperCase(event) {
-    return event.target.value = event.target.value.toUpperCase();
+    return (event.target.value = event.target.value.toUpperCase());
   }
 
   // Varificação de caractere
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (
+      event.charCode == 32 || // espaço
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
       (event.charCode > 191 && event.charCode <= 255) // letras com acentos
     ) {
-
       return true;
     } else {
       this.buildMessage('Insira apenas letras', 1);
       return false;
     }
-
   }
 
   resetForm() {
-
     this.createForm();
-    this.pacienteName.setValue(null);
+    this.pacienteName.setValue('');
+
     this.showNewReportButton = false;
     this.showTotalValueMessage = false;
     this.showFirstMessage = true;
@@ -528,8 +647,8 @@ export class RelatorioComponent implements OnInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -546,5 +665,4 @@ export class RelatorioComponent implements OnInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
 }
