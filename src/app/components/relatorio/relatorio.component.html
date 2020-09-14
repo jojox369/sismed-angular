@@ -173,6 +173,10 @@
       <span *ngIf="hasError && !isLoading" class="message-danger">
         Erro ao tentar carregar a lista de dados
       </span>
+
+      <span *ngIf="showErrorMessage" class="message-danger">
+        Erro ao tentar gerar o relatório
+      </span>
       <div>
         <!--Spinner que aparece enquando a lista não é carregada-->
         <mat-spinner *ngIf="isLoading"></mat-spinner>

@@ -43,13 +43,15 @@ export class RelatorioComponent implements OnInit {
   funcionarioSelectedName;
 
   // Variavel que controla a mensagem de erro
-  hasError: boolean = false;
+  hasError: boolean;
 
   // Variavel que controla a mensagem de dado não encontrado
-  showEmptyMessage: boolean = false;
+  showEmptyMessage: boolean;
 
   // Controla a progress spiner e a aparição da lista
-  isLoading: boolean = false;
+  isLoading: boolean;
+
+  showErrorMessage: boolean;
 
   filteredPacientes: Observable<any>;
 
@@ -91,7 +93,9 @@ export class RelatorioComponent implements OnInit {
         this.funcionarios = data;
       },
       (error) => {
-        console.log(error);
+        this.showErrorMessage = true;
+        this.isLoading = false;
+
         this.buildMessage('Erro ao tentar carregar lista de médicos', 1);
       }
     );
@@ -102,7 +106,9 @@ export class RelatorioComponent implements OnInit {
         this.filterPacientes();
       },
       (error) => {
-        console.log(error);
+        this.showErrorMessage = true;
+        this.isLoading = false;
+
         this.buildMessage('Erro ao tentar carregar lista de pacientes', 1);
       }
     );
@@ -113,7 +119,9 @@ export class RelatorioComponent implements OnInit {
         this.createForm();
       },
       (error) => {
-        console.log(error);
+        this.showErrorMessage = true;
+        this.isLoading = false;
+
         this.buildMessage('Erro ao tentar carregar lista de convênios', 1);
       }
     );
@@ -237,7 +245,9 @@ export class RelatorioComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
+          this.showErrorMessage = true;
+          this.isLoading = false;
+
           this.buildMessage('Erro ao tentar gerar o relatorio', 1);
         }
       );
@@ -273,7 +283,9 @@ export class RelatorioComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            this.showErrorMessage = true;
+            this.isLoading = false;
+
             this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
         );
@@ -309,7 +321,9 @@ export class RelatorioComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            this.showErrorMessage = true;
+            this.isLoading = false;
+
             this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
         );
@@ -350,7 +364,9 @@ export class RelatorioComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
+          this.showErrorMessage = true;
+          this.isLoading = false;
+
           this.buildMessage('Erro ao tentar gerar o relatório', 1);
         }
       );
@@ -396,7 +412,9 @@ export class RelatorioComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            this.showErrorMessage = true;
+            this.isLoading = false;
+
             this.buildMessage('Erro ao tentar gerar o relatório', 1);
           }
         );
@@ -447,7 +465,9 @@ export class RelatorioComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            this.showErrorMessage = true;
+            this.isLoading = false;
+
             this.buildMessage('Erro ao tentar gerar relatório', 1);
           }
         );
@@ -498,7 +518,9 @@ export class RelatorioComponent implements OnInit {
               }
             },
             (error) => {
-              console.log(error);
+              this.showErrorMessage = true;
+              this.isLoading = false;
+
               this.buildMessage('Erro ao tentar gerar o relatorio', 1);
             }
           );
@@ -550,7 +572,9 @@ export class RelatorioComponent implements OnInit {
               }
             },
             (error) => {
-              console.log(error);
+              this.showErrorMessage = true;
+              this.isLoading = false;
+
               this.buildMessage('Erro ao tentar gerar relatorio', 1);
             }
           );
@@ -602,10 +626,15 @@ export class RelatorioComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            this.showErrorMessage = true;
+            this.isLoading = false;
             this.buildMessage('Erro ao tentar gerar o relatorio', 1);
           }
         );
+    } else {
+      this.showErrorMessage = true;
+      this.isLoading = false;
+      this.buildMessage('Não foi possivel gerar relatorio', 1);
     }
   }
 

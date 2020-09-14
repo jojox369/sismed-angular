@@ -1,5 +1,15 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { faSearch, faPlus, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import {
+  faSearch,
+  faPlus,
+  faSortDown,
+} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { ConvenioService } from 'src/app/services/convenio.service';
 import { Convenio } from 'src/app/models/convenio';
@@ -10,10 +20,9 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-convenio-list',
   templateUrl: './convenio-list.component.html',
-  styleUrls: ['./convenio-list.component.css']
+  styleUrls: ['./convenio-list.component.css'],
 })
 export class ConvenioListComponent implements OnInit, AfterViewInit {
-
   // Icone de pesquisa
   faSearch = faSearch;
 
@@ -41,13 +50,11 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   // variavel que captura o que esta sendo digitado
   searchText = '';
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError = false;
 
   // Variavel que controla a mensagem de dado não encontrado
   showEmptyMessage = false;
-
-
 
   @ViewChild('searchInput') searchInput: ElementRef;
 
@@ -55,39 +62,37 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   dataSource: any;
   displayedColumns: string[] = ['nome', 'cnpj', 'adesao'];
 
-
-
-  constructor(private convenioService: ConvenioService, private route: Router,
-    private snackBar: MatSnackBar) { }
+  constructor(
+    private convenioService: ConvenioService,
+    private route: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.getConvenios();
     this.verifyMessage();
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   /* Função que faz a requisição dos dados para a api.
   Caso ele consiga os dados, o modelo recebe esses dados para serem apresentados;
   */
   getConvenios() {
     this.convenioService.getAll().subscribe(
-      data => {
+      (data) => {
         if (Object.keys(data).length === 0) {
           this.isLoading = false;
           this.convenioIsEmpty = true;
           this.showEmptyMessage = true;
-        }
-        else {
+        } else {
           this.convenios = data;
           this.buildTable();
           this.isLoading = false;
           this.convenioIsEmpty = false;
         }
-
       },
-      error => {
+      (error) => {
         console.log('Erro ao carregar dados');
         this.isLoading = false;
         this.hasError = true;
@@ -119,8 +124,7 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
       document.getElementById('txtBusca').setAttribute('maxlength', '45');
       this.input = value;
       this.placeholder = 'Buscar por Nome';
-    }
-    else if (value === 2) {
+    } else if (value === 2) {
       if (this.input !== value) {
         this.searchText = '';
         this.getConvenios();
@@ -129,10 +133,8 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       document.getElementById('txtBusca').setAttribute('maxlength', '18');
 
-
       this.placeholder = 'Buscar por CNPJ';
-    }
-    else {
+    } else {
       if (this.input !== value) {
         this.searchText = '';
         this.getConvenios();
@@ -141,8 +143,6 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       document.getElementById('txtBusca').setAttribute('maxlength', '9');
       this.placeholder = 'Buscar por ANS';
-
-
     }
   }
 
@@ -150,35 +150,30 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   onChooseSearchMethod() {
     if (this.input === 1) {
       this.onSearchByName();
-    }
-    else if (this.input === 2) {
-
+    } else if (this.input === 2) {
       this.onSearchByCNPJ();
-    }
-    else {
+    } else {
       this.onSearchByANS();
     }
   }
 
   // Pesquisa por nome
   onSearchByName() {
-
     if (this.searchText !== '') {
       this.convenioService.getByNome(this.searchText).subscribe(
-        data => {
+        (data) => {
           // Verificação para saber se a consulta retornou nula
           if (Object.keys(data).length === 0) {
             this.convenioIsEmpty = true;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.showEmptyMessage = false;
             this.convenioIsEmpty = false;
             this.convenios = data;
             this.buildTable();
           }
         },
-        error => {
+        (error) => {
           console.log(error);
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
@@ -193,20 +188,19 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   onSearchByCNPJ() {
     if (this.searchText !== '') {
       this.convenioService.getByCnpj(this.searchText).subscribe(
-        data => {
+        (data) => {
           // Verificação para saber se a consulta retornou nula
           if (Object.keys(data).length === 0) {
             this.convenioIsEmpty = true;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.showEmptyMessage = false;
             this.convenioIsEmpty = false;
             this.convenios = data;
             this.buildTable();
           }
         },
-        error => {
+        (error) => {
           console.log(error);
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
@@ -221,20 +215,19 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   onSearchByANS() {
     if (this.searchText !== '') {
       this.convenioService.getByAns(this.searchText).subscribe(
-        data => {
+        (data) => {
           // Verificação para saber se a consulta retornou nula
           if (Object.keys(data).length === 0) {
             this.convenioIsEmpty = true;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.showEmptyMessage = false;
             this.convenioIsEmpty = false;
             this.convenios = data;
             this.buildTable();
           }
         },
-        error => {
+        (error) => {
           console.log(error);
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
@@ -261,8 +254,8 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -279,10 +272,4 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
-
-
-
-
-
 }
