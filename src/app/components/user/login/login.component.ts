@@ -50,10 +50,10 @@ export class LoginComponent implements OnInit {
           .subscribe(
             (data) => {
               const user = {
-                id: data[0].id,
-                perfil: data[0].perfil,
-                nome: data[0].nome,
-                cpf: data[0].cpf,
+                id: data.id,
+                perfil: data.perfil,
+                nome: data.nome,
+                cpf: data.cpf,
               };
               sessionStorage.setItem('user', JSON.stringify(user));
               sessionStorage.setItem('logged', 'true');
