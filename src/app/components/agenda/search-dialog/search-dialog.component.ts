@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { faSearch, faSortDown, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSearch,
+  faSortDown,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import { Paciente } from 'src/app/models/paciente';
-import { PacienteService } from 'src/app/services/paciente.service'
+import { PacienteService } from 'src/app/services/paciente.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -10,10 +14,9 @@ import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-search-dialog',
   templateUrl: './search-dialog.component.html',
-  styleUrls: ['./search-dialog.component.css']
+  styleUrls: ['./search-dialog.component.css'],
 })
 export class SearchDialogComponent implements OnInit {
-
   faSearch = faSearch;
 
   faSortDown = faSortDown;
@@ -34,18 +37,18 @@ export class SearchDialogComponent implements OnInit {
 
   preCadastro = false;
 
+  loading = true;
+
   myControl = new FormControl();
   options;
   filteredOptions: Observable<any>;
 
-
   @ViewChild('searchInput') searchInput: ElementRef;
-
 
   constructor(
     private pacienteService: PacienteService,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getAll();
@@ -53,25 +56,25 @@ export class SearchDialogComponent implements OnInit {
 
   getAll() {
     this.pacienteService.getAllPacientes().subscribe(
-      data => {
+      (data) => {
         this.onGetPacienteList(data);
+        this.loading = false;
       },
-      error => {
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  // Auth Complete
   onGetPacienteList(data) {
     this.options = data;
 
-    this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => value.length >= 1 ? this.onChooseSearchMethod(value) : [])
-      );
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((value) =>
+        value.length >= 1 ? this.onChooseSearchMethod(value) : []
+      )
+    );
   }
 
   /*Função que troca o campo de pesquisa de acordo com o valor recebido*/
@@ -84,30 +87,24 @@ export class SearchDialogComponent implements OnInit {
       this.input = value;
       //document.getElementById('txtBusca').setAttribute('maxlength', '45')
       this.placeholder = 'Buscar por Nome';
-    }
-    else if (value === 2) {
+    } else if (value === 2) {
       if (this.input !== value) {
         this.clearSearchInput();
-
       }
       this.searchInput.nativeElement.focus();
       this.input = value;
       this.placeholder = 'Buscar por Prontuario';
-    }
-    else if (value === 3) {
+    } else if (value === 3) {
       if (this.input !== value) {
         this.clearSearchInput();
-
       }
       this.searchInput.nativeElement.focus();
       this.input = value;
       //document.getElementById('txtBusca').setAttribute('maxlength', '14')
       this.placeholder = 'Buscar por CPF';
-    }
-    else {
+    } else {
       if (this.input !== value) {
         this.clearSearchInput();
-
       }
       this.searchInput.nativeElement.focus();
       this.input = value;
@@ -121,7 +118,10 @@ export class SearchDialogComponent implements OnInit {
     // Pesquisa por nome
     if (this.input === 1) {
       const filterValue = value.toLowerCase();
-      const results = this.options.filter(option => option.nome.toLowerCase().includes(filterValue));
+      const results = this.options.filter((option) =>
+        option.nome.toLowerCase().includes(filterValue)
+      );
+
       if (results.length) {
         this.preCadastro = false;
       } else {
@@ -132,7 +132,9 @@ export class SearchDialogComponent implements OnInit {
     // pesquisa por prontuario
     else if (this.input === 2) {
       const filterValue = value;
-      const results = this.options.filter(option => option.prontuario.toString().includes(filterValue));
+      const results = this.options.filter((option) =>
+        option.prontuario.toString().includes(filterValue)
+      );
       if (results.length) {
         this.preCadastro = false;
       } else {
@@ -143,7 +145,12 @@ export class SearchDialogComponent implements OnInit {
     // pesquisa por cpf
     else if (this.input === 3) {
       const filterValue = value;
-      const results = this.options.filter(option => option.cpf.includes(filterValue));
+
+      const results = this.options.filter((option) => {
+        if (option.cpf) {
+          return option.cpf.includes(filterValue);
+        }
+      });
       if (results.length) {
         this.preCadastro = false;
       } else {
@@ -154,8 +161,12 @@ export class SearchDialogComponent implements OnInit {
     // pesquisa por telefone
     else {
       const filterValue = value;
-      console.log(filterValue);
-      const results = this.options.filter(option => option.celular.includes(filterValue));
+
+      const results = this.options.filter((option) => {
+        if (option.celular) {
+          return option.celular.includes(filterValue);
+        }
+      });
       if (results.length !== 0) {
         this.preCadastro = false;
       } else {
@@ -171,23 +182,22 @@ export class SearchDialogComponent implements OnInit {
 
   /*função que ao digitar, passa todas as letras para maiusculo*/
   toUpperCase(event) {
-    return event.target.value = event.target.value.toUpperCase();
+    return (event.target.value = event.target.value.toUpperCase());
   }
 
   // Varificação de caractere
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (
+      event.charCode == 32 || // espaço
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
       (event.charCode > 191 && event.charCode <= 255) // letras com acentos
     ) {
-
       return true;
     } else {
       this.buildMessage('Insira apenas letras', 1);
       return false;
     }
-
   }
 
   // monta a mensagem que vai ser exibida na pagina
@@ -196,8 +206,8 @@ export class SearchDialogComponent implements OnInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -214,5 +224,4 @@ export class SearchDialogComponent implements OnInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
 }

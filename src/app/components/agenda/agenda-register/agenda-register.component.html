@@ -64,7 +64,7 @@
           <input
             matInput
             value="{{
-              paciente.cpf === null ? 'NÃO CADASTRADO' : paciente.cpf
+              paciente.cpf === null ? 'NÃO CADASTRADO' : (paciente.cpf | CPF)
             }}"
             disabled
           />
@@ -74,7 +74,9 @@
           <mat-label>RG</mat-label>
           <input
             matInput
-            value="{{ paciente.rg === null ? 'NÃO CADASTRADO' : paciente.rg }}"
+            value="{{
+              paciente.rg === null ? 'NÃO CADASTRADO' : (paciente.rg | RG)
+            }}"
             disabled
           />
         </mat-form-field>

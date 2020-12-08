@@ -4,73 +4,98 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Paciente, PacientePost } from '../models/paciente';
 import { UserService } from './user.service';
-
+import baseUrl from '../url';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PacienteService {
-  baseUrl = 'https://sismed-api.herokuapp.com/';
   token = this.userService.token;
   message: string;
-  httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
+  httpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   getAllPacientes(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(this.baseUrl + "pacientes/", { headers: this.httpHeaders }).pipe(
-      map(data => data.map(data => new Paciente().deserializable(data)))
-    );
+    return this.http
+      .get<Paciente[]>(baseUrl + 'pacientes/', { headers: this.httpHeaders })
+      .pipe(
+        map((data) => data.map((data) => new Paciente().deserializable(data)))
+      );
   }
 
   getPacienteByName(name: string): Observable<any> {
-    return this.http.get(this.baseUrl + "pacientes/nome/" + name + "/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'pacientes/nome/' + name + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   getPacienteByProntuario(prontuario: Number): Observable<any> {
-    return this.http.get(this.baseUrl + "pacientes/prontuario/" + prontuario + "/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'pacientes/prontuario/' + prontuario + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   getPacienteByCpf(cpf: string): Observable<any> {
-    return this.http.get(this.baseUrl + "pacientes/cpf/" + cpf + "/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'pacientes/cpf/' + cpf + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   getPacienteByCelular(celular: string): Observable<any> {
-    return this.http.get(this.baseUrl + "pacientes/celular/" + celular + "/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'pacientes/celular/' + celular + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   getPacienteByTelefone(telefone: string): Observable<any> {
-    return this.http.get(this.baseUrl + "pacientes/telefone/" + telefone + "/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'pacientes/telefone/' + telefone + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   getPaciente(id: string): Observable<PacientePost> {
-    return this.http.get<PacientePost>(this.baseUrl + "pacientes/" + id + "/", { headers: this.httpHeaders }).pipe(
-      map(data => new PacientePost().deserializable(data))
-    );
+    return this.http
+      .get<PacientePost>(baseUrl + 'pacientes/' + id + '/', {
+        headers: this.httpHeaders,
+      })
+      .pipe(map((data) => new PacientePost().deserializable(data)));
   }
 
   getPacienteDetails(prontuario: string): Observable<Paciente> {
-    return this.http.get<Paciente>(this.baseUrl + "paciente/details/" + prontuario + "/", { headers: this.httpHeaders });
+    return this.http.get<Paciente>(
+      baseUrl + 'paciente/details/' + prontuario + '/',
+      { headers: this.httpHeaders }
+    );
   }
 
-
   savePaciente(paciente: PacientePost) {
-    return this.http.post(this.baseUrl + "pacientes/", paciente, { headers: this.httpHeaders });
+    return this.http.post(baseUrl + 'pacientes/', paciente, {
+      headers: this.httpHeaders,
+    });
   }
 
   upadatePaciente(paciente: PacientePost): Observable<any> {
-    return this.http.put(this.baseUrl + "pacientes/" + paciente.id + "/", paciente, { headers: this.httpHeaders });
+    return this.http.put(baseUrl + 'pacientes/' + paciente.id + '/', paciente, {
+      headers: this.httpHeaders,
+    });
   }
 
   deletePaciente(id: Number) {
-    return this.http.delete(this.baseUrl + "pacientes/" + id + "/", { headers: this.httpHeaders });
+    return this.http.delete(baseUrl + 'pacientes/' + id + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   lastId() {
-    return this.http.get(this.baseUrl + "ultimoid/", { headers: this.httpHeaders });
+    return this.http.get(baseUrl + 'ultimoid/', { headers: this.httpHeaders });
   }
 
   preCadastro(paciente: PacientePost): Observable<any> {
-    return this.http.post(this.baseUrl + "precadastro/", paciente, { headers: this.httpHeaders });
+    return this.http.post(baseUrl + 'precadastro/', paciente, {
+      headers: this.httpHeaders,
+    });
   }
 }

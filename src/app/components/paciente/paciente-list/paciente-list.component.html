@@ -92,7 +92,7 @@
           <th mat-header-cell *matHeaderCellDef>Nome</th>
           <td mat-cell *matCellDef="let element">
             <a
-              [routerLink]="['/paciente', element.id]"
+              [routerLink]="['/paciente', element.prontuario]"
               title="Clique para editar o paciênte {{ element.nome }}"
               >{{ element.nome }}</a
             >
@@ -143,7 +143,11 @@
         <ng-container matColumnDef="celular">
           <th mat-header-cell *matHeaderCellDef>Celular</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.celular | celular }}
+            {{
+              element.celular === null
+                ? "Não cadastrado"
+                : (element.celular | celular)
+            }}
           </td>
         </ng-container>
 

@@ -34,6 +34,7 @@ import { LogService } from 'src/app/services/log.service';
   styleUrls: ['./paciente-details.component.css'],
 })
 export class PacienteDetailsComponent implements OnInit {
+  mask = '(00) 0000-0000';
   // Icone de exluir
   faTimes = faTimes;
 
@@ -110,6 +111,9 @@ export class PacienteDetailsComponent implements OnInit {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       (data) => {
         this.paciente = data;
+        if (this.paciente.telefone_fixo.length > 10) {
+          this.mask = '(00) 0 0000-0000';
+        }
         this.getTipoConvenioDetails();
       },
       (error) => {

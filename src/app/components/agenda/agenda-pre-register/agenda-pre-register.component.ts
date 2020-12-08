@@ -331,7 +331,7 @@ export class AgendaPreRegisterComponent implements OnInit {
   getProntuario() {
     this.pacienteService.lastId().subscribe(
       (data) => {
-        this.formPaciente.controls.prontuario.setValue(data[0].prontuario + 1);
+        this.formPaciente.controls.prontuario.setValue(data['response']);
       },
       (error) => {
         console.log(error);

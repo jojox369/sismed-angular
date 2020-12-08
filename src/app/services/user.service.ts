@@ -3,13 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Funcionario } from 'src/app/models/funcionario';
 import { User } from 'src/app/models/user';
+import baseUrl from '../url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   token = sessionStorage.getItem('token');
-  baseUrl = 'https://sismed-api.herokuapp.com/';
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
@@ -18,14 +18,14 @@ export class UserService {
 
   // Realiza a autenticação e retorna o token que sera ultilizado para realizar as requisições
   login(user): Observable<any> {
-    return this.http.post(this.baseUrl + 'auth/', user, {
+    return this.http.post(baseUrl + 'auth/', user, {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   // Salva o login do funcionario
   save(user): Observable<any> {
-    return this.http.post(this.baseUrl + 'users/', user, {
+    return this.http.post(baseUrl + 'users/', user, {
       headers: this.httpHeaders,
     });
   }
@@ -34,33 +34,33 @@ export class UserService {
   createSession(cpf): Observable<Funcionario> {
     this.token = sessionStorage.getItem('token');
     return this.http.get<Funcionario>(
-      this.baseUrl + 'funcionario/login/' + cpf + '/',
+      baseUrl + 'funcionario/login/' + cpf + '/',
       { headers: { 'Content-Type': 'application/json' } }
     );
   }
 
   // Salva as informações do funcionario na tabela de login usada no SISMED JAVA
   loginRegister(funcionario): Observable<any> {
-    return this.http.post(this.baseUrl + 'login/', funcionario, {
+    return this.http.post(baseUrl + 'login/', funcionario, {
       headers: this.httpHeaders,
     });
   }
 
   // Retorna a lista de usarios cadastrados na tabela do DJANGO
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + 'users/', {
+    return this.http.get<User[]>(baseUrl + 'users/', {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   deleteUser(userId): Observable<any> {
-    return this.http.delete(this.baseUrl + 'users/' + userId + '/', {
+    return this.http.delete(baseUrl + 'users/' + userId + '/', {
       headers: this.httpHeaders,
     });
   }
 
   updatePassword(userId, user): Observable<any> {
-    return this.http.put(this.baseUrl + 'users/' + userId + '/', user, {
+    return this.http.put(baseUrl + 'users/' + userId + '/', user, {
       headers: { 'Content-Type': 'application/json' },
     });
   }

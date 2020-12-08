@@ -4,30 +4,48 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { Registroclinico } from '../models/registroclinico';
+import baseUrl from '../url';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RegistroclinicoService {
-  baseUrl = 'https://sismed-api.herokuapp.com/';
   token = this.userService.token;
-  httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.token);
+  message: string;
+  httpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   getRegistros(): Observable<Registroclinico[]> {
-    return this.http.get<Registroclinico[]>(this.baseUrl + "registrosclinicos/", { headers: this.httpHeaders }).pipe(
-      map(data => data.map(data => new Registroclinico().deserializable(data)))
-    );
+    return this.http
+      .get<Registroclinico[]>(baseUrl + 'registrosclinicos/', {
+        headers: this.httpHeaders,
+      })
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
   }
 
   getRegistrosAnteriores(pacienteId: number): Observable<Registroclinico[]> {
-    return this.http.get<Registroclinico[]>(this.baseUrl + "registrosanteriores/" + pacienteId + '/', { headers: this.httpHeaders }).pipe(
-      map(data => data.map(data => new Registroclinico().deserializable(data)))
-    );
+    return this.http
+      .get<Registroclinico[]>(
+        baseUrl + 'registrosanteriores/' + pacienteId + '/',
+        { headers: this.httpHeaders }
+      )
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
   }
 
   saveRegistroClinico(registroClinico: Registroclinico) {
-    return this.http.post(this.baseUrl + "registroclinico/", registroClinico, { headers: this.httpHeaders });
+    return this.http.post(baseUrl + 'registroclinico/', registroClinico, {
+      headers: this.httpHeaders,
+    });
   }
 }

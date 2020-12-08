@@ -7,7 +7,12 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
   <h2 mat-dialog-title>Novo Agendamento</h2>
 
-  <form fxLayout="row" fxLayoutAlign="start center" class="container">
+  <form
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    class="container"
+    *ngIf="!loading"
+  >
     <mat-form-field style="width: 90%" appearance="fill">
       <span matPrefix> <fa-icon [icon]="faSearch"></fa-icon> &nbsp; </span>
       <button mat-icon-button [matMenuTriggerFor]="menu" matSuffix>
@@ -21,13 +26,12 @@
         [formControl]="myControl"
         [matAutocomplete]="auto"
         (keyup)="toUpperCase($event)"
-        (keypress)="onlyLetters($event)"
       />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option
           *ngFor="let option of filteredOptions | async"
           [value]="option"
-          [routerLink]="['/agenda/agendar', option.id]"
+          [routerLink]="['/agenda/agendar', option.prontuario]"
           mat-dialog-close
         >
           {{
@@ -92,4 +96,9 @@
       </div>
     </div>
   </form>
+  <div>
+    <!--Spinner que aparece enquando a lista não é carregada-->
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <span style="margin-top: 10px" *ngIf="loading">Carregando dados</span>
+  </div>
 </div>
