@@ -11,7 +11,7 @@ import { Funcionario } from 'src/app/models/funcionario';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
 import { Procedimento } from 'src/app/models/procedimento';
-import { Agendar } from 'src/app/models/agenda';
+import { Agenda, Agendar } from 'src/app/models/agenda';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { ProcedimentoService } from 'src/app/services/procedimento.service';
@@ -35,8 +35,7 @@ export class AgendaRegisterComponent implements OnInit {
   // Icone do botão de salvar
   faCheck = faCheck;
 
-  // Variavel que vai receber os dados
-  paciente: Paciente;
+
 
   // variavel que recebe a lista de medicos
   medicos: Funcionario[];
@@ -51,16 +50,11 @@ export class AgendaRegisterComponent implements OnInit {
   procedimentos: Procedimento[];
 
   // Variavel que recebe todos os dados do agendamentos para enviar para o django para ser salva
-  agendamento: Agendar;
+  agendamento: Agenda;
 
   // recebe os dados do formulario
   formAgenda: FormGroup;
 
-  // Variavel que recebe os detalhes do funcionario
-  medicoDetail = {
-    crm: undefined,
-    especialidade: undefined,
-  };
 
   // Recebe o id do convenio selecionado
   convenio = new FormControl('', Validators.required);
@@ -91,21 +85,26 @@ export class AgendaRegisterComponent implements OnInit {
   }
 
   createForm() {
-    this.agendamento = new Agendar();
+    this.agendamento = new Agenda();
+    this.agendamento.paciente = new Paciente();
+    this.agendamento.funcionario = new Funcionario();
+    this.agendamento.tipoConvenio = new TipoConvenio();
+    this.agendamento.procedimento = new Procedimento();
     this.formAgenda = this.fb.group({
       data: [this.agendamento.data, Validators.required],
       hora: [this.agendamento.hora, Validators.required],
-      paciente: [this.agendamento.paciente],
-      funcionario: [this.agendamento.funcionario, Validators.required],
-      procedimento: [this.agendamento.procedimento, Validators.required],
-      tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
+      paciente: [this.agendamento.paciente.prontuario],
+      funcionario: [this.agendamento.funcionario.id, Validators.required],
+      procedimento: [this.agendamento.procedimento.id, Validators.required],
+      tipoConvenio: [this.agendamento.tipoConvenio.id, Validators.required],
       pagou: [this.agendamento.pagou],
-      primeira_vez: [this.agendamento.primeira_vez],
-      compareceu: [this.agendamento.primeira_vez],
+      primeiraVez: [this.agendamento.primeiraVez],
+      compareceu: [this.agendamento.compareceu],
     });
 
     this.formAgenda.controls.compareceu.setValue(1);
     this.formAgenda.controls.pagou.setValue(1);
+    this.formAgenda.controls.paciente.setValue(this.prontuario);
     this.formAgenda.controls.tipoConvenio.disable();
     this.formAgenda.controls.procedimento.disable();
     this.formAgenda.controls.data.disable();
@@ -118,8 +117,8 @@ export class AgendaRegisterComponent implements OnInit {
     this.pacienteService.getPaciente(this.prontuario).subscribe(
       (data) => {
 
-        this.paciente = data;
-        this.formAgenda.controls.paciente.setValue(this.paciente.prontuario);
+        this.agendamento.paciente = data;
+
         this.showContent = true;
         this.isLoading = false;
       },
@@ -155,10 +154,7 @@ export class AgendaRegisterComponent implements OnInit {
       .subscribe(
         (data) => {
 
-          this.medicoDetail = {
-            crm: data.crm,
-            especialidade: data.especialidade,
-          };
+          this.agendamento.funcionario = data
         },
         (error) => {
 
@@ -235,17 +231,19 @@ export class AgendaRegisterComponent implements OnInit {
     this.isLoading = true;
 
     this.loadingDataMessage = 'Agendando paciente';
-    this.agendaService.lastAgendamento(this.paciente.prontuario).subscribe(
+    this.agendaService.lastAgendamento(this.agendamento.paciente.prontuario).subscribe(
       (data) => {
 
 
         if (data) {
-          this.formAgenda.controls.primeira_vez.setValue(0);
+          this.formAgenda.controls.primeiraVez.setValue(0);
 
         } else {
-          this.formAgenda.controls.primeira_vez.setValue(1);
+          this.formAgenda.controls.primeiraVez.setValue(1);
 
         }
+
+
         this.agendaService.agendar(this.formAgenda.value).subscribe(
           (data) => {
             this.agendaService.message =
@@ -270,6 +268,7 @@ export class AgendaRegisterComponent implements OnInit {
 
         );
       });
+
   }
 
   // Verifica se o medico ja possui agendamento para o dia e hora selecionados;

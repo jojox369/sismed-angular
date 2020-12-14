@@ -8,7 +8,7 @@ import { Funcionario } from './funcionario';
 export class Agenda implements Deserializable {
 
   id: number;
-  primeira_vez: number;
+  primeiraVez: number;
   compareceu: number;
   pagou: number;
   finalizado: number;
@@ -28,17 +28,17 @@ export class Agenda implements Deserializable {
 export class Agendar implements Deserializable {
 
   id: number;
-  primeira_vez: number;
+  primeiraVez: number;
   compareceu: number;
   pagou: number;
   finalizado: number;
   data: Date;
   hora: string;
   observacao: string;
-  procedimento: number;
-  tipoConvenio: number;
-  paciente: number;
-  funcionario: number;
+  procedimentoId: number;
+  tipoConvenioId: number;
+  pacienteId: number;
+  funcionarioId: number;
 
 
   deserializable(input: any): this {

@@ -22,42 +22,42 @@
         <!--Nome Input-->
         <mat-form-field appearance="fill">
           <mat-label>Prontuário</mat-label>
-          <input matInput value="{{ paciente.prontuario }}" disabled />
+          <input matInput value="{{ agendamento.paciente.prontuario }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input matInput value="{{ paciente.nome }}" disabled />
+          <input matInput value="{{ agendamento.paciente.nome }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Cônvenio</mat-label>
           <input matInput value="{{
-              paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
-                ? paciente.tipoConvenio.convenio.nome
-                : paciente.tipoConvenio.convenio.nome +
+              agendamento.paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
+                ? agendamento.paciente.tipoConvenio.convenio.nome
+                : agendamento.paciente.tipoConvenio.convenio.nome +
                   ' - ' +
-                  paciente.tipoConvenio.nome
+                  agendamento.paciente.tipoConvenio.nome
             }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>CPF</mat-label>
           <input matInput value="{{
-              paciente.cpf === null ? 'NÃO CADASTRADO' : (paciente.cpf | CPF)
+              agendamento.paciente.cpf === null ? 'NÃO CADASTRADO' : (agendamento.paciente.cpf | CPF)
             }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>RG</mat-label>
           <input matInput value="{{
-              paciente.rg === null ? 'NÃO CADASTRADO' : (paciente.rg | RG)
+              agendamento.paciente.rg === null ? 'NÃO CADASTRADO' : (agendamento.paciente.rg | RG)
             }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Nascimento</mat-label>
-          <input matInput value="{{ paciente.dataNascimento | date: 'dd/MM/yyyy' }}" disabled />
+          <input matInput value="{{ agendamento.paciente.dataNascimento | date: 'dd/MM/yyyy' }}" disabled />
         </mat-form-field>
       </div>
 
@@ -77,12 +77,12 @@
 
         <mat-form-field appearance="fill">
           <mat-label>CRM</mat-label>
-          <input matInput value="{{ medicoDetail.crm }}" disabled />
+          <input matInput value="{{ agendamento.funcionario.crm }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Especialidade</mat-label>
-          <input matInput value="{{ medicoDetail.especialidade }}" disabled />
+          <input matInput value="{{ agendamento.funcionario.especialidade }}" disabled />
         </mat-form-field>
       </div>
 

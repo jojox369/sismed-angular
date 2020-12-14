@@ -1,60 +1,30 @@
-<form
-  [formGroup]="formAgenda"
-  #frm="ngForm"
-  (ngSubmit)="verifyAgendamento(frm)"
-  *ngIf="!isLoading"
->
+<form [formGroup]="formAgenda" #frm="ngForm" (ngSubmit)="save(frm)" *ngIf="!isLoading">
   <mat-card-title class="mat-card-title">
     <div>
       <span> <strong>Edição | </strong> Agendamento</span>
 
-      <button
-        type="submit"
-        mat-stroked-button
-        class="btn-success float-right"
-        title="Atualizar Agendamento"
-        [disabled]="frm.invalid"
-        *ngIf="isEditing"
-      >
+      <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar Agendamento"
+        [disabled]="frm.invalid" *ngIf="isEditing">
         <fa-icon [icon]="faCheck"></fa-icon> Salvar
       </button>
 
-      <button
-        mat-stroked-button
-        class="btn-danger btn-spacer float-right"
-        title="Cancelar edição"
-        *ngIf="isEditing"
-        (click)="cancelEditing()"
-      >
+      <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição" *ngIf="isEditing"
+        (click)="cancelEditing()">
         <fa-icon [icon]="faBan"></fa-icon> Cancelar
       </button>
 
-      <button
-        mat-stroked-button
-        class="btn-success float-right"
-        title="Editar Agendamento"
-        *ngIf="!isEditing"
-        (click)="unblockFields()"
-      >
+      <button mat-stroked-button class="btn-success float-right" title="Editar Agendamento" *ngIf="!isEditing"
+        (click)="unblockFields()">
         <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
       </button>
 
-      <a
-        mat-stroked-button
-        class="btn-danger btn-spacer float-right"
-        title="Excluir Agendamento"
-        (click)="delete()"
-        *ngIf="!isEditing"
-      >
+      <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir Agendamento" (click)="delete()"
+        *ngIf="!isEditing">
         <fa-icon [icon]="faTimes"></fa-icon> Excluir
       </a>
 
-      <a
-        mat-stroked-button
-        [routerLink]="['/agenda']"
-        title="Voltar à Agenda"
-        class="btn-sismed btn-spacer float-right"
-      >
+      <a mat-stroked-button [routerLink]="['/agenda']" title="Voltar à Agenda"
+        class="btn-sismed btn-spacer float-right">
         <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
       </a>
     </div>
@@ -62,7 +32,7 @@
 
   <mat-card-content>
     <!--Div que ocupa 100% do card-->
-    <div fxLayout="row" fxLayoutAlign="center start" *ngIf="showFields">
+    <div fxLayout="row" fxLayoutAlign="center start">
       <!-- Column 1 -->
       <div class="form">
         <h5 fxLayoutAlign="center start">Paciente</h5>
@@ -79,46 +49,30 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Cônvenio</mat-label>
-          <input
-            matInput
-            value="{{
-              paciente.tipo_convenio.convenio.nome === 'PARTICULAR'
-                ? paciente.tipo_convenio.convenio.nome
-                : paciente.tipo_convenio.convenio.nome +
+          <input matInput value="{{
+              paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
+                ? paciente.tipoConvenio.convenio.nome
+                : paciente.tipoConvenio.convenio.nome +
                   ' - ' +
-                  paciente.tipo_convenio.nome
-            }}"
-            disabled
-          />
+                  paciente.tipoConvenio.nome
+            }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>CPF</mat-label>
-          <input
-            matInput
-            value="{{
+          <input matInput value="{{
               paciente.cpf === null ? 'NÃO CADASTRADO' : paciente.cpf
-            }}"
-            disabled
-          />
+            }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>RG</mat-label>
-          <input
-            matInput
-            value="{{ paciente.rg === null ? 'NÃO CADASTRADO' : paciente.rg }}"
-            disabled
-          />
+          <input matInput value="{{ paciente.rg === null ? 'NÃO CADASTRADO' : paciente.rg }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Nascimento</mat-label>
-          <input
-            matInput
-            value="{{ paciente.data_nascimento | date: 'dd/MM/yyyy' }}"
-            disabled
-          />
+          <input matInput value="{{ paciente.dataNascimento | date: 'dd/MM/yyyy' }}" disabled />
         </mat-form-field>
       </div>
 
@@ -128,11 +82,8 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Medicos</mat-label>
-          <mat-select
-            [formControl]="formAgenda.controls.funcionario"
-            (selectionChange)="getConvenios(); getMedicoDetails()"
-            autofocus="autofocus"
-          >
+          <mat-select [formControl]="formAgenda.controls.funcionario"
+            (selectionChange)="getConvenios(); getMedicoDetails()" autofocus="autofocus">
             <mat-option *ngFor="let medico of medicos" [value]="medico.id">{{
               medico.nome
             }}</mat-option>
@@ -141,12 +92,12 @@
 
         <mat-form-field appearance="fill">
           <mat-label>CRM</mat-label>
-          <input matInput value="{{ medicoDetail.crm }}" disabled />
+          <input matInput value="{{ agendamento.funcionario.crm }}" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Especialidade</mat-label>
-          <input matInput value="{{ medicoDetail.especialidade }}" disabled />
+          <input matInput value="{{ agendamento.funcionario.especialidade }}" disabled />
         </mat-form-field>
       </div>
       <!-- Column 3-->
@@ -155,20 +106,16 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Convenio</mat-label>
-          <mat-select
-            [formControl]="convenioControl"
-            (selectionChange)="getTiposConvenio(); getProcedimentos()"
-            required
-          >
-            <mat-option *ngFor="let convenio of convenios" [value]="convenio.id"
-              >{{ convenio.nome }}
+          <mat-select [formControl]="convenioControl" (selectionChange)="getTiposConvenio(); getProcedimentos()"
+            required>
+            <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">{{ convenio.nome }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Plano</mat-label>
-          <mat-select [formControl]="this.formAgenda.controls.tipo_convenio">
+          <mat-select [formControl]="this.formAgenda.controls.tipoConvenio">
             <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">{{
               tipo.nome
             }}</mat-option>
@@ -178,58 +125,31 @@
         <mat-form-field appearance="fill">
           <mat-label>Procedimento</mat-label>
           <mat-select [formControl]="this.formAgenda.controls.procedimento">
-            <mat-option
-              *ngFor="let procedimento of procedimentos"
-              [value]="procedimento.id"
-            >
-              {{ procedimento.descricao }}</mat-option
-            >
+            <mat-option *ngFor="let procedimento of procedimentos" [value]="procedimento.id">
+              {{ procedimento.descricao }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data do Atendimento</mat-label>
-          <input
-            matInput
-            type="date"
-            autocomplete="off"
-            [formControl]="formAgenda.controls.data"
-            required
-          />
+          <input matInput type="date" autocomplete="off" [formControl]="formAgenda.controls.data" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Hora do Atendimento</mat-label>
-          <input
-            matInput
-            type="time"
-            autocomplete="off"
-            [formControl]="formAgenda.controls.hora"
-            required
-          />
+          <input matInput type="time" autocomplete="off" [formControl]="formAgenda.controls.hora" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Observação</mat-label>
-          <textarea
-            matInput
-            formControlName="observacao"
-            (keyup)="toUpperCase($event)"
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="7"
-            cdkAutosizeMaxRows="5"
-          ></textarea>
+          <textarea matInput formControlName="observacao" (keyup)="toUpperCase($event)" cdkTextareaAutosize
+            cdkAutosizeMinRows="7" cdkAutosizeMaxRows="5"></textarea>
         </mat-form-field>
       </div>
     </div>
   </mat-card-content>
 </form>
 
-<div
-  id="loading-data"
-  fxLayoutAlign="space-between center"
-  fxLayout="column"
-  *ngIf="isLoading"
->
+<div id="loading-data" fxLayoutAlign="space-between center" fxLayout="column" *ngIf="isLoading">
   <app-loading-data [message]="loadingDataMessage"></app-loading-data>
 </div>

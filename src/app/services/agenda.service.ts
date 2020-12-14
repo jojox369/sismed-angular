@@ -42,18 +42,19 @@ export class AgendaService {
   }
 
   // Faz requisição a API, que retorna um unico convenio
-  getAgendamento(medicoId, agendamentoId): Observable<Agendar> {
+  getAgendamento(agendamentoId): Observable<Agenda> {
     return this.http
-      .get<Agendar>(
-        baseUrl + 'agenda/' + medicoId + '/' + agendamentoId + '/',
+      .get<Agenda>(
+        baseUrl + 'agenda/agendamento/detalhes/' + agendamentoId + '/',
         { headers: this.httpHeaders }
       )
-      .pipe(map((data) => new Agendar().deserializable(data)));
+      .pipe(map((data) => new Agenda().deserializable(data)));
   }
 
-  updateAgendamento(agendamento: Agendar): Observable<any> {
+  updateAgendamento(agendamento: Agenda): Observable<any> {
+    console.log(agendamento)
     return this.http.put(
-      baseUrl + 'agendar/' + agendamento.id + '/',
+      baseUrl + 'agenda/',
       agendamento,
       { headers: this.httpHeaders }
     );

@@ -119,7 +119,7 @@ export class AgendaListComponent implements OnInit {
           this.medicos = data;
         },
         (error) => {
-          console.log(error);
+          this.buildMessage('Erro ao tentar recuperar dados', 1);
         }
       );
     }
@@ -137,7 +137,7 @@ export class AgendaListComponent implements OnInit {
       .getAgendamentos(this.medicoId, this.data_agendamento)
       .subscribe(
         (data) => {
-          console.log(data)
+
           if (Object.keys(data).length === 0) {
             this.isAgendaNotEmpty = false;
             this.isLoading = false;
@@ -153,7 +153,7 @@ export class AgendaListComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage('Erro ao tentar recuperar dados', 1);
         }
       );

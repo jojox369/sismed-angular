@@ -4,7 +4,7 @@ import { Convenio } from './convenio';
 export class TipoConvenio implements Deserializable {
   id: number;
   nome: string;
-  convenio: number;
+  convenio: Convenio;
 
   deserializable(input: any): this {
     return Object.assign(this, input);

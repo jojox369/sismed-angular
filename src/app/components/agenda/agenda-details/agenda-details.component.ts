@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Agendar } from 'src/app/models/agenda';
+import { Agenda, Agendar } from 'src/app/models/agenda';
 import { Funcionario } from 'src/app/models/funcionario';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
@@ -69,7 +69,7 @@ export class AgendaDetailsComponent implements OnInit {
   agendamentoId = this.route.snapshot.paramMap.get('agendamentoId');
 
   // Variavel que recebe os dados do agendamento
-  agendamento: Agendar;
+  agendamento: Agenda;
 
   // variavel que recebe a lista de medicos
   medicos: Funcionario[];
@@ -107,11 +107,7 @@ export class AgendaDetailsComponent implements OnInit {
   // Guarda a data do baco de dados para verificação na hora da edição
   dataAgendamento;
 
-  // Variavel que recebe os detalhes do funcionario
-  medicoDetail = {
-    crm: undefined,
-    especialidade: undefined,
-  };
+
 
   user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -141,31 +137,36 @@ export class AgendaDetailsComponent implements OnInit {
       id: [this.agendamento.id],
       data: [this.agendamento.data, Validators.required],
       hora: [this.agendamento.hora, Validators.required],
-      paciente: [this.agendamento.paciente],
-      funcionario: [this.agendamento.funcionario, Validators.required],
-      procedimento: [this.agendamento.procedimento, Validators.required],
-      tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
+      paciente: [this.agendamento.paciente.prontuario],
+      funcionario: [this.agendamento.funcionario.id, Validators.required],
+      procedimento: [this.agendamento.procedimento.id, Validators.required],
+      tipoConvenio: [this.agendamento.tipoConvenio.id, Validators.required],
       pagou: [this.agendamento.pagou],
-      primeira_vez: [this.agendamento.primeira_vez],
-      compareceu: [this.agendamento.primeira_vez],
+      primeira_vez: [this.agendamento.primeiraVez],
+      compareceu: [this.agendamento.compareceu],
       observacao: [this.agendamento.observacao],
     });
     this.formAgenda.disable();
     this.convenioControl.disable();
     this.getMedicos();
     this.getConvenios();
-    this.getConvenioDetails();
-    this.getPacienteDetails();
+    this.getTiposConvenio();
+    this.getProcedimentos();
+
     this.getMedicoDetails();
   }
 
   // Metodo para pegar as informações do agendamento
   getAgendamento() {
     this.agendaService
-      .getAgendamento(this.medicoId, this.agendamentoId)
+      .getAgendamento(this.agendamentoId)
       .subscribe(
         (data) => {
           this.agendamento = data;
+          this.convenioControl.setValue(data.tipoConvenio.convenio.id);
+
+          this.paciente = data.paciente;
+
           this.horaAgendamento = this.agendamento.hora;
           this.dataAgendamento = this.agendamento.data;
           if (CompareDates(this.agendamento.data.toString())) {
@@ -213,52 +214,8 @@ export class AgendaDetailsComponent implements OnInit {
       );
   }
 
-  // Recupera as informações do paciente
-  getPacienteDetails() {
-    this.pacienteService
-      .getPacienteDetails(this.formAgenda.controls.paciente.value)
-      .subscribe(
-        (data) => {
-          this.paciente = data[0];
-          this.showFields = true;
-        },
-        (error) => {
-          this.buildMessage(
-            'Erro ao tentar recuperar as informações do paciente ',
-            1
-          );
-        }
-      );
-  }
 
-  // recupera o id do convenio para fazer as requisições
-  getConvenioDetails() {
-    this.tipoConvenioService
-      .getById(this.formAgenda.controls.tipoConvenio.value)
-      .subscribe(
-        (data) => {
-          this.convenioService.getById(data.convenio).subscribe(
-            (data) => {
-              this.convenioControl.setValue(data.id);
-              this.getTiposConvenio();
-              this.getProcedimentos();
-            },
-            (error) => {
-              this.buildMessage(
-                'Erro ao tentar recuperar as informações do convenio',
-                1
-              );
-            }
-          );
-        },
-        (error) => {
-          this.buildMessage(
-            'Erro ao tentar recuperar as informações do plano',
-            1
-          );
-        }
-      );
-  }
+
 
   // Metodo para pegar os detalhes do medico selecionado
   getMedicoDetails() {
@@ -268,10 +225,7 @@ export class AgendaDetailsComponent implements OnInit {
       .getFuncionario(this.formAgenda.value.funcionario)
       .subscribe(
         (data) => {
-          this.medicoDetail = {
-            crm: data.crm,
-            especialidade: data.especialidade,
-          };
+          this.agendamento.funcionario = data;
           this.isLoading = false;
         },
         (error) => {
@@ -345,8 +299,13 @@ export class AgendaDetailsComponent implements OnInit {
   }
 
   save() {
+    this.isLoading = true;
     this.loadingDataMessage = 'Agendando paciente';
-
+    if (this.formAgenda.controls.observacao.value !== null) {
+      this.formAgenda.controls.observacao.setValue(
+        this.formAgenda.controls.observacao.value.toUpperCase()
+      );
+    }
     this.agendaService.updateAgendamento(this.formAgenda.value).subscribe(
       (data) => {
         this.buildMessage(
@@ -357,7 +316,7 @@ export class AgendaDetailsComponent implements OnInit {
         this.isLoading = false;
         this.convenioControl.disable();
         this.formAgenda.disable();
-        if (this.formAgenda.controls.data.value !== this.dataAgendamento) {
+        /* if (this.formAgenda.controls.data.value !== this.dataAgendamento) {
           let logSave = new LogSave();
           logSave.data = this.getDate();
           logSave.hora = this.getTime();
@@ -376,17 +335,22 @@ export class AgendaDetailsComponent implements OnInit {
               this.buildMessage('erro ao tentar salvar registro de evento', 1);
             }
           );
-        }
+        } */
 
-        if (this.formAgenda.controls.observacao.value !== null) {
-          this.formAgenda.controls.observacao.setValue(
-            this.formAgenda.controls.observacao.value.toUpperCase()
-          );
-        }
+
       },
       (error) => {
-        this.buildMessage('Erro ao tentar salvar as informações', 1);
-        this.isLoading = false;
+        if (error.status === 409) {
+          this.buildMessage(
+            'Médico já possui agendamento para essa data e hora',
+            1
+          );
+          this.isLoading = false;
+        } else {
+          this.buildMessage('Erro ao tentar salvar as informações', 1);
+          this.isLoading = false;
+        }
+
       }
     );
   }
@@ -411,43 +375,6 @@ export class AgendaDetailsComponent implements OnInit {
     });
   }
 
-  // Verifica se o medico ja possui agendamento para o dia e hora selecionados;
-  verifyAgendamento(frm: FormGroup) {
-    this.isLoading = true;
-    this.loadingDataMessage = 'Verificando disponibilidade do médico';
-    if (
-      this.formAgenda.controls.hora.value !== this.horaAgendamento &&
-      this.formAgenda.controls.data.value != this.dataAgendamento
-    ) {
-      this.agendaService
-        .verifyAgendamento(
-          this.formAgenda.controls.data.value,
-          this.formAgenda.controls.hora.value,
-          this.formAgenda.controls.funcionario.value
-        )
-        .subscribe(
-          (data) => {
-            if (Object.keys(data).length == 0) {
-              this.save();
-            } else {
-              this.buildMessage(
-                'Médico já possui agendamento para essa data e hora',
-                1
-              );
-              this.isLoading = false;
-            }
-          },
-          (error) => {
-            this.buildMessage(
-              'Erro ao tentar verificar a disponibilidade do médico',
-              1
-            );
-          }
-        );
-    } else {
-      this.save();
-    }
-  }
 
   // monta a mensagem que vai ser exibida na pagina
   buildMessage(message: string, type: number) {

@@ -100,7 +100,7 @@ const routes: Routes = [
 
   // abre a pagina de pre cadastro
   {
-    path: 'agendamento/details/:medicoId/:agendamentoId',
+    path: 'agendamento/detalhes/:agendamentoId',
     component: AgendaDetailsComponent,
   },
 

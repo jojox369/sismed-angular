@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     this.loadingDataMessage = 'Verificando credenciais';
     this.userService.login(this.formUser.value).subscribe(
       (data) => {
-        console.log(data);
+
         const token = data.token;
         // pega o token da resposta e coloca na variavel token do service
         sessionStorage.setItem('token', token);
