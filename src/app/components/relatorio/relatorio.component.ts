@@ -77,7 +77,7 @@ export class RelatorioComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.user.perfil === 3) {

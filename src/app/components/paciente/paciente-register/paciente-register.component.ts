@@ -58,7 +58,7 @@ export class PacienteRegisterComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.paciente = new PacientePost();
@@ -76,23 +76,23 @@ export class PacienteRegisterComponent implements OnInit {
       nome: [this.paciente.nome, Validators.required],
       cpf: [this.paciente.cpf, Validators.required],
       rg: [this.paciente.rg],
-      orgao_emissor: [this.paciente.orgao_emissor],
-      data_emissao: [this.paciente.data_emissao],
-      data_nascimento: [this.paciente.data_nascimento],
+      orgaoEmissor: [this.paciente.orgaoEmissor],
+      dataEmissao: [this.paciente.dataEmissao],
+      dataNascimento: [this.paciente.dataNascimento],
       naturalidade: [this.paciente.naturalidade],
       nacionalidade: [this.paciente.nacionalidade],
-      telefone_fixo: [this.paciente.telefone_fixo],
-      telefone_trabalho: [this.paciente.telefone_trabalho],
+      telefoneFixo: [this.paciente.telefoneFixo],
+      telefoneTrabalho: [this.paciente.telefoneTrabalho],
       celular: [this.paciente.celular, Validators.required],
       email: [this.paciente.email],
       sexo: [this.paciente.sexo],
-      estado_civil: [this.paciente.estado_civil],
+      estadoCivil: [this.paciente.estadoCivil],
       profissao: [this.paciente.profissao],
       recomendacao: [this.paciente.recomendacao],
       escolaridade: [this.paciente.escolaridade],
-      carteira_convenio: [this.paciente.carteira_convenio],
+      carteiraConvenio: [this.paciente.carteiraConvenio],
       validade: [this.paciente.validade],
-      tipo_convenio: [this.paciente.tipo_convenio, Validators.required],
+      tipoConvenio: [this.paciente.tipoConvenio, Validators.required],
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep],
         logradouro: [this.paciente.endereco.logradouro],
@@ -118,9 +118,9 @@ export class PacienteRegisterComponent implements OnInit {
       );
     }
 
-    if (this.formPaciente.controls.orgao_emissor.value !== null) {
-      this.formPaciente.controls.orgao_emissor.setValue(
-        this.formPaciente.controls.orgao_emissor.value.toUpperCase()
+    if (this.formPaciente.controls.orgaoEmissor.value !== null) {
+      this.formPaciente.controls.orgaoEmissor.setValue(
+        this.formPaciente.controls.orgaoEmissor.value.toUpperCase()
       );
     }
 
@@ -190,7 +190,7 @@ export class PacienteRegisterComponent implements OnInit {
             this.buildMessage('CPF já cadastrado', 1);
           }
         },
-        (error) => {}
+        (error) => { }
       );
   }
 

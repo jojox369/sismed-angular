@@ -129,7 +129,7 @@ export class AgendaDetailsComponent implements OnInit {
     private pacienteService: PacienteService,
     private dialog: MatDialog,
     private logService: LogService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getAgendamento();
@@ -144,7 +144,7 @@ export class AgendaDetailsComponent implements OnInit {
       paciente: [this.agendamento.paciente],
       funcionario: [this.agendamento.funcionario, Validators.required],
       procedimento: [this.agendamento.procedimento, Validators.required],
-      tipo_convenio: [this.agendamento.tipo_convenio, Validators.required],
+      tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
       pagou: [this.agendamento.pagou],
       primeira_vez: [this.agendamento.primeira_vez],
       compareceu: [this.agendamento.primeira_vez],
@@ -234,7 +234,7 @@ export class AgendaDetailsComponent implements OnInit {
   // recupera o id do convenio para fazer as requisições
   getConvenioDetails() {
     this.tipoConvenioService
-      .getById(this.formAgenda.controls.tipo_convenio.value)
+      .getById(this.formAgenda.controls.tipoConvenio.value)
       .subscribe(
         (data) => {
           this.convenioService.getById(data.convenio).subscribe(
@@ -294,7 +294,7 @@ export class AgendaDetailsComponent implements OnInit {
         (data) => {
           this.tipos = data;
         },
-        (error) => {}
+        (error) => { }
       );
   }
 
@@ -304,7 +304,7 @@ export class AgendaDetailsComponent implements OnInit {
       (data) => {
         this.procedimentos = data;
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -371,7 +371,7 @@ export class AgendaDetailsComponent implements OnInit {
             ' para o dia: ' +
             this.formatDate(this.formAgenda.controls.data.value);
           this.logService.save(logSave).subscribe(
-            (data) => {},
+            (data) => { },
             (error) => {
               this.buildMessage('erro ao tentar salvar registro de evento', 1);
             }

@@ -10,7 +10,7 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class ProcedimentoService {
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   token = this.userService.token;
   message: string;
@@ -21,7 +21,7 @@ export class ProcedimentoService {
   // Função que retorna uma de procedimentos
   getAll(convenioId): Observable<Procedimento[]> {
     return this.http
-      .get<Procedimento[]>(baseUrl + 'procedimentos/' + convenioId + '/', {
+      .get<Procedimento[]>(baseUrl + 'procedimento/' + convenioId + '/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -44,11 +44,11 @@ export class ProcedimentoService {
   update(procedimento): Observable<any> {
     return this.http.put(
       baseUrl +
-        'procedimentos/' +
-        procedimento.convenio +
-        '/' +
-        procedimento.id +
-        '/',
+      'procedimentos/' +
+      procedimento.convenio +
+      '/' +
+      procedimento.id +
+      '/',
       procedimento,
       { headers: this.httpHeaders }
     );
@@ -58,11 +58,11 @@ export class ProcedimentoService {
   delete(procedimento) {
     return this.http.delete(
       baseUrl +
-        'procedimentos/' +
-        procedimento.convenio +
-        '/' +
-        procedimento.id +
-        '/',
+      'procedimentos/' +
+      procedimento.convenio +
+      '/' +
+      procedimento.id +
+      '/',
       { headers: this.httpHeaders }
     );
   }

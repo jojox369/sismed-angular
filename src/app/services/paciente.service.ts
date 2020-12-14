@@ -16,11 +16,11 @@ export class PacienteService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   getAllPacientes(): Observable<Paciente[]> {
     return this.http
-      .get<Paciente[]>(baseUrl + 'pacientes/', { headers: this.httpHeaders })
+      .get<Paciente[]>(baseUrl + 'paciente/', { headers: this.httpHeaders })
       .pipe(
         map((data) => data.map((data) => new Paciente().deserializable(data)))
       );
@@ -56,12 +56,13 @@ export class PacienteService {
     });
   }
 
-  getPaciente(id: string): Observable<PacientePost> {
+  getPaciente(prontuario: string): Observable<Paciente> {
+
     return this.http
-      .get<PacientePost>(baseUrl + 'pacientes/' + id + '/', {
+      .get<Paciente>(baseUrl + 'paciente/' + prontuario + '/', {
         headers: this.httpHeaders,
       })
-      .pipe(map((data) => new PacientePost().deserializable(data)));
+      .pipe(map((data) => new Paciente().deserializable(data)));
   }
 
   getPacienteDetails(prontuario: string): Observable<Paciente> {

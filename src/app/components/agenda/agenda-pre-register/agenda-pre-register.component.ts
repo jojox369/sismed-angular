@@ -81,7 +81,7 @@ export class AgendaPreRegisterComponent implements OnInit {
     private funcionarioService: FuncionarioService,
     private funcionarioTipoConvenioService: FuncionarioTipoConvenioService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getProntuario();
@@ -99,7 +99,7 @@ export class AgendaPreRegisterComponent implements OnInit {
       paciente: [this.agendamento.paciente],
       funcionario: [this.agendamento.funcionario, Validators.required],
       procedimento: [this.agendamento.procedimento, Validators.required],
-      tipo_convenio: [this.agendamento.tipo_convenio, Validators.required],
+      tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
       pagou: [this.agendamento.pagou],
       primeira_vez: [this.agendamento.primeira_vez],
       compareceu: [this.agendamento.primeira_vez],
@@ -110,9 +110,9 @@ export class AgendaPreRegisterComponent implements OnInit {
       nome: [this.paciente.nome, Validators.required],
       cpf: [this.paciente.cpf, Validators.required],
       rg: [this.paciente.rg],
-      data_nascimento: [this.paciente.data_nascimento],
+      dataNascimento: [this.paciente.dataNascimento],
       celular: [this.paciente.celular, Validators.required],
-      tipo_convenio: [this.paciente.tipo_convenio],
+      tipoConvenio: [this.paciente.tipoConvenio],
 
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep, Validators.required],
@@ -128,7 +128,7 @@ export class AgendaPreRegisterComponent implements OnInit {
     this.formAgenda.controls.compareceu.setValue(1);
     this.formAgenda.controls.pagou.setValue(1);
     this.formAgenda.controls.primeira_vez.setValue(1);
-    this.formAgenda.controls.tipo_convenio.disable();
+    this.formAgenda.controls.tipoConvenio.disable();
     this.formAgenda.controls.procedimento.disable();
     this.formAgenda.controls.data.disable();
     this.formAgenda.controls.hora.disable();
@@ -144,7 +144,7 @@ export class AgendaPreRegisterComponent implements OnInit {
         this.isLoading = false;
       },
       (error) => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar a lista de médicos', 1);
       }
     );
@@ -163,7 +163,7 @@ export class AgendaPreRegisterComponent implements OnInit {
           };
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage(
             'Erro ao tentar recuperar as informações do médico',
             1
@@ -182,7 +182,7 @@ export class AgendaPreRegisterComponent implements OnInit {
           this.convenio.enable();
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage(
             'Erro ao tentar recuperar a lista de convenios aceitos pelo médico',
             1
@@ -198,10 +198,10 @@ export class AgendaPreRegisterComponent implements OnInit {
       .subscribe(
         (data) => {
           this.tipos = data;
-          this.formAgenda.controls.tipo_convenio.enable();
+          this.formAgenda.controls.tipoConvenio.enable();
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage(
             'Erro ao tentar recuperar a lista de planos aceitos pelo médico',
             1
@@ -218,7 +218,7 @@ export class AgendaPreRegisterComponent implements OnInit {
         this.formAgenda.controls.procedimento.enable();
       },
       (error) => {
-        console.log(error);
+
         this.buildMessage(
           'Erro ao tentar recuperar a lista de procedimentos do convenio',
           1
@@ -236,8 +236,8 @@ export class AgendaPreRegisterComponent implements OnInit {
   save() {
     this.loadingDataMessage = 'Agendando paciente';
     this.formPaciente.controls.prontuario.enable();
-    this.formPaciente.controls.tipo_convenio.setValue(
-      this.formAgenda.controls.tipo_convenio.value
+    this.formPaciente.controls.tipoConvenio.setValue(
+      this.formAgenda.controls.tipoConvenio.value
     );
     this.formPaciente.controls.nome.setValue(
       this.formPaciente.controls.nome.value.toUpperCase()
@@ -258,7 +258,7 @@ export class AgendaPreRegisterComponent implements OnInit {
           (error) => {
             this.isLoading = false;
             this.buildMessage('Erro ao tentar salvar o agendamento', 1);
-            console.log(error);
+
           }
         );
       });
@@ -287,7 +287,7 @@ export class AgendaPreRegisterComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage('Erro ao verificar a disponibilidade do médico', 1);
         }
       );
@@ -334,7 +334,7 @@ export class AgendaPreRegisterComponent implements OnInit {
         this.formPaciente.controls.prontuario.setValue(data['response']);
       },
       (error) => {
-        console.log(error);
+
       }
     );
   }

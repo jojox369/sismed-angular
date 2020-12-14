@@ -14,11 +14,11 @@ export class UserService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Realiza a autenticação e retorna o token que sera ultilizado para realizar as requisições
   login(user): Observable<any> {
-    return this.http.post(baseUrl + 'auth/', user, {
+    return this.http.post(baseUrl + 'autenticacao/', user, {
       headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -30,14 +30,7 @@ export class UserService {
     });
   }
 
-  // Pega as informações do funcionario que realizou o login
-  createSession(cpf): Observable<Funcionario> {
-    this.token = sessionStorage.getItem('token');
-    return this.http.get<Funcionario>(
-      baseUrl + 'funcionario/login/' + cpf + '/',
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-  }
+
 
   // Salva as informações do funcionario na tabela de login usada no SISMED JAVA
   loginRegister(funcionario): Observable<any> {

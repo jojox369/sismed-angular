@@ -15,12 +15,12 @@ export class FuncionarioTipoConvenioService {
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   // Retorna uma lista de convenios aceitos pelo medico
   getAcceptedConvenios(funcionarioId): Observable<Convenio[]> {
     return this.http.get<Convenio[]>(
-      baseUrl + 'convenios/accepted/' + funcionarioId + '/',
+      baseUrl + 'funcionario/conveniosAceitos/' + funcionarioId + '/',
       { headers: this.httpHeaders }
     );
   }
@@ -37,11 +37,11 @@ export class FuncionarioTipoConvenioService {
   getUnresgisteredTiposConveio(funcionarioId, convenioId): Observable<any> {
     return this.http.get(
       baseUrl +
-        'tiposUnregistered/funcionario/' +
-        funcionarioId +
-        '/' +
-        convenioId +
-        '/',
+      'tiposUnregistered/funcionario/' +
+      funcionarioId +
+      '/' +
+      convenioId +
+      '/',
       { headers: this.httpHeaders }
     );
   }
@@ -56,7 +56,7 @@ export class FuncionarioTipoConvenioService {
   // Função que retorna a lista de tipos de convenios aceitos pelo medico
   getAcceptedTipos(funcionarioId, convenioId): Observable<any> {
     return this.http.get(
-      baseUrl + 'tiposAccepted/' + funcionarioId + '/' + convenioId + '/',
+      baseUrl + 'funcionario/' + funcionarioId + '/tiposAceitos/' + convenioId + '/',
       { headers: this.httpHeaders }
     );
   }

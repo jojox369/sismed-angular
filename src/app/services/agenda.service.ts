@@ -17,7 +17,7 @@ export class AgendaService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   // Faz requisição a API, que retorna uma lista com todos os agendamentos
   getAllAgendamentos(medicoId): Observable<Agenda[]> {
@@ -33,7 +33,7 @@ export class AgendaService {
   // Retorna uma lista de agendamentos a partir de uma data e do id do medico
   getAgendamentos(medicoId, date): Observable<Agenda[]> {
     return this.http
-      .get<Agenda[]>(baseUrl + 'agendamentos/' + medicoId + '/' + date + '/', {
+      .get<Agenda[]>(baseUrl + 'agenda/' + medicoId + '/' + date + '/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -60,19 +60,17 @@ export class AgendaService {
   }
 
   // Busca o ultimo agendamento do paciente
-  lastAgendamento(protuario): Observable<Agenda[]> {
+  lastAgendamento(protuario): Observable<Agenda> {
     return this.http
-      .get<Agenda[]>(baseUrl + 'agenda/last/' + protuario + '/', {
+      .get<Agenda>(baseUrl + 'agenda/paciente/ultimoAgendamento/' + protuario + '/', {
         headers: this.httpHeaders,
       })
-      .pipe(
-        map((data) => data.map((data) => new Agenda().deserializable(data)))
-      );
+
   }
 
   // Metodo para agendar paciente ja cadastrado
   agendar(agendamento: Agendar): Observable<any> {
-    return this.http.post(baseUrl + 'agendar/', agendamento, {
+    return this.http.post(baseUrl + 'agenda/', agendamento, {
       headers: this.httpHeaders,
     });
   }

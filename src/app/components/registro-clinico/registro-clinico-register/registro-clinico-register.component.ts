@@ -62,7 +62,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     this.registroClinico = new Registroclinico();
     if (this.direcionador === "paciente") {
       this.pacienteId = this.route.snapshot.paramMap.get('id');
-      this.getPaciente()
+      //this.getPaciente()
     } else {
       this.agendamentoId = this.route.snapshot.paramMap.get('id');
       this.getAgendamento();
@@ -126,27 +126,27 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     )
   }
 
-  getPaciente() {
+  /* getPaciente() {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       data => {
         console.log(data);
         this.isLoading = false;
         this.paciente = data;
         this.getTipoConvenios(this.paciente.tipo_convenio);
-       
+
       },
       error => {
         console.log("erro ao carregar dados");
       }
     );
-  }
+  } */
 
   getAgendamento() {
     this.agendamentoService.getAgendamentoById(this.agendamentoId).subscribe(
       data => {
         this.isLoading = false;
         this.agendamento = data;
-        this.getPaciente();
+        //this.getPaciente();
       },
       error => {
         console.log("erro ao carregar dados");
@@ -206,7 +206,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     const todayArray = todayDate.toLocaleDateString().split('/');
 
     var todayYear = todayArray[2];
-    var todayMonth =todayArray[1];
+    var todayMonth = todayArray[1];
     var todayDay = todayArray[0];
 
     this.registroClinico.data = todayYear + '-' + todayMonth + '-' + todayDay;

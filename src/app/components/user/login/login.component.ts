@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private appComponent: AppComponent,
     private router: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
   createForm() {
     this.formUser = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+      cpf: ['', Validators.required],
+      senha: ['', Validators.required],
     });
   }
 
@@ -42,26 +42,21 @@ export class LoginComponent implements OnInit {
     this.loadingDataMessage = 'Verificando credenciais';
     this.userService.login(this.formUser.value).subscribe(
       (data) => {
+        console.log(data);
         const token = data.token;
         // pega o token da resposta e coloca na variavel token do service
-        sessionStorage.setItem('token', 'Token ' + token);
-        this.userService
-          .createSession(this.formUser.controls.username.value)
-          .subscribe(
-            (data) => {
-              const user = {
-                id: data.id,
-                perfil: data.perfil,
-                nome: data.nome,
-                cpf: data.cpf,
-              };
-              sessionStorage.setItem('user', JSON.stringify(user));
-              sessionStorage.setItem('logged', 'true');
-              this.appComponent.verifyLogged();
-              this.router.navigate(['/home']);
-            },
-            (error) => {}
-          );
+        sessionStorage.setItem('token', token);
+        const user = {
+          id: data.id,
+          perfil: data.perfil,
+          nome: data.nome,
+          cpf: data.cpf,
+        };
+        sessionStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('logged', 'true');
+        this.appComponent.verifyLogged();
+        this.router.navigate(['/home']);
+
       },
       (error) => {
         this.buildMessage('Usuário e senha inválidos', 1);

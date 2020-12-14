@@ -95,7 +95,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getFuncionario();
@@ -128,11 +128,11 @@ export class FuncionarioDetailsComponent implements OnInit {
       ],
       cpf: [this.funcionario.cpf, Validators.required],
       rg: [this.funcionario.rg, Validators.required],
-      orgao_emissor: [this.funcionario.orgao_emissor, Validators.required],
-      data_emissao: [this.funcionario.data_emissao, Validators.required],
-      data_nascimento: [this.funcionario.data_nascimento, Validators.required],
-      data_inicio: [this.funcionario.data_inicio, Validators.required],
-      data_termino: [this.funcionario.data_termino],
+      orgaoEmissor: [this.funcionario.orgaoEmissor, Validators.required],
+      dataEmissao: [this.funcionario.dataEmissao, Validators.required],
+      dataNascimento: [this.funcionario.dataNascimento, Validators.required],
+      dataInicio: [this.funcionario.dataInicio, Validators.required],
+      dataTermino: [this.funcionario.dataTermino],
       naturalidade: [this.funcionario.naturalidade, Validators.required],
       nacionalidade: [this.funcionario.nacionalidade, Validators.required],
       telefone_fixo: [this.funcionario.telefone_fixo, Validators.required],
@@ -160,8 +160,8 @@ export class FuncionarioDetailsComponent implements OnInit {
     }
 
     this.formFuncionario.disable();
-    this.dataInicio = this.formFuncionario.controls.data_inicio.value;
-    this.dataTermino = this.formFuncionario.controls.data_termino.value;
+    this.dataInicio = this.formFuncionario.controls.dataInicio.value;
+    this.dataTermino = this.formFuncionario.controls.dataTermino.value;
     this.isLoading = false;
   }
 
@@ -257,7 +257,7 @@ export class FuncionarioDetailsComponent implements OnInit {
           this.isEditing = false;
           this.buildMessage('Funcionário atualizado com sucesso!', 0);
           if (
-            this.dataInicio !== this.formFuncionario.controls.data_inicio.value
+            this.dataInicio !== this.formFuncionario.controls.dataInicio.value
           ) {
             this.log = new LogSave();
             this.log.data = this.getDate();
@@ -270,9 +270,9 @@ export class FuncionarioDetailsComponent implements OnInit {
               '. DA DATA ' +
               this.formatDate(this.dataInicio) +
               ' PARA A DATA ' +
-              this.formatDate(this.formFuncionario.controls.data_inicio.value);
+              this.formatDate(this.formFuncionario.controls.dataInicio.value);
             this.logService.save(this.log).subscribe(
-              (data) => {},
+              (data) => { },
               (error) => {
                 this.buildMessage(
                   'Erro ao tentar salvar o registro de evento',
@@ -284,7 +284,7 @@ export class FuncionarioDetailsComponent implements OnInit {
 
           if (
             this.dataTermino !==
-            this.formFuncionario.controls.data_termino.value
+            this.formFuncionario.controls.dataTermino.value
           ) {
             if (this.dataTermino !== null) {
               this.log = new LogSave();
@@ -299,7 +299,7 @@ export class FuncionarioDetailsComponent implements OnInit {
                 this.formatDate(this.dataTermino) +
                 ' PARA A DATA ' +
                 this.formatDate(
-                  this.formFuncionario.controls.data_termino.value
+                  this.formFuncionario.controls.dataTermino.value
                 );
               this.logService.save(this.log).subscribe((error) => {
                 this.buildMessage(
@@ -318,7 +318,7 @@ export class FuncionarioDetailsComponent implements OnInit {
                 this.funcionario.nome +
                 '. DE DATA DE DISPENSA NÃO CADASTRADA PARA A DATA ' +
                 this.formatDate(
-                  this.formFuncionario.controls.data_termino.value
+                  this.formFuncionario.controls.dataTermino.value
                 );
               this.logService.save(this.log).subscribe((error) => {
                 this.buildMessage(
@@ -352,7 +352,7 @@ export class FuncionarioDetailsComponent implements OnInit {
             this.log.descricao =
               'EXCLUSÃO DO FUNCIONÁRIO ' + this.funcionario.nome;
             this.logService.save(this.log).subscribe(
-              (data) => {},
+              (data) => { },
               (error) => {
                 this.buildMessage(
                   'Erro ao tentar salvar o registro de evento',

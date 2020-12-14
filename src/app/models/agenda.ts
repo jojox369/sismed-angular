@@ -7,42 +7,42 @@ import { Funcionario } from './funcionario';
 
 export class Agenda implements Deserializable {
 
-    id: number;
-    primeira_vez: number;
-    compareceu: number;
-    pagou: number;
-    finalizado: number;
-    data: Date;
-    hora: string;
-    observacao: string;
-    procedimento: Procedimento;
-    tipo_convenio: TipoConvenioPaciente;
-    paciente: Paciente;
-    funcionario: Funcionario;
+  id: number;
+  primeira_vez: number;
+  compareceu: number;
+  pagou: number;
+  finalizado: number;
+  data: Date;
+  hora: string;
+  observacao: string;
+  procedimento: Procedimento;
+  tipoConvenio: TipoConvenioPaciente;
+  paciente: Paciente;
+  funcionario: Funcionario;
 
-    deserializable(input: any): this {
-        return Object.assign(this, input);
-    }
+  deserializable(input: any): this {
+    return Object.assign(this, input);
+  }
 }
 
 export class Agendar implements Deserializable {
 
-    id: number;
-    primeira_vez: number;
-    compareceu: number;
-    pagou: number;
-    finalizado: number;
-    data: Date;
-    hora: string;
-    observacao: string;
-    procedimento: number;
-    tipo_convenio: number;
-    paciente: number;
-    funcionario: number;
+  id: number;
+  primeira_vez: number;
+  compareceu: number;
+  pagou: number;
+  finalizado: number;
+  data: Date;
+  hora: string;
+  observacao: string;
+  procedimento: number;
+  tipoConvenio: number;
+  paciente: number;
+  funcionario: number;
 
 
-    deserializable(input: any): this {
-        return Object.assign(this, input);
-    }
+  deserializable(input: any): this {
+    return Object.assign(this, input);
+  }
 }
 

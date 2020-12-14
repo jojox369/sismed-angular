@@ -78,7 +78,7 @@ export class AgendaListComponent implements OnInit {
     'celular',
     'hora',
     'convenio',
-    'primeira_vez',
+    'primeiraVez',
     'compareceu',
     'pagou',
     'idade',
@@ -90,7 +90,7 @@ export class AgendaListComponent implements OnInit {
     private funcionarioService: FuncionarioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.verifyEmployee();
@@ -137,6 +137,7 @@ export class AgendaListComponent implements OnInit {
       .getAgendamentos(this.medicoId, this.data_agendamento)
       .subscribe(
         (data) => {
+          console.log(data)
           if (Object.keys(data).length === 0) {
             this.isAgendaNotEmpty = false;
             this.isLoading = false;

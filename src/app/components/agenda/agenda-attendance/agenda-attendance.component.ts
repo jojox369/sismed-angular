@@ -105,7 +105,7 @@ export class AgendaAttendanceComponent implements OnInit {
     this.registroClinico = new Registroclinico();
     this.relatorio = new Relatorio();
     this.paciente = new Paciente();
-    this.paciente.tipo_convenio = new TipoConvenioPaciente();
+    this.paciente.tipoConvenio = new TipoConvenioPaciente();
 
     this.registroForm = this.fb.group({
       data: [this.registroClinico.data],
@@ -159,7 +159,7 @@ export class AgendaAttendanceComponent implements OnInit {
     this.relatorioForm.controls.data.setValue(agendamentoInfo.data);
     this.relatorioForm.controls.procedimento.setValue(agendamentoInfo.procedimento.id);
     this.relatorioForm.controls.valor.setValue(agendamentoInfo.procedimento.valor);
-    this.relatorioForm.controls.convenio.setValue(agendamentoInfo.tipo_convenio.convenio.id);
+    this.relatorioForm.controls.convenio.setValue(agendamentoInfo.tipoConvenio.convenio.id);
     this.relatorioForm.controls.paciente.setValue(agendamentoInfo.paciente.id);
     this.relatorioForm.controls.agendamento.setValue(agendamentoInfo.id);
 
@@ -176,7 +176,7 @@ export class AgendaAttendanceComponent implements OnInit {
     this.agendamento.paciente = agendamentoInfo.paciente.id;
     this.agendamento.funcionario = agendamentoInfo.funcionario.id;
     this.agendamento.procedimento = agendamentoInfo.procedimento.id;
-    this.agendamento.tipo_convenio = agendamentoInfo.tipo_convenio.id;
+    this.agendamento.tipoConvenio = agendamentoInfo.tipoConvenio.id;
 
 
 
@@ -185,7 +185,7 @@ export class AgendaAttendanceComponent implements OnInit {
 
   /*
 
-  Envia os dados para o back-end para serem salvos. 
+  Envia os dados para o back-end para serem salvos.
   Salva o registro clinico, cria um novo dado para o relatorio e atualiza o agendamento;
   */
   finishAttendance(frm: FormGroup) {

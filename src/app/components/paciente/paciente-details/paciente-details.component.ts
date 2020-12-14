@@ -99,15 +99,15 @@ export class PacienteDetailsComponent implements OnInit {
     private tipoConvenioService: TipoConvenioService,
     private enderecoService: EnderecoService,
     private logService: LogService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.convenioFormControl = new FormControl('', Validators.required);
-    this.getPaciente();
+    //this.getPaciente();
     this.getConvenios();
   }
 
-  getPaciente() {
+  /* getPaciente() {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       (data) => {
         this.paciente = data;
@@ -124,10 +124,10 @@ export class PacienteDetailsComponent implements OnInit {
         this.router.navigate(['/error']);
       }
     );
-  }
+  } */
 
   getTipoConvenioDetails() {
-    this.tipoConvenioService.getById(this.paciente.tipo_convenio).subscribe(
+    this.tipoConvenioService.getById(this.paciente.tipoConvenio).subscribe(
       (data) => {
         this.convenioFormControl.setValue(data.convenio);
         this.createForm();
@@ -151,24 +151,24 @@ export class PacienteDetailsComponent implements OnInit {
       nome: [this.paciente.nome, Validators.required],
       cpf: [this.paciente.cpf, Validators.required],
       rg: [this.paciente.rg],
-      orgao_emissor: [this.paciente.orgao_emissor],
-      data_emissao: [this.paciente.data_emissao],
-      data_nascimento: [this.paciente.data_nascimento],
+      orgaoEmissor: [this.paciente.orgaoEmissor],
+      dataEmissao: [this.paciente.dataEmissao],
+      dataNascimento: [this.paciente.dataNascimento],
       naturalidade: [this.paciente.naturalidade],
       nacionalidade: [this.paciente.nacionalidade],
-      telefone_fixo: [this.paciente.telefone_fixo],
-      telefone_trabalho: [this.paciente.telefone_trabalho],
+      telefone_fixo: [this.paciente.telefoneFixo],
+      telefone_trabalho: [this.paciente.telefoneTrabalho],
       celular: [this.paciente.celular, Validators.required],
       email: [this.paciente.email],
       sexo: [this.paciente.sexo],
-      estado_civil: [this.paciente.estado_civil],
+      estado_civil: [this.paciente.estadoCivil],
       profissao: [this.paciente.profissao],
       recomendacao: [this.paciente.recomendacao],
       escolaridade: [this.paciente.escolaridade],
-      carteira_convenio: [this.paciente.carteira_convenio],
+      carteira_convenio: [this.paciente.carteiraConvenio],
       situacao: [this.paciente.situacao],
       validade: [this.paciente.validade],
-      tipo_convenio: [this.paciente.tipo_convenio, Validators.required],
+      tipoConvenio: [this.paciente.tipoConvenio, Validators.required],
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep],
         logradouro: [this.paciente.endereco.logradouro],
@@ -222,9 +222,9 @@ export class PacienteDetailsComponent implements OnInit {
       );
     }
 
-    if (this.formPaciente.controls.orgao_emissor.value !== null) {
-      this.formPaciente.controls.orgao_emissor.setValue(
-        this.formPaciente.controls.orgao_emissor.value.toUpperCase()
+    if (this.formPaciente.controls.orgaoEmissor.value !== null) {
+      this.formPaciente.controls.orgaoEmissor.setValue(
+        this.formPaciente.controls.orgaoEmissor.value.toUpperCase()
       );
     }
 
@@ -282,7 +282,7 @@ export class PacienteDetailsComponent implements OnInit {
         this.formPaciente.controls.sexo.disable();
         this.formPaciente.controls.estado_civil.disable();
         this.formPaciente.controls.escolaridade.disable();
-        this.formPaciente.controls.tipo_convenio.disable();
+        this.formPaciente.controls.tipoConvenio.disable();
         this.formPaciente.controls.situacao.disable();
         this.convenioFormControl.disable();
         this.formPaciente.disable();
@@ -315,7 +315,7 @@ export class PacienteDetailsComponent implements OnInit {
             log.evento = 'EXCLUSÃO';
             log.descricao = 'EXCLUSÃO DO paciente ' + this.paciente.nome;
             this.logService.save(log).subscribe(
-              (data) => {},
+              (data) => { },
               (error) => {
                 this.buildMessage(
                   'Erro ao tentar salvar o registro de evento',
@@ -335,7 +335,6 @@ export class PacienteDetailsComponent implements OnInit {
     });
   }
 
-  /*função que ao digitar, passa todas as letras para maiusculo*/
   toUpperCase(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
@@ -355,14 +354,12 @@ export class PacienteDetailsComponent implements OnInit {
     }
   }
 
-  /*Função para liberar os campos para edição */
   unblockFields() {
     this.formPaciente.enable();
     this.convenioFormControl.enable();
     this.isEditing = true;
   }
 
-  // função para bloquear os campos de edição
   cancelEditing() {
     this.isEditing = false;
     this.formPaciente.get('endereco.estado').disable();
@@ -370,11 +367,11 @@ export class PacienteDetailsComponent implements OnInit {
     this.formPaciente.controls.sexo.disable();
     this.formPaciente.controls.estado_civil.disable();
     this.formPaciente.controls.escolaridade.disable();
-    this.formPaciente.controls.tipo_convenio.disable();
+    this.formPaciente.controls.tipoConvenio.disable();
     this.formPaciente.controls.situacao.disable();
     this.convenioFormControl.disable();
     this.formPaciente.disable();
-    this.getPaciente();
+    //this.getPaciente();
   }
 
   getEndereco() {
@@ -414,11 +411,8 @@ export class PacienteDetailsComponent implements OnInit {
       verticalPosition: 'top',
     };
 
-    /*
-      type = 0: Mensagem de sucesso
-      type = 1: Mensagem de erro
-      type = 3: Mensagem de warning
-    */
+
+
 
     if (type === 0) {
       snackbarConfig.panelClass = 'success-snackbar';

@@ -138,7 +138,7 @@ export class ExameRegisterComponent implements OnInit {
 
 
   getLaboratorios() {
-    this.laboratorioService.getByTipoConvenio(this.paciente.tipo_convenio.id).subscribe(
+    this.laboratorioService.getByTipoConvenio(this.paciente.tipoConvenio.id).subscribe(
       data => {
         this.laboratorios = data;
         this.exameForm.controls.laboratorio.enable();
@@ -165,7 +165,7 @@ export class ExameRegisterComponent implements OnInit {
 
     this.laboratorioTipoConvenioService.getAcceptedConveniosTipos(this.exameForm.controls.laboratorio.value).subscribe(
       data => {
-        this.laboratorioTipos = data.filter(tipo => tipo.id === 1 || tipo.id === this.paciente.tipo_convenio.id);
+        this.laboratorioTipos = data.filter(tipo => tipo.id === 1 || tipo.id === this.paciente.tipoConvenio.id);
 
       },
       error => {

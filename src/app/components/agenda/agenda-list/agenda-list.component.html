@@ -3,20 +3,10 @@
     <div class="container-size">
       <mat-form-field class="agendaField" appearance="outline">
         <mat-label>Agenda</mat-label>
-        <input
-          matInput
-          type="date"
-          name="agenda"
-          [(ngModel)]="data_agendamento"
-          autocomplete="off"
-        />
+        <input matInput type="date" name="agenda" [(ngModel)]="data_agendamento" autocomplete="off" />
       </mat-form-field>
-      <button
-        mat-icon-button
-        title="Clique para pesquisar pela data selecionada"
-        (click)="getAgendamentoByDate()"
-        matSuffix
-      >
+      <button mat-icon-button title="Clique para pesquisar pela data selecionada" (click)="getAgendamentoByDate()"
+        matSuffix>
         <fa-icon [icon]="faSearch"></fa-icon>
       </button>
     </div>
@@ -27,11 +17,7 @@
     <div class="container-size" *ngIf="funcionarioPerfil === 2">
       <mat-form-field apperance="outline">
         <mat-label>Selecione o Médico</mat-label>
-        <mat-select
-          name="select-medico"
-          [(ngModel)]="selectedMedicoId"
-          (selectionChange)="selectedDoctor()"
-        >
+        <mat-select name="select-medico" [(ngModel)]="selectedMedicoId" (selectionChange)="selectedDoctor()">
           <mat-option *ngFor="let medico of medicos" [value]="medico.id">{{
             medico.nome
           }}</mat-option>
@@ -39,21 +25,11 @@
       </mat-form-field>
     </div>
     <div class="btnActions">
-      <button
-        class="btn-sismed"
-        mat-stroked-button
-        title="Iniciar os atendimentos"
-        *ngIf="funcionarioPerfil !== 2"
-        [routerLink]="['/agenda/attendence', medicoId]"
-      >
+      <button class="btn-sismed" mat-stroked-button title="Iniciar os atendimentos" *ngIf="funcionarioPerfil !== 2"
+        [routerLink]="['/agenda/attendence', medicoId]">
         <fa-icon [icon]="faPencilAlt"></fa-icon> Atender
       </button>
-      <button
-        class="btn-success"
-        mat-stroked-button
-        title="Realizar novo agendamento"
-        (click)="newAgendamento()"
-      >
+      <button class="btn-success" mat-stroked-button title="Realizar novo agendamento" (click)="newAgendamento()">
         <fa-icon [icon]="faPlus"></fa-icon> Agendar
       </button>
     </div>
@@ -76,11 +52,8 @@
       <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef>Nome</th>
         <td mat-cell *matCellDef="let element">
-          <a
-            title="Ver agendamentos anteriores"
-            (click)="openAgendamentosAnteriosDialog(element.paciente.id)"
-            >{{ element.paciente.nome }}</a
-          >
+          <a title="Ver agendamentos anteriores"
+            (click)="openAgendamentosAnteriosDialog(element.paciente.id)">{{ element.paciente.nome }}</a>
         </td>
       </ng-container>
 
@@ -89,9 +62,9 @@
         <th mat-header-cell *matHeaderCellDef>Telefone</th>
         <td mat-cell *matCellDef="let element">
           {{
-            element.paciente.telefone_fixo === null
+            element.paciente.telefoneFixo === null
               ? "Não Cadastrado"
-              : (element.paciente.telefone_fixo | telefone)
+              : (element.paciente.telefoneFixo | telefone)
           }}
         </td>
       </ng-container>
@@ -112,34 +85,30 @@
       <ng-container matColumnDef="hora">
         <th mat-header-cell *matHeaderCellDef>Hora</th>
         <td mat-cell *matCellDef="let element">
-          <a
-            *ngIf="editable && element.finalizado === 0"
-            [routerLink]="['/agendamento/details', medicoId, element.id]"
-            title="Clique aqui para editar o agendamento"
-          >
-            {{ element.hora }}</a
-          >
+          <a *ngIf="editable && element.finalizado === 0" [routerLink]="['/agendamento/details', medicoId, element.id]"
+            title="Clique aqui para editar o agendamento">
+            {{ element.hora }}</a>
           <span *ngIf="!editable || (editable && element.finalizado === 1)">{{
             element.hora
           }}</span>
         </td>
 
-        <td></td
-      ></ng-container>
+        <td></td>
+      </ng-container>
 
       <!-- Convenio Column -->
       <ng-container matColumnDef="convenio">
         <th mat-header-cell *matHeaderCellDef>Convenio</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.paciente.tipo_convenio.convenio.nome }}
+          {{ element.tipoConvenio.convenio.nome }}
         </td>
       </ng-container>
 
       <!-- Primeira Vez Column -->
-      <ng-container matColumnDef="primeira_vez">
+      <ng-container matColumnDef="primeiraVez">
         <th mat-header-cell *matHeaderCellDef>Primeira Vez</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.primeira_vez === 1 ? "SIM" : "NÃO" }}
+          {{ element.primeiraVez === 1 ? "SIM" : "NÃO" }}
         </td>
       </ng-container>
 
@@ -164,8 +133,8 @@
         <th mat-header-cell *matHeaderCellDef>Idade</th>
         <td mat-cell *matCellDef="let element">
           {{
-            element.paciente.data_nascimento !== null
-              ? pacienteIdade(element.paciente.data_nascimento)
+            element.paciente.dataNascimento !== null
+              ? pacienteIdade(element.paciente.dataNascimento)
               : "Data de Nascimento não cadastrada"
           }}
         </td>
@@ -175,11 +144,7 @@
       <ng-container matColumnDef="observacao">
         <th mat-header-cell *matHeaderCellDef>Observação</th>
         <td mat-cell *matCellDef="let element">
-          <a
-            title="Observação do agendamento"
-            (click)="openObservacaoDialog(element.observacao)"
-            >OBS</a
-          >
+          <a title="Observação do agendamento" (click)="openObservacaoDialog(element.observacao)">OBS</a>
         </td>
       </ng-container>
 

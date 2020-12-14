@@ -93,7 +93,7 @@ const routes: Routes = [
   { path: 'agenda', component: AgendaListComponent },
 
   // abre a pagina de agendamento de um paciente
-  { path: 'agenda/agendar/:pacienteId', component: AgendaRegisterComponent },
+  { path: 'agenda/agendar/:prontuario', component: AgendaRegisterComponent },
 
   // abre a pagina de pre cadastro
   { path: 'agenda/preCadastro', component: AgendaPreRegisterComponent },
@@ -173,4 +173,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
