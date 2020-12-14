@@ -117,7 +117,7 @@ export class AgendaRegisterComponent implements OnInit {
   getPaciente() {
     this.pacienteService.getPaciente(this.prontuario).subscribe(
       (data) => {
-        console.log(data)
+
         this.paciente = data;
         this.formAgenda.controls.paciente.setValue(this.paciente.prontuario);
         this.showContent = true;
