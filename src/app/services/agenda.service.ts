@@ -78,7 +78,7 @@ export class AgendaService {
 
   anteriores(pacienteId): Observable<any> {
     return this.http.get(
-      baseUrl + 'agendamentos/anteriores/' + pacienteId + '/',
+      baseUrl + 'agenda/agendamentos/anteriores/' + pacienteId + '/',
       { headers: this.httpHeaders }
     );
   }
