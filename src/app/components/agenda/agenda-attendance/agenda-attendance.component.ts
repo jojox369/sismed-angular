@@ -9,10 +9,11 @@ import { RelatorioService } from 'src/app/services/relatorio.service';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { Agenda, Agendar } from 'src/app/models/agenda';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective, NgForm } from '@angular/forms';
-import { TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
+import { TipoConvenio, TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
 import { Funcionario } from 'src/app/models/funcionario';
 import { FuncionarioService } from 'src/app/services/funcionario.service';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Procedimento } from 'src/app/models/procedimento';
 
 @Component({
   selector: 'app-agenda-attendance',
@@ -33,7 +34,7 @@ export class AgendaAttendanceComponent implements OnInit {
 
   agendamentos: Agenda[];
 
-  agendamento: Agendar;
+  agendamento: Agenda;
 
   medico: Funcionario;
 
@@ -44,6 +45,8 @@ export class AgendaAttendanceComponent implements OnInit {
   data_agendamento;
 
   registroForm: FormGroup;
+
+  formAgenda: FormGroup;
 
   relatorioForm: FormGroup;
 
@@ -63,7 +66,7 @@ export class AgendaAttendanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.agendamento = new Agendar();
+
     this.getAgendamentos();
     this.getMedico();
     this.getHours();
@@ -78,11 +81,11 @@ export class AgendaAttendanceComponent implements OnInit {
       data => {
         this.agendamentos = data;
         this.agendamentos = this.agendamentos.filter(agenda => agenda.finalizado !== 1);
-        this.createForms();
+        this.createForms()
 
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar dados', 1);
       }
     );
@@ -92,10 +95,8 @@ export class AgendaAttendanceComponent implements OnInit {
     this.funcionarioService.getFuncionario(this.medicoId).subscribe(
       data => {
         this.medico = data;
-
       },
       error => {
-        console.log(error);
         this.buildMessage('Erro ao tentar recuperar as informações do médico', 1);
       }
     );
@@ -106,17 +107,21 @@ export class AgendaAttendanceComponent implements OnInit {
     this.relatorio = new Relatorio();
     this.paciente = new Paciente();
     this.paciente.tipoConvenio = new TipoConvenioPaciente();
-
+    this.agendamento = new Agenda()
+    this.agendamento.funcionario = new Funcionario();
+    this.agendamento.procedimento = new Procedimento();
+    this.agendamento.paciente = new Paciente();
+    this.agendamento.tipoConvenio = new TipoConvenio();
     this.registroForm = this.fb.group({
       data: [this.registroClinico.data],
       hora: [this.registroClinico.hora],
-      paciente: [this.registroClinico.paciente, Validators.required],
-      funcionario: [this.registroClinico.funcionario],
-      agendamento: [this.registroClinico.agendamento],
+      pacienteId: [this.registroClinico.paciente, Validators.required],
+      funcionarioId: [this.registroClinico.funcionario],
+      agendamentoId: [this.registroClinico.agendamento],
       descricao: [this.registroClinico.descricao, Validators.required],
     });
 
-    this.registroForm.controls.funcionario.setValue(this.medicoId);
+    this.registroForm.controls.funcionarioId.setValue(this.medicoId);
     this.registroForm.controls.data.setValue(this.data_agendamento);
     this.registroForm.controls.hora.setValue(this.hora);
 
@@ -134,12 +139,29 @@ export class AgendaAttendanceComponent implements OnInit {
     this.relatorioForm.controls.hora.setValue(this.hora);
 
 
+    this.formAgenda = this.fb.group({
+      id: [this.agendamento.id],
+      data: [this.agendamento.data, Validators.required],
+      hora: [this.agendamento.hora, Validators.required],
+      paciente: [this.agendamento.paciente.prontuario],
+      funcionario: [this.agendamento.funcionario.id, Validators.required],
+      procedimento: [this.agendamento.procedimento.id, Validators.required],
+      tipoConvenio: [this.agendamento.tipoConvenio.id, Validators.required],
+      pagou: [this.agendamento.pagou],
+      primeiraVez: [this.agendamento.primeiraVez],
+      compareceu: [this.agendamento.compareceu],
+      observacao: [this.agendamento.observacao],
+      finalizado: [this.agendamento.finalizado],
+    });
+
+
+
   }
 
 
   getPacienteDetails() {
 
-    const agendamentoId = this.registroForm.controls.agendamento.value;
+    const agendamentoId = this.registroForm.controls.agendamentoId.value;
     let agendamentoInfo: Agenda;
 
     this.agendamentos.filter(function (agendamento) {
@@ -151,51 +173,51 @@ export class AgendaAttendanceComponent implements OnInit {
 
 
 
-    this.showPacienteDetails = true;
 
     this.paciente = agendamentoInfo.paciente;
+    this.agendamento.id = this.registroForm.controls.agendamentoId.value;
 
 
     this.relatorioForm.controls.data.setValue(agendamentoInfo.data);
     this.relatorioForm.controls.procedimento.setValue(agendamentoInfo.procedimento.id);
     this.relatorioForm.controls.valor.setValue(agendamentoInfo.procedimento.valor);
     this.relatorioForm.controls.convenio.setValue(agendamentoInfo.tipoConvenio.convenio.id);
-    this.relatorioForm.controls.paciente.setValue(agendamentoInfo.paciente.id);
+    this.relatorioForm.controls.paciente.setValue(agendamentoInfo.paciente.prontuario);
     this.relatorioForm.controls.agendamento.setValue(agendamentoInfo.id);
 
 
-    this.registroForm.controls.paciente.setValue(agendamentoInfo.paciente.id);
-    this.registroForm.controls.agendamento.setValue(agendamentoInfo.id);
+    this.registroForm.controls.pacienteId.setValue(agendamentoInfo.paciente.prontuario);
+    this.registroForm.controls.agendamentoId.setValue(agendamentoInfo.id);
 
 
+    this.formAgenda.controls.id.setValue(agendamentoInfo.id);
+    this.formAgenda.controls.data.setValue(agendamentoInfo.data);
+    this.formAgenda.controls.hora.setValue(agendamentoInfo.hora);
+    this.formAgenda.controls.funcionario.setValue(parseInt(this.medicoId))
+    this.formAgenda.controls.paciente.setValue(agendamentoInfo.paciente.prontuario);
+    this.formAgenda.controls.procedimento.setValue(agendamentoInfo.procedimento.id);
+    this.formAgenda.controls.tipoConvenio.setValue(agendamentoInfo.tipoConvenio.id);
+    this.formAgenda.controls.primeiraVez.setValue(agendamentoInfo.primeiraVez);
+    this.formAgenda.controls.pagou.setValue(agendamentoInfo.pagou);
+    this.formAgenda.controls.compareceu.setValue(agendamentoInfo.compareceu);
+    this.formAgenda.controls.observacao.setValue(agendamentoInfo.observacao);
 
-    /* Seta as informações do agendamentos para o mesmo ser atualizado */
-    this.agendamento.id = agendamentoInfo.id;
-    this.agendamento.data = agendamentoInfo.data;
-    this.agendamento.hora = agendamentoInfo.hora;
-    this.agendamento.paciente = agendamentoInfo.paciente.id;
-    this.agendamento.funcionario = agendamentoInfo.funcionario.id;
-    this.agendamento.procedimento = agendamentoInfo.procedimento.id;
-    this.agendamento.tipoConvenio = agendamentoInfo.tipoConvenio.id;
-
-
-
+    this.showPacienteDetails = true;
 
   }
 
-  /*
 
-  Envia os dados para o back-end para serem salvos.
-  Salva o registro clinico, cria um novo dado para o relatorio e atualiza o agendamento;
-  */
   finishAttendance(frm: FormGroup) {
+
     this.registroForm.controls.descricao.setValue(this.registroForm.controls.descricao.value.toUpperCase());
     this.registroClinicoService.saveRegistroClinico(this.registroForm.value).subscribe(
       data => {
         this.relatorioService.saveReport(this.relatorioForm.value).subscribe(
           data => {
-            this.agendamento.finalizado = 1;
-            this.agendaService.updateAgendamento(this.agendamento).subscribe(
+            this.formAgenda.controls.finalizado.setValue(1);
+
+
+            this.agendaService.updateAgendamento(this.formAgenda.value).subscribe(
               data => {
                 this.buildMessage('Atendimento finalizado com sucesso', 0);
 
@@ -204,19 +226,19 @@ export class AgendaAttendanceComponent implements OnInit {
 
               },
               error => {
-                console.log(error);
+
                 this.buildMessage('Erro ao tentar atualizar as informações do agendamento', 1);
               }
             )
           },
           error => {
-            console.log(error);
+
             this.buildMessage('Erro ao tentar salvar a finalização do atendimento', 1);
           }
         );
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar salvar o registro clinico', 1);
       }
     );
@@ -226,7 +248,7 @@ export class AgendaAttendanceComponent implements OnInit {
   /* Atualiza a lista de pacientes vista no select */
   updateList() {
     this.getAgendamentos();
-    this.registroForm.controls.agendamento.reset();
+    this.registroForm.controls.agendamentoId.reset();
     this.registroForm.controls.descricao.reset();
     this.formDirective.resetForm();
     this.showPacienteDetails = false;

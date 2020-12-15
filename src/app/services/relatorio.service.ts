@@ -15,11 +15,12 @@ export class RelatorioService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   /*Metodo que salva relatorio de acordo com as informações do agendamento */
   saveReport(relatorio: Relatorio): Observable<any> {
-    return this.http.post(baseUrl + 'report/save/', relatorio, {
+    console.log(relatorio)
+    return this.http.post(baseUrl + 'relatorio/', relatorio, {
       headers: this.httpHeaders,
     });
   }
@@ -42,13 +43,13 @@ export class RelatorioService {
   getAllReportByPeriodEPaciente(dataIni, dataFim, prontuario): Observable<any> {
     return this.http.get(
       baseUrl +
-        'report/periodo/' +
-        dataIni +
-        '/' +
-        dataFim +
-        '/paciente/' +
-        prontuario +
-        '/',
+      'report/periodo/' +
+      dataIni +
+      '/' +
+      dataFim +
+      '/paciente/' +
+      prontuario +
+      '/',
       { headers: this.httpHeaders }
     );
   }
@@ -64,13 +65,13 @@ export class RelatorioService {
   getAllReportByPeriodEConvenio(dataIni, dataFim, convenioId): Observable<any> {
     return this.http.get(
       baseUrl +
-        'report/periodo/' +
-        dataIni +
-        '/' +
-        dataFim +
-        '/convenio/' +
-        convenioId +
-        '/',
+      'report/periodo/' +
+      dataIni +
+      '/' +
+      dataFim +
+      '/convenio/' +
+      convenioId +
+      '/',
       { headers: this.httpHeaders }
     );
   }
@@ -83,13 +84,13 @@ export class RelatorioService {
   ): Observable<any> {
     return this.http.get(
       baseUrl +
-        'report/periodo/' +
-        dataIni +
-        '/' +
-        dataFim +
-        '/funcionario/' +
-        funcionarioId +
-        '/',
+      'report/periodo/' +
+      dataIni +
+      '/' +
+      dataFim +
+      '/funcionario/' +
+      funcionarioId +
+      '/',
       { headers: this.httpHeaders }
     );
   }

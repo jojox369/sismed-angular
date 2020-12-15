@@ -52,7 +52,7 @@ export class AgendaService {
   }
 
   updateAgendamento(agendamento: Agenda): Observable<any> {
-    console.log(agendamento)
+
     return this.http.put(
       baseUrl + 'agenda/',
       agendamento,

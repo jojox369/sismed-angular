@@ -3,7 +3,6 @@ import { Deserializable } from './deserializable';
 import { Endereco } from './endereco';
 
 export class Paciente implements Deserializable {
-  id: number;
   nome: string;
   prontuario: number;
   cpf: string;
@@ -34,7 +33,6 @@ export class Paciente implements Deserializable {
 }
 
 export class PacientePost implements Deserializable {
-  id: number;
   nome: string;
   prontuario: number;
   cpf: string;

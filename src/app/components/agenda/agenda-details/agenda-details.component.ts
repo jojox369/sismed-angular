@@ -142,7 +142,7 @@ export class AgendaDetailsComponent implements OnInit {
       procedimento: [this.agendamento.procedimento.id, Validators.required],
       tipoConvenio: [this.agendamento.tipoConvenio.id, Validators.required],
       pagou: [this.agendamento.pagou],
-      primeira_vez: [this.agendamento.primeiraVez],
+      primeiraVez: [this.agendamento.primeiraVez],
       compareceu: [this.agendamento.compareceu],
       observacao: [this.agendamento.observacao],
     });

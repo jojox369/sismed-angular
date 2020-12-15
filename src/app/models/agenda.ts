@@ -35,10 +35,10 @@ export class Agendar implements Deserializable {
   data: Date;
   hora: string;
   observacao: string;
-  procedimentoId: number;
-  tipoConvenioId: number;
-  pacienteId: number;
-  funcionarioId: number;
+  procedimento: number;
+  tipoConvenio: number;
+  paciente: number;
+  funcionario: number;
 
 
   deserializable(input: any): this {

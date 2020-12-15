@@ -37,7 +37,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Selecione um paciente</mat-label>
-          <mat-select (selectionChange)="getPacienteDetails()" [formControl]="registroForm.controls.agendamento"
+          <mat-select (selectionChange)="getPacienteDetails()" [formControl]="registroForm.controls.agendamentoId"
             autofocus="autofocus" required>
             <mat-option *ngFor="let agendamento of agendamentos" [value]="agendamento.id">
               {{ agendamento.paciente.nome }}</mat-option>
