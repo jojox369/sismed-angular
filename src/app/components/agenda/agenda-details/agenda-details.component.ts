@@ -363,10 +363,12 @@ export class AgendaDetailsComponent implements OnInit {
         this.loadingDataMessage = 'Excluindo agendamento';
         this.agendaService.deleteAgendamento(this.agendamento.id).subscribe(
           (data) => {
+
             this.agendaService.message = 'Agendamento Excluído Com Sucesso!';
             this.router.navigate(['/agenda']);
           },
           (error) => {
+
             this.isLoading = false;
             this.buildMessage('Erro ao tentar excluir o agendamento', 1);
           }

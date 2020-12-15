@@ -92,7 +92,7 @@ export class AgendaService {
   }
 
   deleteAgendamento(agendamentoId): Observable<any> {
-    return this.http.delete(baseUrl + 'agendar/' + agendamentoId + '/', {
+    return this.http.delete(baseUrl + 'agenda/' + agendamentoId + '/', {
       headers: this.httpHeaders,
     });
   }
