@@ -35,7 +35,7 @@ export class PacienteListComponent implements OnInit {
   // variavel que captura o que esta sendo digitado
   searchText = '';
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError = false;
 
   // Variavel que controla a mensagem de dado não encontrado
@@ -50,7 +50,7 @@ export class PacienteListComponent implements OnInit {
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: any;
-  displayedColumns: string[] = ['prontuario', 'nome', 'rg', 'cpf', 'convenio', 'plano', 'telefone_fixo', 'celular'];
+  displayedColumns: string[] = ['prontuario', 'nome', 'rg', 'cpf', 'convenio', 'plano', 'telefoneFixo', 'celular'];
 
   constructor(
     private pacienteService: PacienteService,

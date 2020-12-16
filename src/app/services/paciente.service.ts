@@ -27,31 +27,31 @@ export class PacienteService {
   }
 
   getPacienteByName(name: string): Observable<any> {
-    return this.http.get(baseUrl + 'pacientes/nome/' + name + '/', {
+    return this.http.get(baseUrl + 'paciente/nome/' + name + '/', {
       headers: this.httpHeaders,
     });
   }
 
   getPacienteByProntuario(prontuario: Number): Observable<any> {
-    return this.http.get(baseUrl + 'pacientes/prontuario/' + prontuario + '/', {
+    return this.http.get(baseUrl + 'paciente/prontuario/' + prontuario + '/', {
       headers: this.httpHeaders,
     });
   }
 
   getPacienteByCpf(cpf: string): Observable<any> {
-    return this.http.get(baseUrl + 'pacientes/cpf/' + cpf + '/', {
+    return this.http.get(baseUrl + 'paciente/cpf/' + cpf + '/', {
       headers: this.httpHeaders,
     });
   }
 
   getPacienteByCelular(celular: string): Observable<any> {
-    return this.http.get(baseUrl + 'pacientes/celular/' + celular + '/', {
+    return this.http.get(baseUrl + 'paciente/celular/' + celular + '/', {
       headers: this.httpHeaders,
     });
   }
 
   getPacienteByTelefone(telefone: string): Observable<any> {
-    return this.http.get(baseUrl + 'pacientes/telefone/' + telefone + '/', {
+    return this.http.get(baseUrl + 'paciente/telefone/' + telefone + '/', {
       headers: this.httpHeaders,
     });
   }

@@ -150,10 +150,12 @@ export class AgendaListComponent implements OnInit {
             this.convertTime();
             this.buildTable();
             this.editable = CompareDates(this.agendamentos[0].data.toString());
+
           }
         },
         (error) => {
-
+          this.isLoading = false;
+          this.hasError = true
           this.buildMessage('Erro ao tentar recuperar dados', 1);
         }
       );
@@ -174,8 +176,10 @@ export class AgendaListComponent implements OnInit {
   // Metodo para formatar a hora do agendamento
   convertTime() {
     for (const agendamento of this.agendamentos) {
+
       const hora = agendamento.hora.split(':', 2);
       agendamento.hora = hora[0] + ':' + hora[1];
+
     }
   }
 

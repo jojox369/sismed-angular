@@ -88,9 +88,9 @@
           <a *ngIf="editable && element.finalizado === 0" [routerLink]="['/agendamento/detalhes', element.id]"
             title="Clique aqui para editar o agendamento">
             {{ element.hora }}</a>
-          <span *ngIf="!editable || (editable && element.finalizado === 1)">{{
+          <!-- <span *ngIf="!editable || (editable && element.finalizado === 1)">{{
             element.hora
-          }}</span>
+          }}</span> -->
         </td>
 
         <td></td>
