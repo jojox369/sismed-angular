@@ -16,12 +16,12 @@ export class ConvenioService {
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   // Faz requisição a API, que retorna uma lista com todos os convenios
   getAll(): Observable<Convenio[]> {
     return this.http
-      .get<Convenio[]>(baseUrl + 'convenios/', {
+      .get<Convenio[]>(baseUrl + 'convenio/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -32,7 +32,7 @@ export class ConvenioService {
   // Faz requisição a API, que retorna um unico convenio
   getById(id): Observable<Convenio> {
     return this.http
-      .get<Convenio>(baseUrl + 'convenios/' + id + '/', {
+      .get<Convenio>(baseUrl + 'convenio/' + id + '/', {
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new Convenio().deserializable(data)));
@@ -40,21 +40,21 @@ export class ConvenioService {
 
   // Faz requisição a API para atualizar um convenio
   update(convenio): Observable<any> {
-    return this.http.put(baseUrl + 'convenios/' + convenio.id + '/', convenio, {
+    return this.http.put(baseUrl + 'convenio/' + convenio.id + '/', convenio, {
       headers: this.httpHeaders,
     });
   }
 
   // Faz requisição a API para salvar um convenio
   save(convenio) {
-    return this.http.post(baseUrl + 'convenios/', convenio, {
+    return this.http.post(baseUrl + 'convenio/', convenio, {
       headers: this.httpHeaders,
     });
   }
 
   // Faz requisição a API para deletar um convenio
   delete(id) {
-    return this.http.delete(baseUrl + 'convenios/' + id + '/', {
+    return this.http.delete(baseUrl + 'convenio/' + id + '/', {
       headers: this.httpHeaders,
     });
   }

@@ -73,19 +73,19 @@ export class PacienteService {
   }
 
   savePaciente(paciente: PacientePost) {
-    return this.http.post(baseUrl + 'pacientes/', paciente, {
+    return this.http.post(baseUrl + 'paciente/', paciente, {
       headers: this.httpHeaders,
     });
   }
 
   upadatePaciente(paciente: PacientePost): Observable<any> {
-    return this.http.put(baseUrl + 'pacientes/' + paciente.id + '/', paciente, {
+    return this.http.put(baseUrl + 'paciente/', paciente, {
       headers: this.httpHeaders,
     });
   }
 
-  deletePaciente(id: Number) {
-    return this.http.delete(baseUrl + 'pacientes/' + id + '/', {
+  deletePaciente(prontuario: Number) {
+    return this.http.delete(baseUrl + 'paciente/' + prontuario + '/', {
       headers: this.httpHeaders,
     });
   }

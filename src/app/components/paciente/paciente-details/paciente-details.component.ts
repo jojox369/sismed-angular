@@ -14,7 +14,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { PacientePost } from 'src/app/models/paciente';
+import { Paciente, PacientePost } from 'src/app/models/paciente';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
 import { PacienteService } from 'src/app/services/paciente.service';
@@ -69,7 +69,7 @@ export class PacienteDetailsComponent implements OnInit {
   isEditing = false;
 
   // Recebe os dados informados no formulario
-  paciente: PacientePost;
+  paciente: Paciente;
 
   // Recebe a lista de convenios para serem listadas no formulário
   convenios: Convenio[];
@@ -103,18 +103,22 @@ export class PacienteDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.convenioFormControl = new FormControl('', Validators.required);
-    //this.getPaciente();
+    this.getPaciente();
     this.getConvenios();
   }
 
-  /* getPaciente() {
+  getPaciente() {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       (data) => {
         this.paciente = data;
-        if (this.paciente.telefone_fixo.length > 10) {
+        if (this.paciente.telefoneFixo.length > 10) {
           this.mask = '(00) 0 0000-0000';
         }
-        this.getTipoConvenioDetails();
+        this.convenioFormControl.setValue(this.paciente.tipoConvenio.convenio.id);
+        this.createForm();
+        this.isLoading = false;
+        this.getTipos();
+
       },
       (error) => {
         this.buildMessage(
@@ -124,29 +128,14 @@ export class PacienteDetailsComponent implements OnInit {
         this.router.navigate(['/error']);
       }
     );
-  } */
-
-  getTipoConvenioDetails() {
-    this.tipoConvenioService.getById(this.paciente.tipoConvenio).subscribe(
-      (data) => {
-        this.convenioFormControl.setValue(data.convenio);
-        this.createForm();
-        this.isLoading = false;
-        this.getTipos();
-      },
-      (error) => {
-        this.buildMessage(
-          'Erro ao tentar recuperar as informações do plano',
-          1
-        );
-      }
-    );
   }
+
+
 
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
     this.formPaciente = this.fb.group({
-      id: [this.paciente.id],
+
       prontuario: [this.paciente.prontuario],
       nome: [this.paciente.nome, Validators.required],
       cpf: [this.paciente.cpf, Validators.required],
@@ -156,8 +145,8 @@ export class PacienteDetailsComponent implements OnInit {
       dataNascimento: [this.paciente.dataNascimento],
       naturalidade: [this.paciente.naturalidade],
       nacionalidade: [this.paciente.nacionalidade],
-      telefone_fixo: [this.paciente.telefoneFixo],
-      telefone_trabalho: [this.paciente.telefoneTrabalho],
+      telefoneFixo: [this.paciente.telefoneFixo],
+      telefoneTrabalho: [this.paciente.telefoneTrabalho],
       celular: [this.paciente.celular, Validators.required],
       email: [this.paciente.email],
       sexo: [this.paciente.sexo],
@@ -168,7 +157,7 @@ export class PacienteDetailsComponent implements OnInit {
       carteira_convenio: [this.paciente.carteiraConvenio],
       situacao: [this.paciente.situacao],
       validade: [this.paciente.validade],
-      tipoConvenio: [this.paciente.tipoConvenio, Validators.required],
+      tipoConvenio: [this.paciente.tipoConvenio.id, Validators.required],
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep],
         logradouro: [this.paciente.endereco.logradouro],
@@ -196,6 +185,7 @@ export class PacienteDetailsComponent implements OnInit {
   }
 
   getTipos() {
+
     this.tipoConvenioService.getAll(this.convenioFormControl.value).subscribe(
       (data) => {
         this.tiposConvenio = data;
