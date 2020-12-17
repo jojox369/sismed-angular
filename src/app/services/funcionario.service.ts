@@ -36,7 +36,7 @@ export class FuncionarioService {
   // Função que retorna as informações de um funcionario
   getFuncionario(funcionarioId): Observable<Funcionario> {
     return this.http
-      .get<Funcionario>(baseUrl + 'funcionario/detalhes/' + funcionarioId + '/', {
+      .get<Funcionario>(baseUrl + 'funcionario/' + funcionarioId + '/', {
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new Funcionario().deserializable(data)));
@@ -58,7 +58,7 @@ export class FuncionarioService {
   // Função que atualiza um funcionario
   updateFuncionario(funcionario): Observable<any> {
     return this.http.put(
-      baseUrl + 'funcionario/' + funcionario.id + '/',
+      baseUrl + 'funcionario/',
       funcionario,
       { headers: this.httpHeaders }
     );

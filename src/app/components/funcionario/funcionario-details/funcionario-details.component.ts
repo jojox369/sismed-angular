@@ -135,7 +135,7 @@ export class FuncionarioDetailsComponent implements OnInit {
       dataTermino: [this.funcionario.dataTermino],
       naturalidade: [this.funcionario.naturalidade, Validators.required],
       nacionalidade: [this.funcionario.nacionalidade, Validators.required],
-      telefone_fixo: [this.funcionario.telefone_fixo, Validators.required],
+      telefoneFixo: [this.funcionario.telefone_fixo, Validators.required],
       celular: [this.funcionario.celular, Validators.required],
       email: [this.funcionario.email, Validators.required],
       sexo: [this.funcionario.sexo, Validators.required],
@@ -220,31 +220,65 @@ export class FuncionarioDetailsComponent implements OnInit {
     this.isLoading = true;
     this.loadingDataMessage = 'Atualizando informações do funcionário';
     this.formFuncionario.value.nome = this.formFuncionario.value.nome.toUpperCase();
-    this.formFuncionario
-      .get('endereco.logradouro')
-      .setValue(
-        this.formFuncionario.get('endereco.logradouro').value.toUpperCase()
-      );
-    this.formFuncionario
-      .get('endereco.bairro')
-      .setValue(
-        this.formFuncionario.get('endereco.bairro').value.toUpperCase()
-      );
-    this.formFuncionario
-      .get('endereco.cidade')
-      .setValue(
-        this.formFuncionario.get('endereco.cidade').value.toUpperCase()
-      );
-    this.formFuncionario
-      .get('endereco.estado')
-      .setValue(
-        this.formFuncionario.get('endereco.estado').value.toUpperCase()
-      );
-    this.formFuncionario
-      .get('endereco.complemento')
-      .setValue(
-        this.formFuncionario.get('endereco.complemento').value.toUpperCase()
-      );
+
+    if (this.funcionario.orgaoEmissor) {
+      this.formFuncionario.controls.orgaoEmissor.setValue(
+        this.formFuncionario.controls.orgaoEmissor.value.toUpperCase()
+      )
+    }
+
+    if (this.funcionario.email) {
+      this.formFuncionario.controls.email.setValue(
+        this.formFuncionario.controls.email.value.toUpperCase()
+      )
+    }
+
+    if (this.funcionario.naturalidade) {
+      this.formFuncionario.controls.naturalidade.setValue(
+        this.formFuncionario.controls.naturalidade.value.toUpperCase()
+      )
+    }
+
+    if (this.funcionario.endereco.logradouro) {
+      this.formFuncionario
+        .get('endereco.logradouro')
+        .setValue(
+          this.formFuncionario.get('endereco.logradouro').value.toUpperCase()
+        );
+    }
+    if (this.funcionario.endereco.bairro) {
+      this.formFuncionario
+        .get('endereco.bairro')
+        .setValue(
+          this.formFuncionario.get('endereco.bairro').value.toUpperCase()
+        );
+    }
+
+    if (this.funcionario.endereco.cidade) {
+      this.formFuncionario
+        .get('endereco.cidade')
+        .setValue(
+          this.formFuncionario.get('endereco.cidade').value.toUpperCase()
+        );
+    }
+
+
+    if (this.funcionario.endereco.estado) {
+      this.formFuncionario
+        .get('endereco.estado')
+        .setValue(
+          this.formFuncionario.get('endereco.estado').value.toUpperCase()
+        );
+    }
+
+    if (this.funcionario.endereco.complemento) {
+      this.formFuncionario
+        .get('endereco.complemento')
+        .setValue(
+          this.formFuncionario.get('endereco.complemento').value.toUpperCase()
+        );
+    }
+
 
     this.funcionarioService
       .updateFuncionario(this.formFuncionario.value)
