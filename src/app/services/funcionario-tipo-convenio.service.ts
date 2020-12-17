@@ -20,7 +20,15 @@ export class FuncionarioTipoConvenioService {
   // Retorna uma lista de convenios aceitos pelo medico
   getAcceptedConvenios(funcionarioId): Observable<Convenio[]> {
     return this.http.get<Convenio[]>(
-      baseUrl + 'funcionario/conveniosAceitos/' + funcionarioId + '/',
+      baseUrl + 'funcionarioTConvenio/conveniosAceitos/' + funcionarioId + '/',
+      { headers: this.httpHeaders }
+    );
+  }
+
+  // Função que retorna a lista de tipos de convenios aceitos pelo medico
+  getAcceptedTipos(funcionarioId, convenioId): Observable<any> {
+    return this.http.get(
+      baseUrl + 'funcionarioTConvenio/' + funcionarioId + '/tiposAceitos/' + convenioId + '/',
       { headers: this.httpHeaders }
     );
   }
@@ -28,7 +36,7 @@ export class FuncionarioTipoConvenioService {
   // Retorna uma lista de convenios não aceitos pelo medico
   getUnAccpetedConvenios(funcionarioId): Observable<Convenio[]> {
     return this.http.get<Convenio[]>(
-      baseUrl + 'convenios/unaccepted/' + funcionarioId + '/',
+      baseUrl + 'funcionarioTConvenio/conveniosNaoAceitos/' + funcionarioId + '/',
       { headers: this.httpHeaders }
     );
   }
@@ -37,7 +45,7 @@ export class FuncionarioTipoConvenioService {
   getUnresgisteredTiposConveio(funcionarioId, convenioId): Observable<any> {
     return this.http.get(
       baseUrl +
-      'tiposUnregistered/funcionario/' +
+      'funcionarioTConvenio/tiposNaoAceitos/' +
       funcionarioId +
       '/' +
       convenioId +
@@ -47,19 +55,13 @@ export class FuncionarioTipoConvenioService {
   }
 
   // Função que salva os novos tipos de convenio aceitos pelo medico
-  saveTiposFuncionario(funcionarioTipos): Observable<any> {
-    return this.http.post(baseUrl + 'funcionarioTipos/', funcionarioTipos, {
+  saveTiposFuncionario(funcionarioTConvenio): Observable<any> {
+    return this.http.post(baseUrl + 'funcionarioTConvenio/', funcionarioTConvenio, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função que retorna a lista de tipos de convenios aceitos pelo medico
-  getAcceptedTipos(funcionarioId, convenioId): Observable<any> {
-    return this.http.get(
-      baseUrl + 'funcionario/' + funcionarioId + '/tiposAceitos/' + convenioId + '/',
-      { headers: this.httpHeaders }
-    );
-  }
+
 
   // recupera a lista de tipos a ser excluida
   getFuncionarioTipoDetail(funcionarioId, tipoConvenioId): Observable<any> {

@@ -301,7 +301,7 @@ export class PacienteDetailsComponent implements OnInit {
             let log = new LogSave();
             log.data = this.getDate();
             log.hora = new Date().toLocaleTimeString();
-            log.funcionario = this.user.id;
+            log.funcionarioId = this.user.id;
             log.evento = 'EXCLUSÃO';
             log.descricao = 'EXCLUSÃO DO paciente ' + this.paciente.nome;
             this.logService.save(log).subscribe(

@@ -10,19 +10,19 @@ export class Funcionario implements Deserializable {
   dataEmissao: Date;
   crm: number;
   especialidade: string;
-  telefone_fixo: string;
+  telefoneFixo: string;
   celular: string;
   sexo: string;
   dataNascimento: Date;
   email: string;
-  estado_civil: string;
+  estadoCivil: string;
   escolaridade: string;
   nacionalidade: string;
   naturalidade: string;
   dataInicio: Date;
   dataTermino: Date;
   endereco: Endereco;
-  perfil: number;
+  perfilId: number;
   codigo: string;
 
 

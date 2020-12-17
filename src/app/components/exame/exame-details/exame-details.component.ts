@@ -199,7 +199,7 @@ export class ExameDetailsComponent implements OnInit {
       if (this.dataRetorno !== null && this.exameForm.controls.data_retorno.value !== this.dataRetorno) {
         log.data = this.getDate();
         log.hora = new Date().toLocaleTimeString();
-        log.funcionario = this.user.id;
+        log.funcionarioId = this.user.id;
         log.evento = 'EDIÇÃO';
         log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
           this.formatDate(this.dataRetorno) + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
@@ -212,7 +212,7 @@ export class ExameDetailsComponent implements OnInit {
       } else if (this.dataRetorno === null) {
         log.data = this.getDate();
         log.hora = new Date().toLocaleTimeString();
-        log.funcionario = this.user.id;
+        log.funcionarioId = this.user.id;
         log.evento = 'EDIÇÃO';
         log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DE RETORNO PENDENTE'
           + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
@@ -225,7 +225,7 @@ export class ExameDetailsComponent implements OnInit {
     } else if (this.dataRetorno !== null && this.exameForm.controls.data_retorno.value === null) {
       log.data = this.getDate();
       log.hora = new Date().toLocaleTimeString();
-      log.funcionario = this.user.id;
+      log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
       log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataRetorno) + ' PARA DATA DE RETORNO PENDENTE';
@@ -240,7 +240,7 @@ export class ExameDetailsComponent implements OnInit {
     if (this.dataColeta !== this.exameForm.controls.data_coleta.value) {
       log.data = this.getDate();
       log.hora = new Date().toLocaleTimeString();
-      log.funcionario = this.user.id;
+      log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
       log.descricao = 'ALTERAÇÃO NA DATA DE COLETA DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataColeta) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_coleta.value);
@@ -254,7 +254,7 @@ export class ExameDetailsComponent implements OnInit {
     if (this.dataEnvio !== this.exameForm.controls.data_envio.value) {
       log.data = this.getDate();
       log.hora = new Date().toLocaleTimeString();
-      log.funcionario = this.user.id;
+      log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
       log.descricao = 'ALTERAÇÃO NA DATA DE ÊNVIO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataEnvio) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_envio.value);
@@ -297,7 +297,7 @@ export class ExameDetailsComponent implements OnInit {
             let log = new LogSave
             log.data = this.getDate();
             log.hora = new Date().toLocaleTimeString();
-            log.funcionario = this.user.id;
+            log.funcionarioId = this.user.id;
             log.evento = 'EXCLUSÃO';
             log.descricao = 'EXCLUSÃO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome;
             this.logService.save(log).subscribe(

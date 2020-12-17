@@ -45,7 +45,7 @@ export class FuncionarioService {
   // Função que retorna uma lista com todos os medicos
   getMedicos(): Observable<Funcionario[]> {
     return this.http
-      .get<Funcionario[]>(baseUrl + 'funcionario/medicos/', {
+      .get<Funcionario[]>(baseUrl + 'funcionario/listar/medicos/', {
         headers: this.httpHeaders,
       })
       .pipe(

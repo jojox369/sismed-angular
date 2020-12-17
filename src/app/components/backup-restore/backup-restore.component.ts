@@ -54,7 +54,7 @@ export class BackupRestoreComponent implements OnInit {
     private logService: LogService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.user.perfil === 3) {
@@ -225,7 +225,7 @@ export class BackupRestoreComponent implements OnInit {
     this.log = new LogSave();
     this.log.data = this.getDate();
     this.log.hora = new Date().toLocaleTimeString();
-    this.log.funcionario = this.user.id;
+    this.log.funcionarioId = this.user.id;
     this.log.evento = eventType;
     this.log.descricao =
       'REALIZADO ' + eventType + ' DAS TABELAS ' + tablesSuccessful.toString();

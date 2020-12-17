@@ -38,6 +38,8 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
 
   showSelect: boolean = true;
 
+  responseError = true;
+
   isLoading: boolean;
 
   loadingDataMessage: string;
@@ -60,7 +62,7 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private funcionarioTipoConvenioService: FuncionarioTipoConvenioService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getConvenios();
@@ -126,42 +128,31 @@ export class FuncionarioTipoConvenioRegisterComponent implements OnInit {
     this.showLoadingData = true;
     this.hasData = false;
     this.showSelect = false;
+    this.loadingDataMessage = 'Cadastrando planos';
 
     const tiposSelected = this.tipos
       .filter((tipo) => {
         return tipo.selected;
       })
       .map((tipo) => {
-        return { id: tipo.id, nome: tipo.nome, hasError: false };
+        return { tipoConvenioId: tipo.id, funcionarioId: parseInt(this.funcionarioId) };
       });
 
-    let count = 0;
+    this.funcionarioTipoConvenioService
+      .saveTiposFuncionario(tiposSelected)
+      .subscribe(
+        (data) => {
+          this.awaitResponse = false;
+          this.showNewOperationButton = true;
+          this.responseError = false;
+        },
+        (error) => {
+          this.responseError = true;
+          this.showNewOperationButton = true;
+        }
+      );
 
-    const funcionarioTipos = {
-      funcionario: this.funcionarioId,
-      tipo_convenio: 0,
-    };
 
-    for (const tipos of tiposSelected) {
-      this.tablesSelectedNames.push(tipos);
-      funcionarioTipos.tipo_convenio = tipos.id;
-
-      this.funcionarioTipoConvenioService
-        .saveTiposFuncionario(funcionarioTipos)
-        .subscribe(
-          (data) => {
-            count++;
-            this.awaitResponse = false;
-            if (count === tiposSelected.length) {
-              this.showNewOperationButton = true;
-            }
-          },
-          (error) => {
-            tipos.hasError = true;
-            this.showNewOperationButton = true;
-          }
-        );
-    }
   }
 
   newOperation() {

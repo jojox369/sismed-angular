@@ -71,9 +71,9 @@ export class FuncionarioDetailsComponent implements OnInit {
   // Recebe os dados informados no formulario
   funcionario: Funcionario;
 
-  dataInicio;
+  dataInicio: string;
 
-  dataTermino;
+  dataTermino: string;
 
   log: LogSave;
 
@@ -135,16 +135,17 @@ export class FuncionarioDetailsComponent implements OnInit {
       dataTermino: [this.funcionario.dataTermino],
       naturalidade: [this.funcionario.naturalidade, Validators.required],
       nacionalidade: [this.funcionario.nacionalidade, Validators.required],
-      telefoneFixo: [this.funcionario.telefone_fixo, Validators.required],
+      telefoneFixo: [this.funcionario.telefoneFixo, Validators.required],
       celular: [this.funcionario.celular, Validators.required],
       email: [this.funcionario.email, Validators.required],
       sexo: [this.funcionario.sexo, Validators.required],
-      estado_civil: [this.funcionario.estado_civil, Validators.required],
+      estadoCivil: [this.funcionario.estadoCivil, Validators.required],
       escolaridade: [this.funcionario.escolaridade, Validators.required],
-      perfil: [this.funcionario.perfil, Validators.required],
+      perfilId: [this.funcionario.perfilId, Validators.required],
       especialidade: [this.funcionario.especialidade],
       crm: [this.funcionario.crm],
       endereco: this.fb.group({
+        id: [this.funcionario.endereco.id, Validators.required],
         cep: [this.funcionario.endereco.cep, Validators.required],
         logradouro: [this.funcionario.endereco.logradouro, Validators.required],
         numero: [this.funcionario.endereco.numero, Validators.required],
@@ -163,6 +164,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     this.dataInicio = this.formFuncionario.controls.dataInicio.value;
     this.dataTermino = this.formFuncionario.controls.dataTermino.value;
     this.isLoading = false;
+
   }
 
   /*função que é chamada quando um tipo de funcionario é selecionado no formulário
@@ -271,6 +273,7 @@ export class FuncionarioDetailsComponent implements OnInit {
         );
     }
 
+
     if (this.funcionario.endereco.complemento) {
       this.formFuncionario
         .get('endereco.complemento')
@@ -293,10 +296,11 @@ export class FuncionarioDetailsComponent implements OnInit {
           if (
             this.dataInicio !== this.formFuncionario.controls.dataInicio.value
           ) {
+
             this.log = new LogSave();
             this.log.data = this.getDate();
             this.log.hora = new Date().toLocaleTimeString();
-            this.log.funcionario = this.user.id;
+            this.log.funcionarioId = this.user.id;
             this.log.evento = 'EDIÇÃO';
             this.log.descricao =
               'ALTERAÇÃO NA DATA DE CONTRATAÇÃO DO FUNCIONÁRIO ' +
@@ -324,7 +328,7 @@ export class FuncionarioDetailsComponent implements OnInit {
               this.log = new LogSave();
               this.log.data = this.getDate();
               this.log.hora = new Date().toLocaleTimeString();
-              this.log.funcionario = this.user.id;
+              this.log.funcionarioId = this.user.id;
               this.log.evento = 'EDIÇÃO';
               this.log.descricao =
                 'ALTERAÇÃO NA DATA DE DISPENSA DO FUNCIONÁRIO ' +
@@ -345,7 +349,7 @@ export class FuncionarioDetailsComponent implements OnInit {
               this.log = new LogSave();
               this.log.data = this.getDate();
               this.log.hora = new Date().toLocaleTimeString();
-              this.log.funcionario = this.user.id;
+              this.log.funcionarioId = this.user.id;
               this.log.evento = 'EDIÇÃO';
               this.log.descricao =
                 'ALTERAÇÃO NA DATA DE DISPENSA DO FUNCIONÁRIO ' +
@@ -381,12 +385,16 @@ export class FuncionarioDetailsComponent implements OnInit {
             this.log = new LogSave();
             this.log.data = this.getDate();
             this.log.hora = new Date().toLocaleTimeString();
-            this.log.funcionario = this.user.id;
+            this.log.funcionarioId = this.user.id;
             this.log.evento = 'EXCLUSÃO';
             this.log.descricao =
               'EXCLUSÃO DO FUNCIONÁRIO ' + this.funcionario.nome;
             this.logService.save(this.log).subscribe(
-              (data) => { },
+              (data) => {
+                this.router.navigate(['funcionarios']);
+                this.funcionarioService.message =
+                  'Funcionário(a) excluido(a) com sucesso!';
+              },
               (error) => {
                 this.buildMessage(
                   'Erro ao tentar salvar o registro de evento',
@@ -394,30 +402,7 @@ export class FuncionarioDetailsComponent implements OnInit {
                 );
               }
             );
-            this.userService.getUsers().subscribe(
-              (data) => {
-                for (const user of data) {
-                  if (user.username === this.funcionario.cpf) {
-                    this.userService.deleteUser(user.id).subscribe(
-                      (data) => {
-                        this.funcionarioService.message =
-                          'Funcionário(a) excluido(a) com sucesso!';
-                        this.router.navigate(['funcionarios']);
-                      },
-                      (error) => {
-                        this.buildMessage(
-                          'Erro ao tentar excluir as credenciais do funcionario(a)',
-                          1
-                        );
-                      }
-                    );
-                  }
-                }
-              },
-              (error) => {
-                this.buildMessage('Erro ao tentar excluir o funcionario', 1);
-              }
-            );
+
           },
           (error) => {
             this.isLoading = false;

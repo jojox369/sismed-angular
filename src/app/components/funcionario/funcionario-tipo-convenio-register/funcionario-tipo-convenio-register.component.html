@@ -5,12 +5,7 @@
 </div>
 
 <!--Exibe o select com os convenios dispoinveis-->
-<div
-  fxLayout="row"
-  fxLayoutAlign="center center"
-  class="convenioSelect"
-  *ngIf="showSelect"
->
+<div fxLayout="row" fxLayoutAlign="center center" class="convenioSelect" *ngIf="showSelect">
   <mat-form-field appearance="fill" style="width: 90%">
     <mat-label>Selecione o Convênio</mat-label>
     <mat-select [(ngModel)]="convenioSelected" (selectionChange)="getTipos()">
@@ -25,11 +20,7 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center" *ngIf="hasData">
   <ul>
     <li>
-      <mat-checkbox
-        [checked]="allSelected"
-        (change)="selectedAll()"
-        [indeterminate]="someComplete()"
-      >
+      <mat-checkbox [checked]="allSelected" (change)="selectedAll()" [indeterminate]="someComplete()">
         {{ allSelected ? "Desmarcar Todos" : "Selecionar Todos" }}
       </mat-checkbox>
     </li>
@@ -50,53 +41,20 @@
 </div>
 
 <!-- Exibe os tipos de convenios selecionados -->
-<div
-  fxLayout="column "
-  fxLayoutAlign="center center"
-  *ngIf="showLoadingData"
-  class="loading-data"
->
+<div fxLayout="column " fxLayoutAlign="center center" *ngIf="showLoadingData" class="loading-data">
   <h5 fxLayoutAlign="center center">Cadastrando Planos</h5>
-  <ul>
-    <li *ngFor="let table of tablesSelectedNames" class="tables-name">
-      <span>
-        {{ table.nome }}
-        <fa-icon
-          [icon]="faCheck"
-          *ngIf="!awaitResponse && !table.hasError"
-          style="color: #5cb85c"
-          title="Sucesso ao tentar realizar operação"
-        ></fa-icon>
-        <fa-icon
-          [icon]="faTimes"
-          *ngIf="!awaitResponse && table.hasError"
-          style="color: #bb2124"
-          title="Erro ao tentar realizar operação"
-        ></fa-icon>
-        <img
-          src="../../../assets/spinner.gif"
-          alt="spinner"
-          *ngIf="awaitResponse"
-        />
-      </span>
-    </li>
-  </ul>
-  <button
-    mat-stroked-button
-    class="btn-sismed btn-spacer"
-    style="margin-top: 1rem"
-    (click)="newOperation()"
-    *ngIf="showNewOperationButton"
-  >
+  <app-loading-data [message]="loadingDataMessage" *ngIf="awaitResponse"></app-loading-data>
+  <h5 fxLayoutAlign="center center" style="color: #5cb85c" *ngIf="!awaitResponse && !responseError">Planos Cadastrados
+    com sucesso!</h5>
+  <h5 fxLayoutAlign="center center" style="color: #bb2124" *ngIf="!awaitResponse && responseError">Planos Cadastrados
+    com sucesso!</h5>
+  <h5 fxLayoutAlign="center center" *ngIf="!awaitResponse && responseError">Erro ao tentar cadastrar os planos</h5>
+  <button mat-stroked-button class="btn-sismed btn-spacer" style="margin-top: 1rem" (click)="newOperation()"
+    *ngIf="showNewOperationButton">
     <fa-icon [icon]="faPlus"></fa-icon> Realizar nova operação
   </button>
 </div>
 
-<div
-  id="loading-data"
-  fxLayoutAlign="space-between center"
-  fxLayout="column"
-  *ngIf="isLoading"
->
+<div id="loading-data" fxLayoutAlign="space-between center" fxLayout="column" *ngIf="isLoading">
   <app-loading-data [message]="loadingDataMessage"></app-loading-data>
 </div>
