@@ -101,8 +101,8 @@ export class AgendaPreRegisterComponent implements OnInit {
       procedimento: [this.agendamento.procedimento, Validators.required],
       tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
       pagou: [this.agendamento.pagou],
-      primeira_vez: [this.agendamento.primeira_vez],
-      compareceu: [this.agendamento.primeira_vez],
+      primeira_vez: [this.agendamento.primeiraVez],
+      compareceu: [this.agendamento.compareceu],
     });
 
     this.formPaciente = this.fb.group({

@@ -99,7 +99,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
       this.registroClinico.agendamento = this.agendamento.id
     }
     this.registroClinico.descricao = this.formRegistroClinico.get('descricao').value;
-    this.registroClinico.paciente = this.paciente.id;
+    this.registroClinico.paciente = this.paciente.prontuario;
     this.registroClinico.funcionario = user.id;
     this.getHours();
     this.getDate();
@@ -158,7 +158,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     this.tipoConvenioService.getById(tipoConvenioId).subscribe(
       data => {
         this.tipoConvenio = data;
-        this.getConvenio(this.tipoConvenio.convenio);
+        //this.getConvenio(this.tipoConvenio.convenio);
       },
       error => {
         console.log("erro ao carregar dados");

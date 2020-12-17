@@ -5,7 +5,7 @@ import {
   Validators,
   FormBuilder,
 } from '@angular/forms';
-import { PacientePost } from 'src/app/models/paciente';
+import { Paciente, PacientePost } from 'src/app/models/paciente';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
@@ -33,7 +33,7 @@ export class PacienteRegisterComponent implements OnInit {
   formPaciente: FormGroup;
 
   // Recebe os dados informados no formulario
-  paciente: PacientePost;
+  paciente: Paciente;
 
   // Recebe a lista de convenios para serem listadas no formulário
   convenios: Convenio[];
@@ -61,18 +61,17 @@ export class PacienteRegisterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.paciente = new PacientePost();
+    this.paciente = new Paciente();
     this.paciente.endereco = new Endereco();
+    this.paciente.tipoConvenio = new TipoConvenio();
     this.convenioFormControl = new FormControl('');
     this.getConvenios();
-    this.getLastProntuario();
     this.createForm();
   }
 
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
     this.formPaciente = this.fb.group({
-      prontuario: [this.paciente.prontuario],
       nome: [this.paciente.nome, Validators.required],
       cpf: [this.paciente.cpf, Validators.required],
       rg: [this.paciente.rg],
@@ -92,7 +91,7 @@ export class PacienteRegisterComponent implements OnInit {
       escolaridade: [this.paciente.escolaridade],
       carteiraConvenio: [this.paciente.carteiraConvenio],
       validade: [this.paciente.validade],
-      tipoConvenio: [this.paciente.tipoConvenio, Validators.required],
+      tipoConvenio: [this.paciente.tipoConvenio.id, Validators.required],
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep],
         logradouro: [this.paciente.endereco.logradouro],
@@ -225,15 +224,7 @@ export class PacienteRegisterComponent implements OnInit {
     );
   }
 
-  getLastProntuario() {
-    this.pacienteService.lastId().subscribe((data) => {
-      if (Object.keys(data).length === 0) {
-        this.formPaciente.controls.prontuario.setValue(1);
-      } else {
-        this.formPaciente.controls.prontuario.setValue(data[0].prontuario + 1);
-      }
-    });
-  }
+
 
   getTipos() {
     this.tipoConvenioService.getAll(this.convenioFormControl.value).subscribe(

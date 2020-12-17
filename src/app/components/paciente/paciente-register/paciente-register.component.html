@@ -1,27 +1,13 @@
-<form
-  [formGroup]="formPaciente"
-  #frm="ngForm"
-  (ngSubmit)="save(frm)"
-  *ngIf="!isLoading"
->
+<form [formGroup]="formPaciente" #frm="ngForm" (ngSubmit)="save(frm)" *ngIf="!isLoading">
   <mat-card-title class="mat-card-title">
     <div>
       <span> <strong>Cadastro | </strong> Paciente </span>
 
-      <button
-        mat-stroked-button
-        class="btn-success float-right"
-        title="Salvar informações"
-        [disabled]="frm.invalid"
-      >
+      <button mat-stroked-button class="btn-success float-right" title="Salvar informações" [disabled]="frm.invalid">
         <fa-icon [icon]="faCheck"></fa-icon> Salvar
       </button>
-      <a
-        mat-stroked-button
-        [routerLink]="['/funcionarios']"
-        title="Listar os funcionários"
-        class="btn-sismed btn-spacer float-right"
-      >
+      <a mat-stroked-button [routerLink]="['/funcionarios']" title="Listar os funcionários"
+        class="btn-sismed btn-spacer float-right">
         <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
       </a>
     </div>
@@ -34,87 +20,42 @@
       <div class="form">
         <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input
-            matInput
-            placeholder="Ex: ANDRÉ SOUZA"
-            formControlName="nome"
-            autocomplete="off"
-            maxlength="45"
-            required
-            (keypress)="onlyLetters($event)"
-            (keyup)="toUpperCase($event)"
-          />
+          <input matInput placeholder="Ex: ANDRÉ SOUZA" formControlName="nome" autocomplete="off" maxlength="45"
+            required (keypress)="onlyLetters($event)" (keyup)="toUpperCase($event)" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Nascimento</mat-label>
-          <input
-            matInput
-            type="date"
-            formControlName="data_nascimento"
-            autocomplete="off"
-          />
+          <input matInput type="date" formControlName="dataNascimento" autocomplete="off" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>CPF</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 000.000.000-0"
-            mask="000.000.000-00"
-            formControlName="cpf"
-            autocomplete="off"
-            required
-            (change)="verifyCPF()"
-          />
+          <input matInput placeholder="Ex: 000.000.000-0" mask="000.000.000-00" formControlName="cpf" autocomplete="off"
+            required (change)="verifyCPF()" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>RG</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 00.000.000-0"
-            mask="00.000.000-0"
-            formControlName="rg"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: 00.000.000-0" mask="00.000.000-0" formControlName="rg" autocomplete="off"
+            maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Orgão Emissor</mat-label>
-          <input
-            matInput
-            placeholder="Ex: DETRANRJ"
-            formControlName="orgao_emissor"
-            (keypress)="onlyLetters($event)"
-            autocomplete="off"
-            maxlength="45"
-            (keyup)="toUpperCase($event)"
-          />
+          <input matInput placeholder="Ex: DETRANRJ" formControlName="orgaoEmissor" (keypress)="onlyLetters($event)"
+            autocomplete="off" maxlength="45" (keyup)="toUpperCase($event)" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Emissão</mat-label>
-          <input
-            matInput
-            type="date"
-            formControlName="data_emissao"
-            autocomplete="off"
-          />
+          <input matInput type="date" formControlName="dataEmissao" autocomplete="off" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Naturalidade</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keypress)="onlyLetters($event)"
-            (keyup)="toUpperCase($event)"
-            formControlName="naturalidade"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keypress)="onlyLetters($event)"
+            (keyup)="toUpperCase($event)" formControlName="naturalidade" autocomplete="off" maxlength="45" />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Nacionalidade</mat-label>
@@ -129,48 +70,26 @@
       <div class="form">
         <mat-form-field appearance="fill">
           <mat-label>Telefone Fixo</mat-label>
-          <input
-            matInput
-            formControlName="telefone_fixo"
-            autocomplete="off"
-            placeholder="Ex: (21) 2548-3020"
-            mask="(00) 0000-0000"
-          />
+          <input matInput formControlName="telefoneFixo" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Telefone do Trabalho</mat-label>
-          <input
-            matInput
-            formControlName="telefone_trabalho"
-            autocomplete="off"
-            placeholder="Ex: (21) 2548-3020"
-            mask="(00) 0000-0000"
-          />
+          <input matInput formControlName="telefoneTrabalho" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Celular</mat-label>
-          <input
-            matInput
-            placeholder="Ex: (21) 9 8548-3048"
-            mask="(00) 0 0000-0000"
-            formControlName="celular"
-            autocomplete="off"
-            required
-          />
+          <input matInput placeholder="Ex: (21) 9 8548-3048" mask="(00) 0 0000-0000" formControlName="celular"
+            autocomplete="off" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            placeholder="Ex: alana@sismed.com.br"
-            formControlName="email"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput type="email" placeholder="Ex: alana@sismed.com.br" formControlName="email" autocomplete="off"
+            maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -184,7 +103,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Estado Civil</mat-label>
-          <mat-select formControlName="estado_civil">
+          <mat-select formControlName="estadoCivil">
             <mat-option value="S">SOLTEIRO(A)</mat-option>
             <mat-option value="C">CASADO(A)</mat-option>
             <mat-option value="D">DIVORCIADO(A)</mat-option>
@@ -201,21 +120,15 @@
             <mat-option value="EFI">ENSINO FUNDAMENTAL INCOMPLETO</mat-option>
             <mat-option value="EMC">ENSINO MÉDIO COMPLETO</mat-option>
             <mat-option value="EMI">ENSINO MÉDIO INCOMPLETO</mat-option>
+            <mat-option value="PG">PÓS-GRADUAÇÃO</mat-option>
             <mat-option value="M">MESTRADO</mat-option>
             <mat-option value="D">DOUTORADO</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Profissão</mat-label>
-          <input
-            matInput
-            placeholder="Ex: DESENVOLVEDOR"
-            (keyup)="toUpperCase($event)"
-            formControlName="profissao"
-            autocomplete="off"
-            maxlength="45"
-            (keypress)="onlyLetters($event)"
-          />
+          <input matInput placeholder="Ex: DESENVOLVEDOR" (keyup)="toUpperCase($event)" formControlName="profissao"
+            autocomplete="off" maxlength="45" (keypress)="onlyLetters($event)" />
         </mat-form-field>
       </div>
 
@@ -223,61 +136,35 @@
       <div class="form">
         <mat-form-field appearance="fill">
           <mat-label>Recomedação</mat-label>
-          <input
-            matInput
-            placeholder="Ex: PRIMO, AMIGO, NAMORADA, ETC"
-            (keyup)="toUpperCase($event)"
-            formControlName="recomendacao"
-            autocomplete="off"
-            maxlength="45"
-            (keypress)="onlyLetters($event)"
-          />
+          <input matInput placeholder="Ex: PRIMO, AMIGO, NAMORADA, ETC" (keyup)="toUpperCase($event)"
+            formControlName="recomendacao" autocomplete="off" maxlength="45" (keypress)="onlyLetters($event)" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Convênio</mat-label>
-          <mat-select
-            [formControl]="convenioFormControl"
-            (selectionChange)="getTipos()"
-            required
-          >
-            <mat-option
-              *ngFor="let convenio of convenios"
-              [value]="convenio.id"
-              >{{ convenio.nome }}</mat-option
-            >
+          <mat-select [formControl]="convenioFormControl" (selectionChange)="getTipos()" required>
+            <mat-option *ngFor="let convenio of convenios" [value]="convenio.id">{{ convenio.nome }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Plano</mat-label>
-          <mat-select formControlName="tipo_convenio" required>
+          <mat-select formControlName="tipoConvenio" required>
             <mat-option *ngFor="let tipo of tiposConvenio" [value]="tipo.id">{{
               tipo.nome
-            }}</mat-option>
+              }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Carteira Convênio</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 09706001161459812"
-            formControlName="carteira_convenio"
-            autocomplete="off"
-            maxlength="45"
-            mask="00000000000000000000"
-          />
+          <input matInput placeholder="Ex: 09706001161459812" formControlName="carteiraConvenio" autocomplete="off"
+            maxlength="45" mask="00000000000000000000" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Validade</mat-label>
-          <input
-            matInput
-            type="date"
-            formControlName="validade"
-            autocomplete="off"
-          />
+          <input matInput type="date" formControlName="validade" autocomplete="off" />
         </mat-form-field>
       </div>
 
@@ -285,75 +172,38 @@
       <div class="form" formGroupName="endereco">
         <mat-form-field appearance="fill">
           <mat-label>CEP</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="cep"
-            mask="00000-000"
-            autocomplete="off"
-            maxlength="9"
-            (focusout)="getEndereco()"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="cep" mask="00000-000" autocomplete="off"
+            maxlength="9" (focusout)="getEndereco()" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Logradouro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: AV. FRANKLIN ROOSEVELT"
-            (keyup)="toUpperCase($event)"
-            formControlName="logradouro"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: AV. FRANKLIN ROOSEVELT" (keyup)="toUpperCase($event)"
+            formControlName="logradouro" autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Numero</mat-label>
-          <input
-            matInput
-            #numberInput
-            placeholder="Ex: 166"
-            formControlName="numero"
-            autocomplete="off"
-            maxlength="6"
-          />
+          <input matInput #numberInput placeholder="Ex: 166" formControlName="numero" autocomplete="off"
+            maxlength="6" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Complemento</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="complemento"
-            (keyup)="toUpperCase($event)"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="complemento" (keyup)="toUpperCase($event)"
+            autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Bairro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="bairro"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="bairro"
+            autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Cidade</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="cidade"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="cidade"
+            autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -392,11 +242,6 @@
     </div>
   </mat-card-content>
 </form>
-<div
-  id="loading-data"
-  fxLayoutAlign="space-between center"
-  fxLayout="column"
-  *ngIf="isLoading"
->
+<div id="loading-data" fxLayoutAlign="space-between center" fxLayout="column" *ngIf="isLoading">
   <app-loading-data [message]="loadingDataMessage"></app-loading-data>
 </div>

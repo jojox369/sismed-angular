@@ -36,7 +36,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   // variavel que captura o que esta sendo digitado
   searchText = '';
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError = false;
 
   // Variavel que controla a mensagem de dado não encontrado
@@ -50,7 +50,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: any;
-  displayedColumns: string[] = ['id', 'nome', 'cpf', 'crm', 'especialidade', 'telefone_fixo', 'celular', 'email'];
+  displayedColumns: string[] = ['id', 'nome', 'cpf', 'crm', 'especialidade', 'telefoneFixo', 'celular', 'email'];
 
   constructor(
     private funcionarioService: FuncionarioService,
