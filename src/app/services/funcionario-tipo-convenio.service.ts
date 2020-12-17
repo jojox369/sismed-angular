@@ -72,10 +72,14 @@ export class FuncionarioTipoConvenioService {
   }
 
   // deleta os tipos selecionados
-  deleteTiposFuncionario(funcionarioTipoId): Observable<any> {
+  deleteTiposFuncionario(funcionarioTipo): Observable<any> {
+    const options = {
+      headers: this.httpHeaders,
+      body: funcionarioTipo,
+    };
+    console.log(funcionarioTipo)
     return this.http.delete(
-      baseUrl + 'funcionarioTipos/' + funcionarioTipoId + '/',
-      { headers: this.httpHeaders }
+      baseUrl + 'funcionarioTConvenio/', options
     );
   }
 }
