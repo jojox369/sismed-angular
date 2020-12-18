@@ -16,7 +16,7 @@ export class TipoConvenioService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   // Faz requisição a API, que retorna uma lista com todos os tipos convenio a partir de um convenio
   getAll(convenioId): Observable<TipoConvenio[]> {
@@ -34,7 +34,7 @@ export class TipoConvenioService {
   // Faz requisição a API, que retorna um unico tipo de convenio
   getById(tipoConvenioId): Observable<TipoConvenio> {
     return this.http
-      .get<TipoConvenio>(baseUrl + 'tipoConvenio/' + tipoConvenioId + '/', {
+      .get<TipoConvenio>(baseUrl + 'tiposConvenio/detalhes/' + tipoConvenioId + '/', {
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new TipoConvenio().deserializable(data)));
@@ -43,7 +43,7 @@ export class TipoConvenioService {
   // Faz requisição a API para salvar um tipo de convenio
   save(tipoConvenio): Observable<any> {
     return this.http.post(
-      baseUrl + 'tiposConvenio/' + tipoConvenio.convenio + '/',
+      baseUrl + 'tiposConvenio/',
       tipoConvenio,
       { headers: this.httpHeaders }
     );
@@ -51,21 +51,14 @@ export class TipoConvenioService {
 
   // Faz requisição a API para atualizar um tipo de convenio
   update(tipoConvenioDetail): Observable<any> {
-    return this.http.put(
-      baseUrl +
-        'tiposConvenio/' +
-        tipoConvenioDetail.convenio +
-        '/' +
-        tipoConvenioDetail.id +
-        '/',
-      tipoConvenioDetail,
+    return this.http.put(baseUrl + 'tiposConvenio/', tipoConvenioDetail,
       { headers: this.httpHeaders }
     );
   }
 
   // Faz requisição a API para deletar um tipo de convenio
   delete(id) {
-    return this.http.delete(baseUrl + 'tipoConvenio/' + id + '/', {
+    return this.http.delete(baseUrl + 'tiposConvenio/' + id + '/', {
       headers: this.httpHeaders,
     });
   }
@@ -73,7 +66,7 @@ export class TipoConvenioService {
   // Função que faz a pesquisa em tipos a partir do nome
   getByName(convenioId, name): Observable<any> {
     return this.http.get(
-      baseUrl + 'tiposConvenio/nome/' + convenioId + '/' + name + '/',
+      baseUrl + 'tiposConvenio/nome/' + name + '/convenio/' + convenioId + '/',
       { headers: this.httpHeaders }
     );
   }

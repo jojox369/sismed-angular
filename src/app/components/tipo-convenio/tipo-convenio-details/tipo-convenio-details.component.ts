@@ -16,6 +16,7 @@ import { TipoConvenio } from 'src/app/models/tipo-convenio';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Convenio } from 'src/app/models/convenio';
 
 @Component({
   selector: 'app-tipo-convenio-details',
@@ -48,7 +49,8 @@ export class TipoConvenioDetailsComponent implements OnInit {
   // Controla os campos do formulario
   formTipoConvenio: FormGroup;
 
-  tipoConvenioDetail: TipoConvenio;
+  tipoConvenio: TipoConvenio;
+
 
   /*Recupera o id do tipo de convenio para a consulta na API*/
   tipoConvenioId = this.route.snapshot.paramMap.get('tipoConvenioId');
@@ -60,7 +62,6 @@ export class TipoConvenioDetailsComponent implements OnInit {
     private tipoConvenioService: TipoConvenioService,
     private route: ActivatedRoute,
     private router: Router,
-    private convenioService: ConvenioService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private fb: FormBuilder
@@ -74,11 +75,13 @@ export class TipoConvenioDetailsComponent implements OnInit {
   loadTipoConvenioDetail() {
     this.tipoConvenioService.getById(this.tipoConvenioId).subscribe(
       data => {
-        this.createForm(data);
+        this.tipoConvenio = data;
 
+        this.createForm();
       },
       error => {
-        console.log(error);
+
+        this.buildMessage('Erro ao tentar recuperar informações do plano', 1);
 
       }
     );
@@ -87,23 +90,25 @@ export class TipoConvenioDetailsComponent implements OnInit {
 
 
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
-  createForm(tipoConvenio: TipoConvenio) {
-    this.formTipoConvenio = this.fb.group({
-      id: [tipoConvenio.id],
-      nome: [tipoConvenio.nome, Validators.required],
-      convenio: [tipoConvenio.convenio]
-    });
+  createForm() {
 
+    this.formTipoConvenio = this.fb.group({
+      id: [this.tipoConvenio.id],
+      nome: [this.tipoConvenio.nome, Validators.required],
+      convenioId: [this.tipoConvenio.convenio.id]
+    });
     this.formTipoConvenio.disable();
   }
 
 
 
   update(frm: FormGroup) {
+
     this.formTipoConvenio.value.nome = this.formTipoConvenio.value.nome.toUpperCase()
     this.tipoConvenioService.update(this.formTipoConvenio.value).subscribe(
       data => {
-        this.createForm(data);
+        this.tipoConvenio = data;
+        this.createForm();
         this.isEditing = false;
         this.buildMessage('Informações atualizadas com sucesso', 0);
       },
@@ -121,11 +126,11 @@ export class TipoConvenioDetailsComponent implements OnInit {
         this.tipoConvenioService.delete(this.formTipoConvenio.controls.id.value).subscribe(
           data => {
             this.tipoConvenioService.message = 'Plano excluido com sucesso!';
-            this.router.navigate(['/tiposConvenio', this.formTipoConvenio.controls.convenio_id.value]);
+            this.router.navigate(['/tiposConvenio', this.tipoConvenio.convenio.id]);
 
           },
           error => {
-            console.log(error);
+
             this.buildMessage('Erro ao tentar excluir plano', 1);
           }
         )

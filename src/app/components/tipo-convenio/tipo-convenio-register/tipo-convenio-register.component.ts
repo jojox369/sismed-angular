@@ -49,12 +49,12 @@ export class TipoConvenioRegisterComponent implements OnInit {
     this.tipoConvenio = new TipoConvenio();
     this.formTipoConvenio = this.fb.group({
       nome: [this.tipoConvenio.nome, Validators.required],
-      convenio: [this.tipoConvenio.convenio]
+      convenioId: [this.tipoConvenio.convenio]
     })
 
     this.convenioService.getById(this.convenioId).subscribe((data) => {
       this.convenioNome = data.nome;
-      this.formTipoConvenio.controls.convenio.setValue(data.id);
+      this.formTipoConvenio.controls.convenioId.setValue(data.id);
     });
   }
 
