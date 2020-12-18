@@ -40,7 +40,7 @@ export class ConvenioService {
 
   // Faz requisição a API para atualizar um convenio
   update(convenio): Observable<any> {
-    return this.http.put(baseUrl + 'convenio/' + convenio.id + '/', convenio, {
+    return this.http.put(baseUrl + 'convenio/', convenio, {
       headers: this.httpHeaders,
     });
   }

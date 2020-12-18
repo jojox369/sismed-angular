@@ -94,12 +94,13 @@ export class ConvenioDetailsComponent implements OnInit {
       id: [this.convenio.id],
       nome: [this.convenio.nome, [Validators.required]],
       cnpj: [this.convenio.cnpj],
-      registro_ans: [this.convenio.registro_ans],
-      data_adesao: [this.convenio.data_adesao, Validators.required],
-      dados_bancarios: this.fb.group({
-        agencia: [this.convenio.dados_bancarios.agencia, Validators.required],
-        banco: [this.convenio.dados_bancarios.banco, Validators.required],
-        conta: [this.convenio.dados_bancarios.conta, Validators.required]
+      registroAns: [this.convenio.registroAns],
+      dataAdesao: [this.convenio.dataAdesao, Validators.required],
+      dadosBancarios: this.fb.group({
+        id: [this.convenio.dadosBancarios.id, Validators.required],
+        agencia: [this.convenio.dadosBancarios.agencia],
+        banco: [this.convenio.dadosBancarios.banco, Validators.required],
+        conta: [this.convenio.dadosBancarios.conta, Validators.required]
       }),
     });
     this.formConvenio.disable();

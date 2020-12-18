@@ -62,15 +62,6 @@ export class FuncionarioTipoConvenioService {
   }
 
 
-
-  // recupera a lista de tipos a ser excluida
-  getFuncionarioTipoDetail(funcionarioId, tipoConvenioId): Observable<any> {
-    return this.http.get(
-      baseUrl + 'funcionarioTipo/' + funcionarioId + '/' + tipoConvenioId + '/',
-      { headers: this.httpHeaders }
-    );
-  }
-
   // deleta os tipos selecionados
   deleteTiposFuncionario(funcionarioTipo): Observable<any> {
     const options = {

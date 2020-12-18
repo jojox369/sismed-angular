@@ -46,16 +46,16 @@ export class ConvenioRegisterComponent implements OnInit {
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
     this.convenio = new Convenio();
-    this.convenio.dados_bancarios = new DadosBancarios();
+    this.convenio.dadosBancarios = new DadosBancarios();
     this.formConvenio = this.fb.group({
       nome: [this.convenio.nome, [Validators.required]],
       cnpj: [this.convenio.cnpj],
-      registro_ans: [this.convenio.registro_ans],
-      data_adesao: [this.convenio.data_adesao, Validators.required],
-      dados_bancarios: this.fb.group({
-        agencia: [this.convenio.dados_bancarios.agencia, Validators.required],
-        banco: [this.convenio.dados_bancarios.banco, Validators.required],
-        conta: [this.convenio.dados_bancarios.conta, Validators.required]
+      registroAns: [this.convenio.registroAns],
+      dataAdesao: [this.convenio.dataAdesao, Validators.required],
+      dadosBancarios: this.fb.group({
+        agencia: [this.convenio.dadosBancarios.agencia, Validators.required],
+        banco: [this.convenio.dadosBancarios.banco, Validators.required],
+        conta: [this.convenio.dadosBancarios.conta, Validators.required]
       }),
     });
   }
