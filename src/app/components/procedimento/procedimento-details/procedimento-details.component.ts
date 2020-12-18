@@ -37,7 +37,7 @@ export class ProcedimentoDetailsComponent implements OnInit {
   // Controla a edição do formulário
   isEditing = false;
 
-
+  convenioNome: string;
 
   // Controla os campos do formulario
   formProcedimento: FormGroup;
@@ -47,8 +47,7 @@ export class ProcedimentoDetailsComponent implements OnInit {
 
   procedimento: Procedimento;
 
-  // Recebe o nome do convenio
-  convenioNome: string;
+
 
 
 
@@ -56,7 +55,6 @@ export class ProcedimentoDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private procedimentoService: ProcedimentoService,
-    private convenioService: ConvenioService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private fb: FormBuilder
@@ -72,11 +70,9 @@ export class ProcedimentoDetailsComponent implements OnInit {
       data => {
         this.procedimento = data;
         this.createForm();
-
-
       },
       error => {
-        console.log(error);
+        this.buildMessage('Erro ao tentar recuperar as informações do procedimento', 1)
       }
     );
   }
@@ -87,28 +83,18 @@ export class ProcedimentoDetailsComponent implements OnInit {
       id: [this.procedimento.id],
       descricao: [this.procedimento.descricao, Validators.required],
       valor: [this.procedimento.valor, Validators.required],
-      convenio: [this.procedimento.convenio]
+      convenioId: [this.procedimento.convenio.id]
     });
-
-
-
     this.formProcedimento.disable();
   }
 
-  // Função que busca o nome do convenio para ser exibido na pagina
-  loadConvenio() {
-    this.convenioService.getById(this.procedimento.convenio).subscribe(
-      data => {
-        this.convenioNome = data.nome;
-      }
-    );
-  }
+
 
   update(frm: FormGroup) {
     this.formProcedimento.value.descricao = this.formProcedimento.value.descricao.toUpperCase();
     this.procedimentoService.update(this.formProcedimento.value).subscribe(
       data => {
-        this.procedimento = data;
+        this.getProcedimento()
         this.createForm()
         this.isEditing = false;
         this.buildMessage('Informações atualizadas com sucesso', 0)
@@ -116,7 +102,7 @@ export class ProcedimentoDetailsComponent implements OnInit {
       error => {
         this.cancelEditing();
         this.buildMessage('Erro ao tentar atualizar as informações', 1)
-        console.log(error);
+
       }
     );
   }
@@ -128,10 +114,10 @@ export class ProcedimentoDetailsComponent implements OnInit {
         this.procedimentoService.delete(this.procedimento).subscribe(
           data => {
             this.procedimentoService.message = 'Procedimento excluido com sucesso!';
-            this.router.navigate(['procedimentos/' + this.formProcedimento.controls.convenio_id.value]);
+            this.router.navigate(['procedimentos/' + this.formProcedimento.controls.convenioId.value]);
           },
           error => {
-            this.buildMessage('Não foi possivel excluir o procedimento ', 0);
+            this.buildMessage('Não foi possivel excluir o procedimento ', 1);
           }
         );
       }

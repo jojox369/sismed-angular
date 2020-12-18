@@ -6,6 +6,7 @@ import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { ConvenioService } from 'src/app/services/convenio.service';
 import { ProcedimentoService } from 'src/app/services/procedimento.service';
+import { Convenio } from 'src/app/models/convenio';
 
 @Component({
   selector: 'app-procedimento-register',
@@ -51,15 +52,16 @@ export class ProcedimentoRegisterComponent implements OnInit {
   // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
   createForm() {
     this.procedimento = new Procedimento;
+    this.procedimento.convenio = new Convenio();
     this.formProcedimento = this.fb.group({
       descricao: [this.procedimento.descricao, Validators.required],
       valor: [this.procedimento.valor, Validators.required],
-      convenio: [this.procedimento.convenio]
+      convenioId: [this.procedimento.convenio.id]
     });
 
     this.convenioService.getById(this.convenioId).subscribe((data) => {
       this.convenioNome = data.nome;
-      this.formProcedimento.controls.convenio.setValue(data.id);
+      this.formProcedimento.controls.convenioId.setValue(data.id);
     });
 
 

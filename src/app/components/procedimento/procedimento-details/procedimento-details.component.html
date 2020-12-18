@@ -1,57 +1,58 @@
 <form [formGroup]="formProcedimento" #frm="ngForm" (ngSubmit)="update(frm)" *ngIf="formProcedimento">
-    <mat-card-title class="mat-card-title">
-        <div>
-            <span>
-                <strong>Edição | </strong> Procedimento
-            </span>
+  <mat-card-title class="mat-card-title">
+    <div>
+      <span>
+        <strong>Edição | </strong> Procedimento
+      </span>
 
 
-            <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar convênio"
-                [disabled]="frm.invalid" *ngIf="isEditing">
-                <fa-icon [icon]="faCheck"></fa-icon> Salvar
-            </button>
+      <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar convênio"
+        [disabled]="frm.invalid" *ngIf="isEditing">
+        <fa-icon [icon]="faCheck"></fa-icon> Salvar
+      </button>
 
-            <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição"
-                *ngIf="isEditing" (click)="cancelEditing()">
-                <fa-icon [icon]="faBan"></fa-icon> Cancelar
+      <button mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição" *ngIf="isEditing"
+        (click)="cancelEditing()">
+        <fa-icon [icon]="faBan"></fa-icon> Cancelar
 
-            </button>
+      </button>
 
-            <button mat-stroked-button class="btn-success float-right" title="Editar Convênio" *ngIf="!isEditing"
-                (click)="unblockFields()">
-                <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
-            </button>
+      <button mat-stroked-button class="btn-success float-right" title="Editar Convênio" *ngIf="!isEditing"
+        (click)="unblockFields()">
+        <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
+      </button>
 
-            <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir Convênio" (click)="delete()"
-                *ngIf="!isEditing">
-                <fa-icon [icon]="faTimes"></fa-icon> Excluir
-            </a>
+      <a mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir Convênio" (click)="delete()"
+        *ngIf="!isEditing">
+        <fa-icon [icon]="faTimes"></fa-icon> Excluir
+      </a>
 
-            <a mat-stroked-button [routerLink]="['/procedimentos', this.formProcedimento.controls.convenio.value]"
-                title="Listar procedimentos do convênio {{convenioNome}}" class="btn-sismed btn-spacer float-right">
-                <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
-            </a>
-        </div>
-    </mat-card-title>
-    <mat-card-content>
+      <a mat-stroked-button [routerLink]="['/procedimentos', procedimento.convenio.id]"
+        title="Listar procedimentos do convênio {{procedimento.convenio.nome}}"
+        class="btn-sismed btn-spacer float-right">
+        <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
+      </a>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
 
-        <!--Div que ocupa 100% do card-->
-        <div fxLayout="column" fxLayoutAlign="space-evenly center">
-            <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
-                <mat-form-field appearance="outline">
-                    <mat-label>Nome</mat-label>
-                    <input id="nome" matInput placeholder="Ex:700" (keyup)="toUpperCase($event)"
-                        formControlName="descricao" autocomplete="off" maxlength="45" required>
+    <!--Div que ocupa 100% do card-->
+    <div fxLayout="column" fxLayoutAlign="space-evenly center">
+      <div class="form" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input id="nome" matInput placeholder="Ex:700" (keyup)="toUpperCase($event)" formControlName="descricao"
+            autocomplete="off" maxlength="45" required>
 
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Valor</mat-label>
-                    <input id="valor" matInput placeholder="Ex:150,00" formControlName="valor" autocomplete="off"
-                        maxlength="45" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Valor</mat-label>
+          <input id="valor" matInput placeholder="Ex:150,00" formControlName="valor" autocomplete="off" maxlength="45"
+            required>
 
-                </mat-form-field>
-            </div>
-        </div>
-    </mat-card-content>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
 
 </form>

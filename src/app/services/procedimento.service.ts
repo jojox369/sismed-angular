@@ -18,7 +18,7 @@ export class ProcedimentoService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  // Função que retorna uma de procedimentos
+
   getAll(convenioId): Observable<Procedimento[]> {
     return this.http
       .get<Procedimento[]>(baseUrl + 'procedimento/' + convenioId + '/', {
@@ -31,54 +31,39 @@ export class ProcedimentoService {
       );
   }
 
-  // Função que retorna um procedimento
+
   getById(procedimentoId): Observable<Procedimento> {
     return this.http
-      .get<Procedimento>(baseUrl + 'procedimento/' + procedimentoId + '/', {
+      .get<Procedimento>(baseUrl + 'procedimento/detalhes/' + procedimentoId + '/', {
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new Procedimento().deserializable(data)));
   }
 
-  // Função para atualizar um procedimento
+
   update(procedimento): Observable<any> {
-    return this.http.put(
-      baseUrl +
-      'procedimentos/' +
-      procedimento.convenio +
-      '/' +
-      procedimento.id +
-      '/',
-      procedimento,
+    return this.http.put(`${baseUrl}procedimento/`, procedimento,
       { headers: this.httpHeaders }
     );
   }
 
-  // Função para excluir um procedimento
+
   delete(procedimento) {
-    return this.http.delete(
-      baseUrl +
-      'procedimentos/' +
-      procedimento.convenio +
-      '/' +
-      procedimento.id +
-      '/',
+    return this.http.delete(`${baseUrl}procedimento/${procedimento.id}`,
       { headers: this.httpHeaders }
     );
   }
 
-  // Função para salvar um procedimento
+
   save(procedimento) {
-    return this.http.post(
-      baseUrl + 'procedimentos/' + procedimento.convenio + '/',
-      procedimento,
+    return this.http.post(`${baseUrl}procedimento/`, procedimento,
       { headers: this.httpHeaders }
     );
   }
 
   getByDescription(convenioId, description): Observable<any> {
     return this.http.get(
-      baseUrl + 'procedimentos/desc/' + convenioId + '/' + description + '/',
+      `${baseUrl}procedimento/desc/${description}/convenio/${convenioId}`,
       { headers: this.httpHeaders }
     );
   }

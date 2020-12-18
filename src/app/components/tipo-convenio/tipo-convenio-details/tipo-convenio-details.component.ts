@@ -107,7 +107,7 @@ export class TipoConvenioDetailsComponent implements OnInit {
     this.formTipoConvenio.value.nome = this.formTipoConvenio.value.nome.toUpperCase()
     this.tipoConvenioService.update(this.formTipoConvenio.value).subscribe(
       data => {
-        this.tipoConvenio = data;
+        this.loadTipoConvenioDetail();
         this.createForm();
         this.isEditing = false;
         this.buildMessage('Informações atualizadas com sucesso', 0);

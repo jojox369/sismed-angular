@@ -127,11 +127,11 @@ export class ProcedimentoListComponent implements OnInit {
   /*Função que troca o campo de pesquisa de acordo com o valor recebido*/
   onChooseSearchMethod() {
     if (this.input === 1) {
-      this.onSearchByName();
+      this.onSearchByDescription();
     }
   }
 
-  onSearchByName() {
+  onSearchByDescription() {
     if (this.searchText === '') {
       this.showEmptyMessage = false;
       this.getProcedimentos();
