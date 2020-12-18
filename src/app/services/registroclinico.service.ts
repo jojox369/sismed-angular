@@ -16,11 +16,11 @@ export class RegistroclinicoService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   getRegistros(): Observable<Registroclinico[]> {
     return this.http
-      .get<Registroclinico[]>(baseUrl + 'registrosclinicos/', {
+      .get<Registroclinico[]>(baseUrl + 'registroClinico/', {
         headers: this.httpHeaders,
       })
       .pipe(

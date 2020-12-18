@@ -53,6 +53,7 @@
             <mat-label>Cônvenio</mat-label>
             <input matInput value="{{
                 paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
+                || paciente.tipoConvenio.convenio.nome === 'NÃO INFORMADO'
                   ? paciente.tipoConvenio.convenio.nome
                   : paciente.tipoConvenio.convenio.nome +
                     ' - ' +
@@ -62,7 +63,9 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Data de Nascimento</mat-label>
-            <input matInput value="{{ paciente.dataNascimento | date: 'dd/MM/yyyy' }}" disabled />
+            <input matInput
+              value="{{ paciente.dataNascimento ?( paciente.dataNascimento  | date: 'dd/MM/yyyy') : 'NÃO CADASTRADO' }}"
+              disabled />
           </mat-form-field>
         </div>
       </div>

@@ -19,7 +19,7 @@ export class RelatorioService {
 
   /*Metodo que salva relatorio de acordo com as informações do agendamento */
   saveReport(relatorio: Relatorio): Observable<any> {
-    console.log(relatorio)
+
     return this.http.post(baseUrl + 'relatorio/', relatorio, {
       headers: this.httpHeaders,
     });

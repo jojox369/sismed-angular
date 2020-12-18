@@ -99,7 +99,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
       this.registroClinico.agendamento = this.agendamento.id
     }
     this.registroClinico.descricao = this.formRegistroClinico.get('descricao').value;
-    this.registroClinico.paciente = this.paciente.prontuario;
+    this.registroClinico.prontuario = this.paciente.prontuario;
     this.registroClinico.funcionario = user.id;
     this.getHours();
     this.getDate();

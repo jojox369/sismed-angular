@@ -111,9 +111,12 @@ export class PacienteDetailsComponent implements OnInit {
     this.pacienteService.getPaciente(this.pacienteId).subscribe(
       (data) => {
         this.paciente = data;
-        if (this.paciente.telefoneFixo.length > 10) {
-          this.mask = '(00) 0 0000-0000';
+        if (this.paciente.telefoneFixo) {
+          if (this.paciente.telefoneFixo.length > 10) {
+            this.mask = '(00) 0 0000-0000';
+          }
         }
+
         this.convenioFormControl.setValue(this.paciente.tipoConvenio.convenio.id);
         this.createForm();
         this.isLoading = false;
