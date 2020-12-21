@@ -16,22 +16,38 @@ import { RegistroClinicoPacienteListAllComponent } from '../registro-clinico-pac
 })
 export class RegistroClinicoListComponent implements OnInit {
   faSearch = faSearch;
+
   faPlus = faPlus;
+
   faSortDown = faSortDown;
 
   registros: Registroclinico[];
+
   registrosFilter: Registroclinico[];
+
   paginaAtual = 1;
+
   searchText: string = "";
+
   placeholder: string = "Buscar por nome";
+
   input: number = 1;
+
   @ViewChild("searchInput") searchInput: ElementRef;
+
   itemsPerPage: number = 10;
+
   itensLength: number;
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+
   dataSource: any;
 
   displayedColumns: string[] = ['prontuario', 'nome', 'registros'];
+
+  registerNotFound = true;
+
+  inputType = 'text';
 
 
   constructor(private registroClinicoService: RegistroclinicoService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
@@ -41,7 +57,7 @@ export class RegistroClinicoListComponent implements OnInit {
   }
 
   buildTable() {
-    this.dataSource = new MatTableDataSource(this.registrosFilter);
+    this.dataSource = new MatTableDataSource(this.registros);
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Itens por página';
     this.paginator._intl.firstPageLabel = 'Primeira página';
@@ -66,6 +82,7 @@ export class RegistroClinicoListComponent implements OnInit {
 
   onChangeSearchSelector(value: number) {
     if (value === 1) {
+      this.inputType = 'text';
       if (this.input != value && this.searchText != "") {
         this.searchText = "";
         this.dataSource = this.registros;
@@ -75,6 +92,7 @@ export class RegistroClinicoListComponent implements OnInit {
       this.placeholder = 'Buscar por nome';
     }
     else if (value === 2) {
+      this.inputType = 'text';
       if (this.input != value && this.searchText != "") {
         this.searchText = "";
         this.dataSource = this.registros;
@@ -84,6 +102,7 @@ export class RegistroClinicoListComponent implements OnInit {
       this.placeholder = 'Buscar por prontuário';
     }
     else {
+      this.inputType = 'date';
       if (this.input != value && this.searchText != "") {
         this.searchText = "";
         this.dataSource = this.registros;
@@ -95,34 +114,66 @@ export class RegistroClinicoListComponent implements OnInit {
   }
 
   onSearch() {
-    var text = this.searchText.toUpperCase();
+
     if (this.input === 1) {
       if (this.searchText === "") {
-        this.dataSource = this.registros;
+        this.getRegistros();
       } else {
-        this.registrosFilter = this.registros.filter(function (e) {
-          return e.nome.includes(text);
-        });
-        this.dataSource = this.registrosFilter;
+        this.registroClinicoService.getByNome(this.searchText).subscribe(
+          data => {
+            if (Object.keys(data).length !== 0) {
+              this.registros = data;
+              this.buildTable();
+              this.registerNotFound = false;
+            }
+
+          },
+          error => {
+            this.buildMessage('Erro ao tentar pesquisar', 1);
+
+          }
+        );
       }
     }
     else if (this.input === 2) {
       if (this.searchText === "") {
-        this.dataSource = this.registros;
+        this.getRegistros();
       } else {
-        this.registrosFilter = this.registros.filter(function (e) {
-          return e.prontuario.toString() == text;
-        });
-        this.dataSource = this.registrosFilter;
+        this.registroClinicoService.getByProntuario(+this.searchText).subscribe(
+          data => {
+            if (Object.keys(data).length !== 0) {
+              this.registros = data;
+              this.buildTable();
+              this.registerNotFound = false;
+            }
+
+          },
+          error => {
+            this.buildMessage('Erro ao tentar pesquisar', 1);
+
+          }
+        );
       }
     }
     else {
-      this.registrosFilter = this.registros.filter(function (e) {
-        if (e.data != null) {
-          return e.data.includes(text);
-        }
-        this.dataSource = this.registrosFilter;
-      });
+      if (this.searchText === "") {
+        this.getRegistros();
+      } else {
+        this.registroClinicoService.getByData(this.searchText).subscribe(
+          data => {
+            if (Object.keys(data).length !== 0) {
+              this.registros = data;
+              this.buildTable();
+              this.registerNotFound = false;
+            }
+
+          },
+          error => {
+            this.buildMessage('Erro ao tentar pesquisar', 1);
+
+          }
+        );
+      }
     }
   }
 

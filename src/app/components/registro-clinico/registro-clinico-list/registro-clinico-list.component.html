@@ -3,7 +3,7 @@
     <button id="btn_search">
       <fa-icon [icon]="faSearch"></fa-icon>
     </button>
-    <input [(ngModel)]="searchText" (input)="onSearch()" #searchInput type="text" id="txtBusca"
+    <input [(ngModel)]="searchText" (input)="onSearch()" #searchInput [type]="inputType" id="txtBusca"
       placeholder="{{ placeholder }}" autocomplete="off" />
     <div class="dropdown" id="btn_dropDown">
       <button mat-icon-button [matMenuTriggerFor]="menu" class="btn dropdown-toggle dropdown-toggle-split"

@@ -75,7 +75,7 @@ export class PacienteListComponent implements OnInit {
         }
       },
       error => {
-        console.log("erro ao carregar dados");
+
         this.buildMessage('Erro ao tentar carregar a lista de pacientes', 1)
       }
     );
@@ -150,8 +150,8 @@ export class PacienteListComponent implements OnInit {
           }
         },
         error => {
-          this.buildMessage('Erro ao tentar pesquisar', 0);
-          console.log("erro ao carregar dados");
+          this.buildMessage('Erro ao tentar pesquisar', 1);
+
         }
       );
     }
@@ -173,8 +173,8 @@ export class PacienteListComponent implements OnInit {
           }
         },
         error => {
-          this.buildMessage('Erro ao tentar pesquisar', 0);
-          console.log("erro ao carregar dados");
+          this.buildMessage('Erro ao tentar pesquisar', 1);
+
         }
       );
     }
@@ -195,8 +195,8 @@ export class PacienteListComponent implements OnInit {
           }
         },
         error => {
-          this.buildMessage('Erro ao tentar pesquisar', 0);
-          console.log("erro ao carregar dados");
+          this.buildMessage('Erro ao tentar pesquisar', 1);
+
         }
       );
     }
@@ -217,8 +217,8 @@ export class PacienteListComponent implements OnInit {
           }
         },
         error => {
-          this.buildMessage('Erro ao tentar pesquisar', 0);
-          console.log("erro ao carregar dados");
+          this.buildMessage('Erro ao tentar pesquisar', 1);
+
         }
       );
     }

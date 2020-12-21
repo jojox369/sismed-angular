@@ -49,7 +49,7 @@ export class RegistroclinicoService {
     });
   }
 
-  getRegistrosPorPaciente(prontuario: number, medicoId: number) {
+  getRegistrosPorPaciente(prontuario: number, medicoId: number): Observable<Registroclinico[]> {
     return this.http
       .get<Registroclinico[]>(
         `${baseUrl}registroClinico/paciente/${prontuario}/medico/${medicoId}`,
@@ -61,4 +61,44 @@ export class RegistroclinicoService {
         )
       );
   }
+
+  getByNome(nome: string): Observable<Registroclinico[]> {
+    return this.http
+      .get<Registroclinico[]>(
+        `${baseUrl}registroClinico/nome/${nome}`,
+        { headers: this.httpHeaders }
+      )
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
+  }
+
+  getByProntuario(prontuario: number): Observable<Registroclinico[]> {
+    return this.http
+      .get<Registroclinico[]>(
+        `${baseUrl}registroClinico/prontuario/${prontuario}`,
+        { headers: this.httpHeaders }
+      )
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
+  }
+
+  getByData(data: string): Observable<Registroclinico[]> {
+    return this.http
+      .get<Registroclinico[]>(
+        `${baseUrl}registroClinico/data/${data}`,
+        { headers: this.httpHeaders }
+      )
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
+  }
+
 }
