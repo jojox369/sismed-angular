@@ -49,9 +49,9 @@
         <ng-container matColumnDef="nome">
           <th mat-header-cell *matHeaderCellDef>Nome</th>
           <td mat-cell *matCellDef="let element">
-            <a *ngIf="element.id" [routerLink]="['/registroclinico/paciente', element.id]"
-              title="Clique para editar o paciente {{element.nome}}">{{element.nome}}</a>
-            <label *ngIf="!element.id">{{element.nome}}</label>
+            <a [routerLink]="['/registroclinico', element.prontuario]"
+              title="Clique para cadastrar um registro clinico para o paciente {{element.nome}}">{{element.nome}}</a>
+
           </td>
         </ng-container>
 

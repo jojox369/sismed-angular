@@ -44,7 +44,8 @@ export class RegistroclinicoService {
   }
 
   saveRegistroClinico(registroClinico: Registroclinico) {
-    return this.http.post(baseUrl + 'registroclinico/', registroClinico, {
+    console.log(registroClinico)
+    return this.http.post(`${baseUrl}registroClinico/`, registroClinico, {
       headers: this.httpHeaders,
     });
   }

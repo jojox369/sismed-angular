@@ -140,7 +140,7 @@ const routes: Routes = [
   { path: 'registroclinico', component: RegistroClinicoListComponent },
 
   {
-    path: 'registroclinico/:direc/:id',
+    path: 'registroclinico/:prontuario',
     component: RegistroClinicoRegisterComponent,
   },
 

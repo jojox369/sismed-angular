@@ -16,6 +16,8 @@ import { ConvenioService } from 'src/app/services/convenio.service';
 import { Convenio } from 'src/app/models/convenio';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserLogged } from 'src/app/models/user';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -29,21 +31,26 @@ export class RegistroClinicoRegisterComponent implements OnInit {
   faCheck = faCheck;
 
   isLoading: boolean;
-  direcionador = this.route.snapshot.paramMap.get('direc');
-  pacienteId;
-  paciente: PacientePost;
-  agendamentoId;
-  agendamento: any;
-  tipoConvenio: TipoConvenio;
-  convenio: Convenio;
+
+  prontuario = this.route.snapshot.paramMap.get('prontuario');
+
+  paciente: Paciente;
+
+
 
   registroClinico: Registroclinico;
 
   formRegistroClinico: FormGroup;
 
   registrosAnteriores: Registroclinico[];
+
   dataSource: any;
+
+  user: UserLogged = JSON.parse(sessionStorage.getItem('user'));
+
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+
   displayedColumns: string[] = ['prontuario', 'descricao', 'func_nome', 'especialidade', 'data', 'hora'];
 
 
@@ -55,33 +62,30 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     private tipoConvenioService: TipoConvenioService,
     private convenioService: ConvenioService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.registroClinico = new Registroclinico();
-    if (this.direcionador === "paciente") {
-      this.pacienteId = this.route.snapshot.paramMap.get('id');
-      //this.getPaciente()
-    } else {
-      this.agendamentoId = this.route.snapshot.paramMap.get('id');
-      this.getAgendamento();
-    }
-    this.getRegistroAnteriores();
+    this.paciente = new Paciente();
+    this.paciente.tipoConvenio = new TipoConvenio();
+    this.paciente.tipoConvenio.convenio = new Convenio();
+    this.getPaciente();
+
   }
+
 
   createForm() {
     this.formRegistroClinico = this.fb.group({
-      prontuario: [this.paciente.prontuario],
-      nome: [this.paciente.nome],
-      convenio: [this.tipoConvenio.nome],
-      tipoConvenio: [this.convenio.nome],
-      descricao: [this.registroClinico.descricao]
+      data: [this.registroClinico.data],
+      hora: [this.registroClinico.hora],
+      funcionarioId: [this.registroClinico.funcionario],
+      agendamentoId: [this.registroClinico.agendamento],
+      pacienteId: [this.registroClinico.prontuario],
+      descricao: [this.registroClinico.descricao, Validators.required]
     });
-    this.formRegistroClinico.controls.prontuario.disable();
-    this.formRegistroClinico.controls.nome.disable()
-    this.formRegistroClinico.controls.convenio.disable()
-    this.formRegistroClinico.controls.tipoConvenio.disable()
+
   }
 
   buildTable() {
@@ -95,88 +99,62 @@ export class RegistroClinicoRegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.agendamento != null) {
-      this.registroClinico.agendamento = this.agendamento.id
-    }
-    this.registroClinico.descricao = this.formRegistroClinico.get('descricao').value;
-    this.registroClinico.prontuario = this.paciente.prontuario;
-    this.registroClinico.funcionario = user.id;
+
     this.getHours();
     this.getDate();
-    this.registroClinicoService.saveRegistroClinico(this.registroClinico).subscribe(
+    this.formRegistroClinico.controls.agendamentoId.setValue(0);
+    this.formRegistroClinico.controls.pacienteId.setValue(+this.prontuario);
+    this.formRegistroClinico.controls.funcionarioId.setValue(this.user.id);
+    this.formRegistroClinico.controls.descricao.setValue(this.formRegistroClinico.controls.descricao.value.toUpperCase());
+
+
+    this.registroClinicoService.saveRegistroClinico(this.formRegistroClinico.value).subscribe(
       data => {
-        this.router.navigate(['registroclinico']);
+        this.buildMessage('Registro cadastrado com sucesso', 0);
+        this.formRegistroClinico.reset();
       },
       error => {
-        console.log("erro ao salvar dados");
+
       }
     );
 
   }
 
-  getRegistroAnteriores() {
+  /*função que ao digitar, passa todas as letras para maiusculo*/
+  toUpperCase(event: any) {
+    event.target.value = event.target.value.toUpperCase();
+  }
+
+  /* getRegistroAnteriores() {
     this.registroClinicoService.getRegistrosAnteriores(this.pacienteId).subscribe(
       data => {
         this.registrosAnteriores = data;
         this.buildTable();
       },
       error => {
-        console.log("erro ao carregar dados");
+
       }
     )
-  }
-
-  /* getPaciente() {
-    this.pacienteService.getPaciente(this.pacienteId).subscribe(
-      data => {
-        console.log(data);
-        this.isLoading = false;
-        this.paciente = data;
-        this.getTipoConvenios(this.paciente.tipo_convenio);
-
-      },
-      error => {
-        console.log("erro ao carregar dados");
-      }
-    );
   } */
 
-  getAgendamento() {
-    this.agendamentoService.getAgendamentoById(this.agendamentoId).subscribe(
+  getPaciente() {
+    this.pacienteService.getPaciente(this.prontuario).subscribe(
       data => {
+
         this.isLoading = false;
-        this.agendamento = data;
-        //this.getPaciente();
-      },
-      error => {
-        console.log("erro ao carregar dados");
-      }
-    );
-  }
-
-  getTipoConvenios(tipoConvenioId: Number) {
-    this.tipoConvenioService.getById(tipoConvenioId).subscribe(
-      data => {
-        this.tipoConvenio = data;
-        //this.getConvenio(this.tipoConvenio.convenio);
-      },
-      error => {
-        console.log("erro ao carregar dados");
-      }
-    );
-  }
-
-  getConvenio(convenioId: Number) {
-    this.convenioService.getById(convenioId).subscribe(
-      data => {
-        this.convenio = data;
+        this.paciente = data;
         this.createForm();
+
       },
       error => {
-        console.log("erro ao carregar dados");
+
       }
-    )
+    );
   }
+
+
+
+
 
   getHours() {
     const todayDate = new Date();
@@ -198,7 +176,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     } else {
       seconds = todayDate.getSeconds();
     }
-    this.registroClinico.hora = hora + ':' + minutos + ':' + seconds;
+    this.formRegistroClinico.controls.hora.setValue(hora + ':' + minutos + ':' + seconds);
   }
 
   getDate() {
@@ -209,7 +187,28 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     var todayMonth = todayArray[1];
     var todayDay = todayArray[0];
 
-    this.registroClinico.data = todayYear + '-' + todayMonth + '-' + todayDay;
+    this.formRegistroClinico.controls.data.setValue(todayYear + '-' + todayMonth + '-' + todayDay);
+  }
+
+  buildMessage(message: string, type: number) {
+    // configurações da mensagem de confirmação
+    let snackbarConfig: MatSnackBarConfig = {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    };
+
+
+
+
+    if (type === 0) {
+      snackbarConfig.panelClass = 'success-snackbar';
+    } else if (type === 1) {
+      snackbarConfig.panelClass = 'danger-snackbar';
+    } else {
+      snackbarConfig.panelClass = 'warning-snackbar';
+    }
+    this.snackBar.open(message, undefined, snackbarConfig);
   }
 
 }
