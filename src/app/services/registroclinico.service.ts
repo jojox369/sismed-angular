@@ -48,4 +48,17 @@ export class RegistroclinicoService {
       headers: this.httpHeaders,
     });
   }
+
+  getRegistrosPorPaciente(prontuario: number, medicoId: number) {
+    return this.http
+      .get<Registroclinico[]>(
+        `${baseUrl}registroClinico/paciente/${prontuario}/medico/${medicoId}`,
+        { headers: this.httpHeaders }
+      )
+      .pipe(
+        map((data) =>
+          data.map((data) => new Registroclinico().deserializable(data))
+        )
+      );
+  }
 }

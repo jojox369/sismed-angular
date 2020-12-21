@@ -1,0 +1,66 @@
+<div fxLayout="row" fxLayoutAlign="end start">
+  <button mat-dialog-close mat-icon-button title="Fechar">
+    <fa-icon [icon]="faTimes"></fa-icon>
+  </button>
+</div>
+
+<div fxLayout="column" fxLayoutAlign="center center">
+  <h1 mat-dialog-title>{{paciente.prontuario}} - {{paciente.nome}} - Registros Clínicos</h1>
+  <div class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" *ngIf="!isLoading">
+
+
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef>Data</th>
+        <td mat-cell *matCellDef="let element" title="Data do registro">
+          {{element.data | date: 'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="hora">
+        <th mat-header-cell *matHeaderCellDef>Hora</th>
+        <td mat-cell *matCellDef="let element" title="Hora do registro">{{element.hora}}
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef>Descrição</th>
+        <td mat-cell *matCellDef="let element" title="Descrição do registro">
+          {{element.descricao}}</td>
+      </ng-container>
+
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+    </mat-paginator>
+
+    <!--Mensagens para usuario-->
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <!--Mensagem que aparece quando a pesquisa retorna nula-->
+      <span *ngIf="showEmptyMessage" class="message">
+        Nenhum dado encontrado
+      </span>
+
+
+      <span *ngIf="hasError && !isLoading" class="message-danger">
+        Erro ao tentar carregar a lista de dados
+      </span>
+      <div>
+        <!--Spinner que aparece enquando a lista não é carregada-->
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+        <span style="margin-top: 10px;" *ngIf="isLoading">Carregando dados</span>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>

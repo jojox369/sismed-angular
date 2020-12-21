@@ -5,6 +5,9 @@ import { Registroclinico } from 'src/app/models/registroclinico';
 import { RegistroclinicoService } from 'src/app/services/registroclinico.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { RegistroClinicoPacienteListAllComponent } from '../registro-clinico-paciente-list-all/registro-clinico-paciente-list-all.component';
 
 @Component({
   selector: 'app-registro-clinico-list',
@@ -28,9 +31,10 @@ export class RegistroClinicoListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: any;
 
-  displayedColumns: string[] = ['prontuario', 'nome', 'desc', 'data', 'medico'];
+  displayedColumns: string[] = ['prontuario', 'nome', 'registros'];
 
-  constructor(private registroClinicoService: RegistroclinicoService) { }
+
+  constructor(private registroClinicoService: RegistroclinicoService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getRegistros();
@@ -55,7 +59,7 @@ export class RegistroClinicoListComponent implements OnInit {
         this.buildTable();
       },
       error => {
-        console.log("erro ao carregar dados");
+        this.buildMessage('Erro ao carregar os registros', 1);
       }
     );
   }
@@ -120,6 +124,36 @@ export class RegistroClinicoListComponent implements OnInit {
         this.dataSource = this.registrosFilter;
       });
     }
+  }
+
+  openClinicalRegister(prontuario: number, nome: string) {
+    const dialogRef = this.dialog.open(RegistroClinicoPacienteListAllComponent, {
+      height: '500px',
+      width: '9000px',
+      data: { prontuario, nome },
+    });
+  }
+
+  // monta a mensagem que vai ser exibida na pagina
+  buildMessage(message: string, type: number) {
+    // configurações da mensagem de confirmação
+    let snackbarConfig: MatSnackBarConfig = {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    };
+
+
+
+
+    if (type === 0) {
+      snackbarConfig.panelClass = 'success-snackbar';
+    } else if (type === 1) {
+      snackbarConfig.panelClass = 'danger-snackbar';
+    } else {
+      snackbarConfig.panelClass = 'warning-snackbar';
+    }
+    this.snackBar.open(message, undefined, snackbarConfig);
   }
 
 }

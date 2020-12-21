@@ -7,7 +7,7 @@ export class Registroclinico implements Deserializable {
   descricao: string;
   funcionario: number;
   agendamento: number;
-  qtd: number;
+  quantidade: number;
   nome: string;
   prontuario: number;
   funcionarioNome: string;
