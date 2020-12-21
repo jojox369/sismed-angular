@@ -6,11 +6,10 @@ import { Registroclinico } from 'src/app/models/registroclinico';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { AgendaService } from 'src/app/services/agenda.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Paciente, PacientePost } from 'src/app/models/paciente';
+import { Paciente } from 'src/app/models/paciente';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
 import { TipoConvenioService } from 'src/app/services/tipo-convenio.service';
-import { Agenda } from 'src/app/models/agenda';
-import { UserService } from 'src/app/services/user.service';
+
 import { RegistroclinicoService } from 'src/app/services/registroclinico.service';
 import { ConvenioService } from 'src/app/services/convenio.service';
 import { Convenio } from 'src/app/models/convenio';
@@ -19,7 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserLogged } from 'src/app/models/user';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
-var user = JSON.parse(sessionStorage.getItem('user'));
+
 
 @Component({
   selector: 'app-registro-clinico-register',
@@ -58,11 +57,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     private fb: FormBuilder,
     private registroClinicoService: RegistroclinicoService,
     private pacienteService: PacienteService,
-    private agendamentoService: AgendaService,
-    private tipoConvenioService: TipoConvenioService,
-    private convenioService: ConvenioService,
     private route: ActivatedRoute,
-    private router: Router,
     private snackBar: MatSnackBar
   ) { }
 
@@ -72,7 +67,6 @@ export class RegistroClinicoRegisterComponent implements OnInit {
     this.paciente.tipoConvenio = new TipoConvenio();
     this.paciente.tipoConvenio.convenio = new Convenio();
     this.getPaciente();
-
   }
 
 
@@ -102,7 +96,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
 
     this.getHours();
     this.getDate();
-    this.formRegistroClinico.controls.agendamentoId.setValue(0);
+    this.formRegistroClinico.controls.agendamentoId.setValue(null);
     this.formRegistroClinico.controls.pacienteId.setValue(+this.prontuario);
     this.formRegistroClinico.controls.funcionarioId.setValue(this.user.id);
     this.formRegistroClinico.controls.descricao.setValue(this.formRegistroClinico.controls.descricao.value.toUpperCase());
@@ -147,7 +141,7 @@ export class RegistroClinicoRegisterComponent implements OnInit {
 
       },
       error => {
-
+        this.buildMessage('Erro ao tentar recuperar as informações do paciente', 1);
       }
     );
   }
@@ -189,6 +183,8 @@ export class RegistroClinicoRegisterComponent implements OnInit {
 
     this.formRegistroClinico.controls.data.setValue(todayYear + '-' + todayMonth + '-' + todayDay);
   }
+
+
 
   buildMessage(message: string, type: number) {
     // configurações da mensagem de confirmação

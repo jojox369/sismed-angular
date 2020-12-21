@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from './user.service';
-import { Registroclinico } from '../models/registroclinico';
+import { Registroclinico, RegistroclinicoDetails } from '../models/registroclinico';
 import baseUrl from '../url';
 
 @Injectable({
@@ -30,6 +30,13 @@ export class RegistroclinicoService {
       );
   }
 
+  getRegistro(registroId: number): Observable<RegistroclinicoDetails> {
+    return this.http.get<RegistroclinicoDetails>(`${baseUrl}registroClinico/${registroId}/`, {
+      headers: this.httpHeaders,
+    })
+      .pipe(map((data) => new RegistroclinicoDetails().deserializable(data)));
+  }
+
   getRegistrosAnteriores(pacienteId: number): Observable<Registroclinico[]> {
     return this.http
       .get<Registroclinico[]>(
@@ -44,8 +51,14 @@ export class RegistroclinicoService {
   }
 
   saveRegistroClinico(registroClinico: Registroclinico) {
-    console.log(registroClinico)
+
     return this.http.post(`${baseUrl}registroClinico/`, registroClinico, {
+      headers: this.httpHeaders,
+    });
+  }
+
+  atualizarRegistroClinico(registroClinico: Registroclinico) {
+    return this.http.put(`${baseUrl}registroClinico/`, registroClinico, {
       headers: this.httpHeaders,
     });
   }
@@ -100,6 +113,12 @@ export class RegistroclinicoService {
           data.map((data) => new Registroclinico().deserializable(data))
         )
       );
+  }
+
+  delete(id) {
+    return this.http.delete(`${baseUrl}registroClinico/${id}`, {
+      headers: this.httpHeaders,
+    });
   }
 
 }

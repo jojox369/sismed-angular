@@ -20,7 +20,11 @@
 
       <ng-container matColumnDef="hora">
         <th mat-header-cell *matHeaderCellDef>Hora</th>
-        <td mat-cell *matCellDef="let element" title="Hora do registro">{{element.hora}}
+        <td mat-cell *matCellDef="let element" title="Hora do registro">
+          <a *ngIf="CompareDates(element.data)" mat-dialog-close
+            [routerLink]="['/registroclinico/detalhes', element.id]"
+            title="Clique para editar o registro clínico">{{element.hora}}</a>
+          <label *ngIf="!CompareDates(element.data)">{{element.hora}}</label>
         </td>
       </ng-container>
 

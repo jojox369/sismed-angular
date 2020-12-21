@@ -36,6 +36,7 @@ import { BackupRestoreComponent } from './components/backup-restore/backup-resto
 import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { AccessDeniedComponent } from './components/shared/access-denied/access-denied.component';
 import { ErrorPageComponent } from './components/shared/error-page/error-page.component';
+import { RegistroClinicoDetailsComponent } from './components/registro-clinico/registro-clinico-details/registro-clinico-details.component';
 
 const routes: Routes = [
   // Abre a pagina de listagem de convenio
@@ -142,6 +143,11 @@ const routes: Routes = [
   {
     path: 'registroclinico/:prontuario',
     component: RegistroClinicoRegisterComponent,
+  },
+
+  {
+    path: 'registroclinico/detalhes/:id',
+    component: RegistroClinicoDetailsComponent,
   },
 
   // abre a pagina inicial

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Convenio } from 'src/app/models/convenio';
 import { ConvenioService } from 'src/app/services/convenio.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import {
   faTimes,
   faCheck,
@@ -13,7 +13,6 @@ import {
   faList,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { DadosBancarios } from 'src/app/models/dados-bancarios';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 
@@ -23,37 +22,37 @@ import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.
   styleUrls: ['./convenio-details.component.css'],
 })
 export class ConvenioDetailsComponent implements OnInit {
-  // Icone de exluir
+
   faTimes = faTimes;
 
-  // Icone de salvar
+
   faCheck = faCheck;
 
-  // Icone de voltar
+
   faChevronLeft = faChevronLeft;
 
-  // Icone de editar
+
   faPencilAlt = faPencilAlt;
 
-  // Icone de cancelar edição
+
   faBan = faBan;
 
-  // Icone de adicionar
+
   faPlus = faPlus;
 
-  // Icone de listar
+
   faList = faList;
 
-  // recece os dados da api
+
   convenio: Convenio
 
-  /*Recupera o id do convenio para realizar a requisição a API */
+
   convenioId = this.route.snapshot.paramMap.get('convenioId');
 
-  // Controla os campos do formulario
+
   formConvenio: FormGroup;
 
-  // Controla a edição do formulário
+
   isEditing = false;
 
 
@@ -72,7 +71,7 @@ export class ConvenioDetailsComponent implements OnInit {
     this.loadConvenio();
   }
 
-  // Metodo que recupera os dados do convenio
+
   loadConvenio() {
     this.convenioService.getById(this.convenioId).subscribe(
       (data) => {
@@ -112,7 +111,7 @@ export class ConvenioDetailsComponent implements OnInit {
 
   }
 
-  // Faz a requisição ao back-end para que o convenio seja atualizado
+
   update(form: FormGroup) {
     this.formConvenio.value.nome = this.formConvenio.value.nome.toUpperCase();
     this.convenioService.update(this.formConvenio.value).subscribe(
@@ -158,16 +157,16 @@ export class ConvenioDetailsComponent implements OnInit {
     this.isEditing = true;
   }
 
-  // função para bloquear os campos de edição
+
   cancelEditing() {
 
     this.isEditing = false;
     this.loadConvenio();
   }
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
+
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
@@ -190,12 +189,12 @@ export class ConvenioDetailsComponent implements OnInit {
     this.snackBar.open(message, undefined, snackbarConfig);
   }
 
-  // Varificação de caractere
+
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (event.charCode == 32 ||
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
-      (event.charCode > 191 && event.charCode <= 255) // letras com acentos
+      (event.charCode > 191 && event.charCode <= 255)
     ) {
       return true;
     } else {

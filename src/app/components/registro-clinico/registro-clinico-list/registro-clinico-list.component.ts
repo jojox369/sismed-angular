@@ -53,6 +53,7 @@ export class RegistroClinicoListComponent implements OnInit {
   constructor(private registroClinicoService: RegistroclinicoService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.verifyMessage();
     this.getRegistros();
   }
 
@@ -183,6 +184,15 @@ export class RegistroClinicoListComponent implements OnInit {
       width: '9000px',
       data: { prontuario, nome },
     });
+  }
+
+  verifyMessage() {
+    if (this.registroClinicoService.message !== undefined) {
+      this.buildMessage(this.registroClinicoService.message, 0);
+      setTimeout(() => {
+        this.registroClinicoService.message = undefined;
+      }, 5000);
+    }
   }
 
   // monta a mensagem que vai ser exibida na pagina

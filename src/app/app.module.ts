@@ -93,6 +93,7 @@ import { ErrorPageComponent } from './components/shared/error-page/error-page.co
 import { RgPipe } from './pipes/rg.pipe';
 import { ChangePasswordComponent } from './components/funcionario/change-password/change-password.component';
 import { RegistroClinicoPacienteListAllComponent } from './components/registro-clinico/registro-clinico-paciente-list-all/registro-clinico-paciente-list-all.component';
+import { RegistroClinicoDetailsComponent } from './components/registro-clinico/registro-clinico-details/registro-clinico-details.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -155,7 +156,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ErrorPageComponent,
     RgPipe,
     ChangePasswordComponent,
-    RegistroClinicoPacienteListAllComponent
+    RegistroClinicoPacienteListAllComponent,
+    RegistroClinicoDetailsComponent
   ],
   entryComponents: [DeleteDialogComponent],
   imports: [
