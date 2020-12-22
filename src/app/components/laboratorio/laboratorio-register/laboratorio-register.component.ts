@@ -47,7 +47,7 @@ export class LaboratorioRegisterComponent implements OnInit {
       nome: [this.laboratorio.nome, Validators.required],
       cnpj: [this.laboratorio.cnpj, Validators.required],
       responsavel: [this.laboratorio.responsavel, Validators.required],
-      telefone_fixo: [this.laboratorio.telefone_fixo, Validators.required],
+      telefoneFixo: [this.laboratorio.telefoneFixo, Validators.required],
       email: [this.laboratorio.email],
       endereco: this.fb.group({
         cep: [this.laboratorio.endereco.cep, Validators.required],

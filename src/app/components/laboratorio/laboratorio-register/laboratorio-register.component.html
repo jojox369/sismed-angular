@@ -3,19 +3,11 @@
     <div>
       <span> <strong>Cadastro | </strong> Laboratório </span>
 
-      <button
-        mat-stroked-button
-        class="btn-success float-right"
-        [disabled]="frm.invalid"
-      >
+      <button mat-stroked-button class="btn-success float-right" [disabled]="frm.invalid">
         <fa-icon [icon]="faCheck"></fa-icon> Salvar
       </button>
-      <a
-        mat-stroked-button
-        [routerLink]="['/convenios']"
-        title="Listar os convenios"
-        class="btn-sismed btn-spacer float-right"
-      >
+      <a mat-stroked-button [routerLink]="['/convenios']" title="Listar os convenios"
+        class="btn-sismed btn-spacer float-right">
         <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
       </a>
     </div>
@@ -29,69 +21,36 @@
         <!--Nome Input-->
         <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input
-            matInput
-            placeholder="Ex: SERGIO FRANCO"
-            (keyup)="toUpperCase($event)"
-            formControlName="nome"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: SERGIO FRANCO" (keyup)="toUpperCase($event)" formControlName="nome"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--CNPJ Input-->
         <mat-form-field appearance="fill">
           <mat-label>CNPJ</mat-label>
-          <input
-            matInput
-            placeholder="Ex. 29.309.127/0001-79"
-            mask="00.000.000/0000-00"
-            formControlName="cnpj"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex. 29.309.127/0001-79" mask="00.000.000/0000-00" formControlName="cnpj"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Responsavel Input-->
         <mat-form-field appearance="fill">
           <mat-label>Responsável</mat-label>
-          <input
-            matInput
-            placeholder="Ex: SERGIO FRANCO"
-            (keyup)="toUpperCase($event)"
-            formControlName="responsavel"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: SERGIO FRANCO" (keyup)="toUpperCase($event)" formControlName="responsavel"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Telefone Fixo input-->
         <mat-form-field appearance="fill">
           <mat-label>Telefone Fixo</mat-label>
-          <input
-            matInput
-            formControlName="telefone_fixo"
-            autocomplete="off"
-            placeholder="Ex: (21) 2548-3020"
-            mask="(00) 0000-0000"
-            required
-          />
+          <input matInput formControlName="telefoneFixo" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" required />
         </mat-form-field>
 
         <!--Email Input-->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            placeholder="Ex: SERGIO FRANCO"
-            formControlName="email"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput type="email" placeholder="Ex: SERGIO FRANCO" formControlName="email" autocomplete="off"
+            maxlength="45" />
         </mat-form-field>
       </div>
 
@@ -99,85 +58,43 @@
         <!--CEP Input-->
         <mat-form-field appearance="fill">
           <mat-label>CEP</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="cep"
-            mask="00000-000"
-            autocomplete="off"
-            maxlength="9"
-            required
-            (focusout)="getEndereco()"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="cep" mask="00000-000" autocomplete="off"
+            maxlength="9" required (focusout)="getEndereco()" />
         </mat-form-field>
 
         <!--Logradouro Input-->
         <mat-form-field appearance="fill">
           <mat-label>Logradouro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: AV. FRANKLIN ROOSEVELT"
-            (keyup)="toUpperCase($event)"
-            formControlName="logradouro"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: AV. FRANKLIN ROOSEVELT" (keyup)="toUpperCase($event)"
+            formControlName="logradouro" autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Numero Input-->
         <mat-form-field appearance="fill">
           <mat-label>Numero</mat-label>
-          <input
-            matInput
-            #numberInput
-            placeholder="Ex: 166"
-            formControlName="numero"
-            autocomplete="off"
-            maxlength="6"
-            required
-          />
+          <input matInput #numberInput placeholder="Ex: 166" formControlName="numero" autocomplete="off" maxlength="6"
+            required />
         </mat-form-field>
 
         <!--Complemento Input-->
         <mat-form-field appearance="fill">
           <mat-label>Complemento</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="complemento"
-            (keyup)="toUpperCase($event)"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="complemento" (keyup)="toUpperCase($event)"
+            autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <!--Bairro Input-->
         <mat-form-field appearance="fill">
           <mat-label>Bairro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="bairro"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="bairro"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Cidade Input-->
         <mat-form-field appearance="fill">
           <mat-label>Cidade</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="cidade"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="cidade"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!-- Estado select -->

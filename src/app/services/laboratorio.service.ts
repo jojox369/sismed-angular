@@ -15,12 +15,12 @@ export class LaboratorioService {
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   // Retorna uma lista com todos os laboratorios
   getAll(): Observable<Laboratorio[]> {
     return this.http
-      .get<Laboratorio[]>(baseUrl + 'laboratorios/', {
+      .get<Laboratorio[]>(baseUrl + 'laboratorio/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -33,7 +33,7 @@ export class LaboratorioService {
   // retorna uma lista de laboratorio filtradas pelo nome
   getByName(name: string): Observable<Laboratorio[]> {
     return this.http
-      .get<Laboratorio[]>(baseUrl + 'laboratorios/name/' + name + '/', {
+      .get<Laboratorio[]>(baseUrl + 'laboratorio/nome/' + name + '/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -46,7 +46,7 @@ export class LaboratorioService {
   // retorna uma lista de laboratorio filtradas pelo telefone
   getByPhone(phone: string): Observable<Laboratorio[]> {
     return this.http
-      .get<Laboratorio[]>(baseUrl + 'laboratorios/telefone/' + phone + '/', {
+      .get<Laboratorio[]>(baseUrl + 'laboratorio/telefone/' + phone + '/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -59,7 +59,7 @@ export class LaboratorioService {
   // retorna uma lista de laboratorio filtradas pelo bairro
   getByBairro(bairro: string): Observable<Laboratorio[]> {
     return this.http
-      .get<Laboratorio[]>(baseUrl + 'laboratorios/bairro/' + bairro + '/', {
+      .get<Laboratorio[]>(baseUrl + 'laboratorio/bairro/' + bairro + '/', {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -73,7 +73,7 @@ export class LaboratorioService {
   getByTipoConvenio(tipoConvenioId: number): Observable<Laboratorio[]> {
     return this.http
       .get<Laboratorio[]>(
-        baseUrl + 'laboratorios/tipoConvenio/' + tipoConvenioId + '/',
+        baseUrl + 'laboratorio/tipoConvenio/' + tipoConvenioId + '/',
         { headers: this.httpHeaders }
       )
       .pipe(
@@ -85,7 +85,7 @@ export class LaboratorioService {
 
   // Salva o laboratorio
   save(laboratorio: Laboratorio): Observable<any> {
-    return this.http.post(baseUrl + 'laboratorios/', laboratorio, {
+    return this.http.post(baseUrl + 'laboratorio/', laboratorio, {
       headers: this.httpHeaders,
     });
   }
@@ -93,14 +93,14 @@ export class LaboratorioService {
   // Atualiza o laboratorio
   update(laboratorio: Laboratorio): Observable<any> {
     return this.http.put(
-      baseUrl + 'laboratorios/' + laboratorio.id + '/',
+      baseUrl + 'laboratorio/' + laboratorio.id + '/',
       laboratorio,
       { headers: this.httpHeaders }
     );
   }
 
   delete(laboratorioId): Observable<any> {
-    return this.http.delete(baseUrl + 'laboratorios/' + laboratorioId + '/', {
+    return this.http.delete(baseUrl + 'laboratorio/' + laboratorioId + '/', {
       headers: this.httpHeaders,
     });
   }
@@ -108,7 +108,7 @@ export class LaboratorioService {
   // recupera um laboratorio pelo id
   getById(id): Observable<Laboratorio> {
     return this.http
-      .get<Laboratorio>(baseUrl + 'laboratorios/' + id + '/', {
+      .get<Laboratorio>(baseUrl + 'laboratorio/' + id + '/', {
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new Laboratorio().deserializable(data)));

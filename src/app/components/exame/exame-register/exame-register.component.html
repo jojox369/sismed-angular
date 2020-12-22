@@ -96,8 +96,8 @@
         <mat-form-field appearance="fill">
           <mat-label>Telefone</mat-label>
           <input [value]="
-              laboratorio.telefone_fixo !== undefined
-                ? (laboratorio.telefone_fixo | telefone)
+              laboratorio.telefoneFixo !== undefined
+                ? (laboratorio.telefoneFixo | telefone)
                 : ''
             " matInput disabled />
         </mat-form-field>
@@ -112,9 +112,9 @@
           <mat-select formControlName="tipoConvenio" required>
             <mat-option *ngFor="let tipo of laboratorioTipos" [value]="tipo.id">
               {{
-                tipo.id === 1
-                  ? tipo.nome
-                  : tipo.convenio.nome + " - " + tipo.nome
+              tipo.id === 1
+              ? tipo.nome
+              : tipo.convenio.nome + " - " + tipo.nome
               }}
             </mat-option>
           </mat-select>

@@ -1,62 +1,29 @@
-<form
-  [formGroup]="formLaboratorio"
-  #frm="ngForm"
-  (ngSubmit)="update(frm)"
-  *ngIf="formLaboratorio"
->
+<form [formGroup]="formLaboratorio" #frm="ngForm" (ngSubmit)="update(frm)" *ngIf="formLaboratorio">
   <mat-card-title class="mat-card-title">
     <div>
       <span> <strong>Edição | </strong> Laboratório </span>
-      <button
-        type="submit"
-        mat-stroked-button
-        class="btn-success float-right"
-        title="Atualizar laboratório"
-        [disabled]="frm.invalid"
-        *ngIf="isEditing"
-      >
+      <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar laboratório"
+        [disabled]="frm.invalid" *ngIf="isEditing">
         <fa-icon [icon]="faCheck"></fa-icon> Salvar
       </button>
 
-      <button
-        type="button"
-        mat-stroked-button
-        class="btn-danger btn-spacer float-right"
-        title="Cancelar edição"
-        *ngIf="isEditing"
-        (click)="cancelEditing()"
-      >
+      <button type="button" mat-stroked-button class="btn-danger btn-spacer float-right" title="Cancelar edição"
+        *ngIf="isEditing" (click)="cancelEditing()">
         <fa-icon [icon]="faBan"></fa-icon> Cancelar
       </button>
 
-      <button
-        type="button"
-        mat-stroked-button
-        class="btn-success float-right"
-        title="Editar funcionario"
-        *ngIf="!isEditing"
-        (click)="unblockFields()"
-      >
+      <button type="button" mat-stroked-button class="btn-success float-right" title="Editar funcionario"
+        *ngIf="!isEditing" (click)="unblockFields()">
         <fa-icon [icon]="faPencilAlt"></fa-icon> Editar
       </button>
 
-      <button
-        type="button"
-        mat-stroked-button
-        class="btn-danger btn-spacer float-right"
-        title="Excluir laboratório"
-        (click)="delete()"
-        *ngIf="!isEditing"
-      >
+      <button type="button" mat-stroked-button class="btn-danger btn-spacer float-right" title="Excluir laboratório"
+        (click)="delete()" *ngIf="!isEditing">
         <fa-icon [icon]="faTimes"></fa-icon> Excluir
       </button>
 
-      <a
-        mat-stroked-button
-        [routerLink]="['/laboratorios']"
-        title="Listar os laboratórios"
-        class="btn-sismed btn-spacer float-right"
-      >
+      <a mat-stroked-button [routerLink]="['/laboratorios']" title="Listar os laboratórios"
+        class="btn-sismed btn-spacer float-right">
         <fa-icon [icon]="faChevronLeft"></fa-icon> Voltar
       </a>
     </div>
@@ -70,69 +37,36 @@
         <!--Nome Input-->
         <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input
-            matInput
-            placeholder="Ex: SERGIO FRANCO"
-            (keyup)="toUpperCase($event)"
-            formControlName="nome"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: SERGIO FRANCO" (keyup)="toUpperCase($event)" formControlName="nome"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--CNPJ Input-->
         <mat-form-field appearance="fill">
           <mat-label>CNPJ</mat-label>
-          <input
-            matInput
-            placeholder="Ex. 29.309.127/0001-79"
-            mask="00.000.000/0000-00"
-            formControlName="cnpj"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex. 29.309.127/0001-79" mask="00.000.000/0000-00" formControlName="cnpj"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Responsavel Input-->
         <mat-form-field appearance="fill">
           <mat-label>Responsável</mat-label>
-          <input
-            matInput
-            placeholder="Ex: SERGIO FRANCO"
-            (keyup)="toUpperCase($event)"
-            formControlName="responsavel"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: SERGIO FRANCO" (keyup)="toUpperCase($event)" formControlName="responsavel"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Telefone Fixo input-->
         <mat-form-field appearance="fill">
           <mat-label>Telefone Fixo</mat-label>
-          <input
-            matInput
-            formControlName="telefone_fixo"
-            autocomplete="off"
-            placeholder="Ex: (21) 2548-3020"
-            mask="(00) 0000-0000"
-            required
-          />
+          <input matInput formControlName="telefoneFixo" autocomplete="off" placeholder="Ex: (21) 2548-3020"
+            mask="(00) 0000-0000" required />
         </mat-form-field>
 
         <!--Email Input-->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            placeholder="Ex: SERGIO FRANCO"
-            formControlName="email"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput type="email" placeholder="Ex: SERGIO FRANCO" formControlName="email" autocomplete="off"
+            maxlength="45" />
         </mat-form-field>
       </div>
 
@@ -140,85 +74,43 @@
         <!--CEP Input-->
         <mat-form-field appearance="fill">
           <mat-label>CEP</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="cep"
-            mask="00000-000"
-            autocomplete="off"
-            maxlength="9"
-            required
-            (focusout)="getEndereco()"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="cep" mask="00000-000" autocomplete="off"
+            maxlength="9" required (focusout)="getEndereco()" />
         </mat-form-field>
 
         <!--Logradouro Input-->
         <mat-form-field appearance="fill">
           <mat-label>Logradouro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: AV. FRANKLIN ROOSEVELT"
-            (keyup)="toUpperCase($event)"
-            formControlName="logradouro"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: AV. FRANKLIN ROOSEVELT" (keyup)="toUpperCase($event)"
+            formControlName="logradouro" autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Numero Input-->
         <mat-form-field appearance="fill">
           <mat-label>Numero</mat-label>
-          <input
-            matInput
-            #numberInput
-            placeholder="Ex: 166"
-            formControlName="numero"
-            autocomplete="off"
-            maxlength="6"
-            required
-          />
+          <input matInput #numberInput placeholder="Ex: 166" formControlName="numero" autocomplete="off" maxlength="6"
+            required />
         </mat-form-field>
 
         <!--Complemento Input-->
         <mat-form-field appearance="fill">
           <mat-label>Complemento</mat-label>
-          <input
-            matInput
-            placeholder="Ex: 20021-120"
-            formControlName="complemento"
-            (keyup)="toUpperCase($event)"
-            autocomplete="off"
-            maxlength="45"
-          />
+          <input matInput placeholder="Ex: 20021-120" formControlName="complemento" (keyup)="toUpperCase($event)"
+            autocomplete="off" maxlength="45" />
         </mat-form-field>
 
         <!--Bairro Input-->
         <mat-form-field appearance="fill">
           <mat-label>Bairro</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="bairro"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="bairro"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!--Cidade Input-->
         <mat-form-field appearance="fill">
           <mat-label>Cidade</mat-label>
-          <input
-            matInput
-            placeholder="Ex: RIO DE JANEIRO"
-            (keyup)="toUpperCase($event)"
-            formControlName="cidade"
-            autocomplete="off"
-            maxlength="45"
-            required
-          />
+          <input matInput placeholder="Ex: RIO DE JANEIRO" (keyup)="toUpperCase($event)" formControlName="cidade"
+            autocomplete="off" maxlength="45" required />
         </mat-form-field>
 
         <!-- Estado select -->
@@ -258,28 +150,15 @@
       <!-- Column 3 -->
       <div class="form">
         <h5 fxLayoutAlign="center start">Convênios Aceitos</h5>
-        <div
-          fxLayoutAlign="center start"
-          *ngFor="let convenio of convenios"
-          style="margin: 5px"
-        >
+        <div fxLayoutAlign="center start" *ngFor="let convenio of convenios" style="margin: 5px">
           <span> {{ convenio.nome }}</span>
         </div>
         <div fxLayoutAlign="center start" class="convenioButtons">
-          <a
-            mat-stroked-button
-            class="btn-success btn-spacer"
-            title="Cadastrar Convênio"
-            (click)="tipoConvenioRegister()"
-          >
+          <a mat-stroked-button class="btn-success btn-spacer" title="Cadastrar Convênio"
+            (click)="tipoConvenioRegister()">
             <fa-icon [icon]="faPlus"></fa-icon> Cadastrar
           </a>
-          <a
-            mat-stroked-button
-            class="btn-danger btn-spacer"
-            title="Excluir Convênio"
-            (click)="tipoConvenioDelete()"
-          >
+          <a mat-stroked-button class="btn-danger btn-spacer" title="Excluir Convênio" (click)="tipoConvenioDelete()">
             <fa-icon [icon]="faTimes"></fa-icon> Excluir
           </a>
         </div>
