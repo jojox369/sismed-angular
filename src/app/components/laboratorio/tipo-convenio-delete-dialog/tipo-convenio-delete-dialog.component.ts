@@ -47,6 +47,8 @@ export class TipoConvenioDeleteDialogComponent implements OnInit {
 
   showSelect: boolean = true;
 
+  responseError = true;
+
   tablesSelectedNames = [];
 
   constructor(
@@ -54,7 +56,7 @@ export class TipoConvenioDeleteDialogComponent implements OnInit {
     private laboratorioTipoConvenioService: LaboratorioTipoConvenioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getConvenios();
@@ -124,37 +126,22 @@ export class TipoConvenioDeleteDialogComponent implements OnInit {
         return tipo.selected;
       })
       .map((tipo) => {
-        return { id: tipo.id, nome: tipo.nome, hasError: false };
+        return { tipoConvenioId: tipo.id, laboratorioId: parseInt(this.laboratorioId) };
       });
 
-    let count = 0;
+    this.laboratorioTipoConvenioService.delete(tiposSelected).subscribe(
+      (data) => {
+        this.awaitResponse = false;
+        this.showNewOperationButton = true;
+        this.responseError = false;
+      },
+      (error) => {
+        this.responseError = true;
+        this.showNewOperationButton = true;
+      }
+    );
 
-    for (const tipo of tiposSelected) {
-      this.tablesSelectedNames.push(tipo);
-      this.laboratorioTipoConvenioService
-        .getLabTaconvenioDetails(this.laboratorioId, tipo.id)
-        .subscribe(
-          (data) => {
-            const id = data[0].id;
-            this.laboratorioTipoConvenioService.delete(id).subscribe(
-              (data) => {
-                count++;
-                this.awaitResponse = false;
-                if (count === tiposSelected.length) {
-                  this.showNewOperationButton = true;
-                }
-              },
-              (error) => {
-                tipo.hasError = true;
-                this.showNewOperationButton = true;
-              }
-            );
-          },
-          (error) => {
-            this.buildMessage('Erro ao tentar excluir os planos', 1);
-          }
-        );
-    }
+
   }
 
   newOperation() {

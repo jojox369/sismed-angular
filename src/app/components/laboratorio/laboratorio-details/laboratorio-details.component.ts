@@ -107,6 +107,7 @@ export class LaboratorioDetailsComponent implements OnInit {
       telefoneFixo: [this.laboratorio.telefoneFixo, Validators.required],
       email: [this.laboratorio.email],
       endereco: this.fb.group({
+        id: [this.laboratorio.endereco.id],
         cep: [this.laboratorio.endereco.cep, Validators.required],
         logradouro: [this.laboratorio.endereco.logradouro, Validators.required],
         numero: [this.laboratorio.endereco.numero, Validators.required],
@@ -195,37 +196,15 @@ export class LaboratorioDetailsComponent implements OnInit {
   }
 
   update(frm: FormGroup) {
-    this.formLaboratorio.controls.nome.setValue(
-      this.formLaboratorio.controls.nome.value.toUpperCase()
-    );
-    this.formLaboratorio.controls.responsavel.setValue(
-      this.formLaboratorio.controls.responsavel.value.toUpperCase()
-    );
-    this.formLaboratorio
-      .get('endereco.logradouro')
-      .setValue(
-        this.formLaboratorio.get('endereco.logradouro').value.toUpperCase()
-      );
-    this.formLaboratorio
-      .get('endereco.bairro')
-      .setValue(
-        this.formLaboratorio.get('endereco.bairro').value.toUpperCase()
-      );
-    this.formLaboratorio
-      .get('endereco.cidade')
-      .setValue(
-        this.formLaboratorio.get('endereco.cidade').value.toUpperCase()
-      );
-    this.formLaboratorio
-      .get('endereco.estado')
-      .setValue(
-        this.formLaboratorio.get('endereco.estado').value.toUpperCase()
-      );
-    this.formLaboratorio
-      .get('endereco.complemento')
-      .setValue(
-        this.formLaboratorio.get('endereco.complemento').value.toUpperCase()
-      );
+    this.formLaboratorio.controls.nome.setValue(this.formLaboratorio.controls.nome.value.toUpperCase());
+    this.formLaboratorio.controls.email.setValue(this.formLaboratorio.controls.email.value.toUpperCase());
+    this.formLaboratorio.controls.responsavel.setValue(this.formLaboratorio.controls.responsavel.value.toUpperCase());
+    this.formLaboratorio.get('endereco.logradouro').setValue(this.formLaboratorio.get('endereco.logradouro').value.toUpperCase());
+    this.formLaboratorio.get('endereco.bairro').setValue(this.formLaboratorio.get('endereco.bairro').value.toUpperCase());
+    this.formLaboratorio.get('endereco.cidade').setValue(this.formLaboratorio.get('endereco.cidade').value.toUpperCase());
+    this.formLaboratorio.get('endereco.estado').setValue(this.formLaboratorio.get('endereco.estado').value.toUpperCase());
+    this.formLaboratorio.get('endereco.complemento').setValue(this.formLaboratorio.get('endereco.complemento').value.toUpperCase());
+
     this.laboratorioService.update(this.formLaboratorio.value).subscribe(
       (data) => {
         this.buildMessage('Dados atualizados com sucesso', 0);

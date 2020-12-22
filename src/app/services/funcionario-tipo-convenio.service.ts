@@ -68,7 +68,6 @@ export class FuncionarioTipoConvenioService {
       headers: this.httpHeaders,
       body: funcionarioTipo,
     };
-    console.log(funcionarioTipo)
     return this.http.delete(
       baseUrl + 'funcionarioTConvenio/', options
     );

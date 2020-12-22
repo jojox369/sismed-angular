@@ -47,6 +47,8 @@ export class TipoConvenioRegisterDialogComponent implements OnInit {
 
   showSelect: boolean = true;
 
+  responseError = true;
+
   tablesSelectedNames = [];
 
   constructor(
@@ -54,7 +56,7 @@ export class TipoConvenioRegisterDialogComponent implements OnInit {
     private laboratorioTipoConvenioService: LaboratorioTipoConvenioService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getConvenios();
@@ -125,33 +127,24 @@ export class TipoConvenioRegisterDialogComponent implements OnInit {
         return tipo.selected;
       })
       .map((tipo) => {
-        return { id: tipo.id, nome: tipo.nome, hasError: false };
+        return { tipoConvenioId: tipo.id, laboratorioId: parseInt(this.laboratorioId) };
       });
 
-    const laboratorioTipos = {
-      laboratorio: this.laboratorioId,
-      tipo_convenio: '',
-    };
 
-    let count = 0;
 
-    for (const tipo of tiposSelected) {
-      this.tablesSelectedNames.push(tipo);
-      laboratorioTipos.tipo_convenio = tipo.id;
-      this.laboratorioTipoConvenioService.save(laboratorioTipos).subscribe(
-        (data) => {
-          count++;
-          this.awaitResponse = false;
-          if (count === tiposSelected.length) {
-            this.showNewOperationButton = true;
-          }
-        },
-        (error) => {
-          tipo.hasError = true;
-          this.showNewOperationButton = true;
-        }
-      );
-    }
+    this.laboratorioTipoConvenioService.save(tiposSelected).subscribe(
+      (data) => {
+        this.awaitResponse = false;
+        this.showNewOperationButton = true;
+        this.responseError = false;
+      },
+      (error) => {
+        this.responseError = true;
+        this.showNewOperationButton = true;
+      }
+    );
+
+
   }
 
   newOperation() {

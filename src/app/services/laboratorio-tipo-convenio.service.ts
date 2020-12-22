@@ -18,13 +18,13 @@ export class LaboratorioTipoConvenioService {
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
-  // lista os convenios aceitos pelo laboratorio
+
   getAcceptedConvenios(laboratorioId: string): Observable<Convenio[]> {
     return this.http
       .get<Convenio[]>(
-        baseUrl + 'conveniosAccepted/laboratorio/' + laboratorioId + '/',
+        `${baseUrl}laboratorioTconvenio/conveniosAceitos/${laboratorioId}/`,
         { headers: this.httpHeaders }
       )
       .pipe(
@@ -32,7 +32,7 @@ export class LaboratorioTipoConvenioService {
       );
   }
 
-  // lista os convenios aceitos pelo laboratorio
+
   getAcceptedConveniosTipos(
     laboratorioId: string
   ): Observable<TipoConvenioPaciente[]> {
@@ -48,11 +48,11 @@ export class LaboratorioTipoConvenioService {
       );
   }
 
-  // lista os convenios aceitos pelo laboratorio
+
   getUnAcceptedConvenios(laboratorioId: string): Observable<Convenio[]> {
     return this.http
       .get<Convenio[]>(
-        baseUrl + 'conveniosUnaccepted/laboratorio/' + laboratorioId + '/',
+        `${baseUrl}laboratorioTconvenio/conveniosNaoAceitos/${laboratorioId}/`,
         { headers: this.httpHeaders }
       )
       .pipe(
@@ -60,47 +60,39 @@ export class LaboratorioTipoConvenioService {
       );
   }
 
-  // lista de tipos convenios aceitos pelo laboratorio
+
   getTiposAccepted(laboratorioId, convenioId): Observable<any> {
     return this.http.get(
-      baseUrl + 'tipos/laboratorio/' + laboratorioId + '/' + convenioId + '/',
+      `${baseUrl}laboratorioTconvenio/${laboratorioId}/${convenioId}/`,
+
       { headers: this.httpHeaders }
     );
   }
 
-  // lista de tipos não aceitos pelo laboratorio
+
   getTiposUnAccepted(laboratorioId, convenioId): Observable<any> {
     return this.http.get(
-      baseUrl +
-        'tiposUnAccepted/' +
-        convenioId +
-        '/laboratorio/' +
-        laboratorioId +
-        '/',
+      `${baseUrl}laboratorioTconvenio/${laboratorioId}/tiposNaoAceitos/${convenioId}/`,
       { headers: this.httpHeaders }
     );
   }
 
-  // salva os tipos de convenios
+
   save(laboratorioTipo): Observable<any> {
-    return this.http.post(baseUrl + 'laboratorioTipos/', laboratorioTipo, {
+    return this.http.post(baseUrl + 'laboratorioTconvenio/', laboratorioTipo, {
       headers: this.httpHeaders,
     });
   }
 
-  // pega as informações da relação entre laboratorio e o tipo de convenio
-  getLabTaconvenioDetails(laboratorioId, tipoId): Observable<any> {
-    return this.http.get(
-      baseUrl + 'laboratorioTipo/' + laboratorioId + '/' + tipoId + '/',
-      { headers: this.httpHeaders }
-    );
-  }
 
-  // exclui a relação do laboratorio com o tipo selecionado
-  delete(labTaconvenioId): Observable<any> {
+  delete(laboratorioTipo): Observable<any> {
+    const options = {
+      headers: this.httpHeaders,
+      body: laboratorioTipo,
+    };
     return this.http.delete(
-      baseUrl + 'laboratorioTipos/' + labTaconvenioId + '/',
-      { headers: this.httpHeaders }
+      baseUrl + 'laboratorioTconvenio/',
+      options
     );
   }
 }
