@@ -11,14 +11,13 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class FuncionarioService {
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   token = this.userService.token;
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-
 
   // Função que retorna uma lista com todos os funcionarios
   getAllFuncionarios(): Observable<Funcionario[]> {
@@ -57,11 +56,9 @@ export class FuncionarioService {
 
   // Função que atualiza um funcionario
   updateFuncionario(funcionario): Observable<any> {
-    return this.http.put(
-      baseUrl + 'funcionario/',
-      funcionario,
-      { headers: this.httpHeaders }
-    );
+    return this.http.put(baseUrl + 'funcionario/', funcionario, {
+      headers: this.httpHeaders,
+    });
   }
 
   // Função que salva um novo funcionario
@@ -102,10 +99,9 @@ export class FuncionarioService {
 
   // Função de pesquisa pela matricula(id) do funcionario
   findByMatricula(matricula): Observable<any> {
-    return this.http.get(
-      baseUrl + 'funcionario/matricula/' + matricula + '/',
-      { headers: this.httpHeaders }
-    );
+    return this.http.get(baseUrl + 'funcionario/matricula/' + matricula + '/', {
+      headers: this.httpHeaders,
+    });
   }
 
   // Função de pesquisa pelo celular do funcionario

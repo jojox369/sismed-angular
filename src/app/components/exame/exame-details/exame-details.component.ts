@@ -11,10 +11,11 @@ import { LaboratorioTipoConvenioService } from 'src/app/services/laboratorio-tip
 import { Paciente } from 'src/app/models/paciente';
 import { Laboratorio } from 'src/app/models/laboratorio';
 import { TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
-import { ExameDetail } from 'src/app/models/exame';
+import { Exame } from 'src/app/models/exame';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { LogSave } from 'src/app/models/log';
 import { LogService } from 'src/app/services/log.service';
+import { Funcionario } from 'src/app/models/funcionario';
 
 @Component({
   selector: 'app-exame-details',
@@ -52,17 +53,11 @@ export class ExameDetailsComponent implements OnInit {
 
   exameForm: FormGroup;
 
-  pacientes: Paciente[];
-
-  paciente: Paciente;
-
   laboratorios: Laboratorio[];
-
-  laboratorio: Laboratorio;
 
   laboratorioTipos: TipoConvenioPaciente[];
 
-  exame: ExameDetail;
+  exame: Exame;
 
   user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -84,8 +79,7 @@ export class ExameDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.paciente = new Paciente;
-    this.laboratorio = new Laboratorio;
+
     this.getExame();
   }
 
@@ -93,11 +87,11 @@ export class ExameDetailsComponent implements OnInit {
     this.exameService.getById(this.exameId).subscribe(
       data => {
         this.exame = data;
+        this.getLaboratorios();
         this.createForm();
-        this.getPacienteDetails();
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar as informações do exame', 1);
       }
     );
@@ -110,72 +104,60 @@ export class ExameDetailsComponent implements OnInit {
       id: [this.exame.id],
       nome: [this.exame.nome, Validators.required],
       descricao: [this.exame.descricao, Validators.required],
-      data_coleta: [this.exame.data_coleta, Validators.required],
-      data_envio: [this.exame.data_envio, Validators.required],
-      data_retorno: [this.exame.data_retorno],
-      funcionario_laboratorio: [this.exame.funcionario_laboratorio, Validators.required],
-      funcionario: [this.exame.funcionario],
+      dataColeta: [this.exame.dataColeta, Validators.required],
+      dataEnvio: [this.exame.dataEnvio, Validators.required],
+      dataRetorno: [this.exame.dataRetorno],
+      funcionarioLaboratorio: [this.exame.funcionarioLaboratorio, Validators.required],
+      funcionarioId: [this.exame.funcionario.id],
       valor: [this.exame.valor, Validators.required],
-      tipo_convenio: [this.exame.tipo_convenio, Validators.required],
-      paciente: [this.exame.paciente, Validators.required],
-      laboratorio: [this.exame.laboratorio, Validators.required]
+      tipoConvenioId: [this.exame.tipoConvenio.id, Validators.required],
+      pacienteId: [this.exame.paciente.prontuario, Validators.required],
+      laboratorioId: [this.exame.laboratorio.id, Validators.required]
     });
-    this.exameForm.controls.funcionario.setValue(this.user.id);
+    this.exameForm.controls.funcionarioId.setValue(this.user.id);
     this.exameForm.disable();
-    this.dataColeta = this.exameForm.controls.data_coleta.value;
-    this.dataEnvio = this.exameForm.controls.data_envio.value;
-    this.dataRetorno = this.exameForm.controls.data_retorno.value;
+    this.dataColeta = this.exameForm.controls.dataColeta.value;
+    this.dataEnvio = this.exameForm.controls.dataEnvio.value;
+    this.dataRetorno = this.exameForm.controls.dataRetorno.value;
 
   }
 
 
 
-  getPacienteDetails() {
-    this.pacienteService.getPacienteDetails(this.exameForm.controls.paciente.value).subscribe(
-      data => {
-        this.paciente = data[0];
-        this.getLaboratorios();
 
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar recuperar as informações do paciente', 1);
-      }
-    );
-  }
 
   getLaboratorios() {
-    this.laboratorioService.getByTipoConvenio(this.paciente.tipoConvenio.id).subscribe(
+    this.laboratorioService.getByTipoConvenio(this.exame.paciente.tipoConvenio.id).subscribe(
       data => {
         this.laboratorios = data;
         this.getLaboratorioDetails();
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar as informações do laboratório', 1);
       }
     );
   }
 
   getLaboratorioDetails() {
-    this.laboratorioService.getById(this.exameForm.controls.laboratorio.value).subscribe(
+    this.laboratorioService.getById(this.exameForm.controls.laboratorioId.value).subscribe(
       data => {
-        this.laboratorio = data;
+        this.exame.laboratorio = data;
 
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar as informaçõs do laboratório', 1);
       }
     );
 
-    this.laboratorioTipoConvenioService.getAcceptedConveniosTipos(this.exameForm.controls.laboratorio.value).subscribe(
+    this.laboratorioTipoConvenioService.getAcceptedConveniosTipos(this.exameForm.controls.laboratorioId.value).subscribe(
       data => {
-        this.laboratorioTipos = data.filter(tipo => tipo.id === 1 || tipo.id === this.paciente.tipoConvenio.id);
+        this.laboratorioTipos = data.filter(tipo => tipo.id === 1 || tipo.id === this.exame.paciente.tipoConvenio.id);
 
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar recuperar a lista de convenios aceitos pelo laboratório', 1);
       }
     )
@@ -193,6 +175,9 @@ export class ExameDetailsComponent implements OnInit {
   }
 
   update() {
+
+    /*
+    passar para o back-end
     let log = new LogSave();
 
     if (this.exameForm.controls.data_retorno.value !== null) {
@@ -201,7 +186,7 @@ export class ExameDetailsComponent implements OnInit {
         log.hora = new Date().toLocaleTimeString();
         log.funcionarioId = this.user.id;
         log.evento = 'EDIÇÃO';
-        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
+        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
           this.formatDate(this.dataRetorno) + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
         this.logService.save(log).subscribe(
 
@@ -214,7 +199,7 @@ export class ExameDetailsComponent implements OnInit {
         log.hora = new Date().toLocaleTimeString();
         log.funcionarioId = this.user.id;
         log.evento = 'EDIÇÃO';
-        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DE RETORNO PENDENTE'
+        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DE RETORNO PENDENTE'
           + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
         this.logService.save(log).subscribe(
           error => {
@@ -227,11 +212,11 @@ export class ExameDetailsComponent implements OnInit {
       log.hora = new Date().toLocaleTimeString();
       log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
+      log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataRetorno) + ' PARA DATA DE RETORNO PENDENTE';
       this.logService.save(log).subscribe(
         error => {
-          console.log(error);
+
           this.buildMessage('erro ao tentar salvar registro de evento', 1);
         }
       );
@@ -242,7 +227,7 @@ export class ExameDetailsComponent implements OnInit {
       log.hora = new Date().toLocaleTimeString();
       log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE COLETA DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
+      log.descricao = 'ALTERAÇÃO NA DATA DE COLETA DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataColeta) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_coleta.value);
       this.logService.save(log).subscribe(
         error => {
@@ -256,7 +241,7 @@ export class ExameDetailsComponent implements OnInit {
       log.hora = new Date().toLocaleTimeString();
       log.funcionarioId = this.user.id;
       log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE ÊNVIO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome + '. DA DATA ' +
+      log.descricao = 'ALTERAÇÃO NA DATA DE ÊNVIO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
         this.formatDate(this.dataEnvio) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_envio.value);
       this.logService.save(log).subscribe(
 
@@ -264,25 +249,25 @@ export class ExameDetailsComponent implements OnInit {
           this.buildMessage('erro ao tentar salvar registro de evento', 1);
         }
       );
-    }
+    } */
 
 
 
     this.exameForm.controls.nome.setValue(this.exameForm.controls.nome.value.toUpperCase());
     this.exameForm.controls.descricao.setValue(this.exameForm.controls.descricao.value.toUpperCase());
-    this.exameForm.controls.funcionario_laboratorio.setValue(this.exameForm.controls.funcionario_laboratorio.value.toUpperCase());
+    this.exameForm.controls.funcionarioLaboratorio.setValue(this.exameForm.controls.funcionarioLaboratorio.value.toUpperCase());
     this.exameService.update(this.exameForm.value).subscribe(
       data => {
-        this.exame = data;
+
         this.buildMessage('Informações atualizada com sucesso', 0);
 
-        this.exameForm.controls.laboratorio.disable();
-        this.exameForm.controls.tipo_convenio.disable();
+        this.exameForm.controls.laboratorioId.disable();
+        this.exameForm.controls.tipoConvenioId.disable();
         this.isEditing = false;
-        this.createForm();
+        this.getExame();
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar atualizar os dados', 1);
       }
     );
@@ -294,17 +279,17 @@ export class ExameDetailsComponent implements OnInit {
       if (result === 'true') {
         this.exameService.delete(this.exameId).subscribe(
           (data) => {
-            let log = new LogSave
-            log.data = this.getDate();
-            log.hora = new Date().toLocaleTimeString();
-            log.funcionarioId = this.user.id;
-            log.evento = 'EXCLUSÃO';
-            log.descricao = 'EXCLUSÃO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.paciente.nome;
-            this.logService.save(log).subscribe(
-              error => {
-                this.buildMessage('erro ao tentar salvar registro de evento', 1);
-              }
-            );
+            /*  let log = new LogSave
+             log.data = this.getDate();
+             log.hora = new Date().toLocaleTimeString();
+             log.funcionarioId = this.user.id;
+             log.evento = 'EXCLUSÃO';
+             log.descricao = 'EXCLUSÃO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome;
+             this.logService.save(log).subscribe(
+               error => {
+                 this.buildMessage('erro ao tentar salvar registro de evento', 1);
+               }
+             ); */
             this.exameService.message = 'Exame excluido com sucesso!';
             this.router.navigate(['exames']);
           },

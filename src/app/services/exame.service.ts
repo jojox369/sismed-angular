@@ -16,48 +16,48 @@ export class ExameService {
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
-  // Recupera todos os exames
+
   getAll(): Observable<Exame[]> {
     return this.http
-      .get<Exame[]>(baseUrl + 'exames/', { headers: this.httpHeaders })
+      .get<Exame[]>(`${baseUrl}exame`, { headers: this.httpHeaders })
       .pipe(
         map((data) => data.map((data) => new Exame().deserializable(data)))
       );
   }
 
-  // Recupera detalhes do exame pelo seu id
-  getById(exameId): Observable<ExameDetail> {
+
+  getById(exameId): Observable<Exame> {
     return this.http
-      .get<ExameDetail>(baseUrl + 'exames/' + exameId + '/', {
+      .get<Exame>(`${baseUrl}exame/${exameId}`, {
         headers: this.httpHeaders,
       })
-      .pipe(map((data) => new ExameDetail().deserializable(data)));
+      .pipe(map((data) => new Exame().deserializable(data)));
   }
 
-  // Solicita ao back que o exame seja atualizado
+
   update(exame: ExameDetail): Observable<any> {
-    return this.http.put(baseUrl + 'exames/' + exame.id + '/', exame, {
+    return this.http.put(`${baseUrl}exame/`, exame, {
       headers: this.httpHeaders,
     });
   }
 
-  // Solicita ao back-end que o exame seja excluido
+
   delete(id): Observable<any> {
-    return this.http.delete(baseUrl + 'exames/' + id + '/', {
+    return this.http.delete(`${baseUrl}exame/${id}`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Solicita ao back que um novo exame seja cadastrado
+
   save(exame: ExameDetail): Observable<any> {
-    return this.http.post(baseUrl + 'exames/', exame, {
+    return this.http.post(`${baseUrl}exame/`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Solicita ao back uma lista de exames pelo nome de paciente
+
   getByPaciente(pacienteName): Observable<Exame[]> {
     return this.http
       .get<Exame[]>(baseUrl + 'exames/paciente/' + pacienteName + '/', {
@@ -68,7 +68,7 @@ export class ExameService {
       );
   }
 
-  // Solicita ao back uma lista de exames pelo nome do exame
+
   getByName(exameName): Observable<Exame[]> {
     return this.http
       .get<Exame[]>(baseUrl + 'exames/name/' + exameName + '/', {
@@ -89,16 +89,16 @@ export class ExameService {
       );
   }
 
-  // Solicita ao back uma lista de exames pelo nome de paciente e pelo nome do exame
+
   getByPacienteExame(pacienteName, exameName): Observable<Exame[]> {
     return this.http
       .get<Exame[]>(
         baseUrl +
-          'exames/paciente/' +
-          pacienteName +
-          '/exame/' +
-          exameName +
-          '/',
+        'exames/paciente/' +
+        pacienteName +
+        '/exame/' +
+        exameName +
+        '/',
         { headers: this.httpHeaders }
       )
       .pipe(
@@ -106,16 +106,16 @@ export class ExameService {
       );
   }
 
-  // Solicita ao back uma lista de exames pelo nome de paciente e pela data de coleta
+
   getByExameDataColeta(exameName, dataColeta): Observable<Exame[]> {
     return this.http
       .get<Exame[]>(
         baseUrl +
-          'exames/name/' +
-          exameName +
-          '/dataColeta/' +
-          dataColeta +
-          '/',
+        'exames/name/' +
+        exameName +
+        '/dataColeta/' +
+        dataColeta +
+        '/',
         { headers: this.httpHeaders }
       )
       .pipe(

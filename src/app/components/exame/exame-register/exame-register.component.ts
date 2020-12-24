@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { ExameService } from 'src/app/services/exame.service';
 import { Paciente } from 'src/app/models/paciente';
-import { ExameDetail } from 'src/app/models/exame';
+import { Exame, ExameDetail } from 'src/app/models/exame';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -39,7 +39,7 @@ export class ExameRegisterComponent implements OnInit {
 
   laboratorioTipos: TipoConvenioPaciente[];
 
-  exame: ExameDetail;
+  exame: Exame;
 
   filteredPacientes: Observable<any>;
 
@@ -65,25 +65,25 @@ export class ExameRegisterComponent implements OnInit {
     this.createForm();
   }
   createForm() {
-    this.exame = new ExameDetail();
+    this.exame = new Exame();
 
     this.exameForm = this.fb.group({
       nome: [this.exame.nome, Validators.required],
       descricao: [this.exame.descricao, Validators.required],
-      data_coleta: [this.exame.data_coleta, Validators.required],
-      data_envio: [this.exame.data_envio, Validators.required],
+      dataColeta: [this.exame.dataColeta, Validators.required],
+      dataEnvio: [this.exame.dataEnvio, Validators.required],
       funcionario_laboratorio: [this.exame.funcionario_laboratorio, Validators.required],
-      funcionario: [this.exame.funcionario],
+      funcionarioId: [this.exame.funcionario],
       valor: [this.exame.valor, Validators.required],
-      tipo_convenio: [this.exame.tipo_convenio, Validators.required],
-      paciente: [this.exame.paciente, Validators.required],
-      laboratorio: [this.exame.laboratorio, Validators.required]
+      tipoConvenioId: [this.exame.tipoConvenio.id, Validators.required],
+      pacienteId: [this.exame.paciente, Validators.required],
+      laboratorioId: [this.exame.laboratorio, Validators.required]
     });
 
-    this.exameForm.controls.funcionario.setValue(this.user.id);
+    this.exameForm.controls.funcionarioId.setValue(this.user.id);
     this.getPacientes();
-    this.exameForm.controls.laboratorio.disable();
-    this.exameForm.controls.tipo_convenio.disable();
+    this.exameForm.controls.laboratorioId.disable();
+    this.exameForm.controls.tipoConvenioId.disable();
 
 
 

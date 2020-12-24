@@ -84,6 +84,7 @@ export class LaboratorioService {
 
   // Salva o laboratorio
   save(laboratorio: Laboratorio): Observable<any> {
+    console.log(laboratorio)
     return this.http.post(`${baseUrl}laboratorio/`, laboratorio, {
       headers: this.httpHeaders,
     });

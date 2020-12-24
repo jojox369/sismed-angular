@@ -1,6 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Funcionario } from 'src/app/models/funcionario';
-import { faSearch, faPlus, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSearch,
+  faPlus,
+  faSortDown,
+} from '@fortawesome/free-solid-svg-icons';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FuncionarioService } from 'src/app/services/funcionario.service';
@@ -8,10 +18,9 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-funcionario-list',
   templateUrl: './funcionario-list.component.html',
-  styleUrls: ['./funcionario-list.component.css']
+  styleUrls: ['./funcionario-list.component.css'],
 })
 export class FuncionarioListComponent implements OnInit, AfterViewInit {
-
   // Icone de pesquisa
   faSearch = faSearch;
 
@@ -50,12 +59,21 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: any;
-  displayedColumns: string[] = ['id', 'nome', 'cpf', 'crm', 'especialidade', 'telefoneFixo', 'celular', 'email'];
+  displayedColumns: string[] = [
+    'id',
+    'nome',
+    'cpf',
+    'crm',
+    'especialidade',
+    'telefoneFixo',
+    'celular',
+    'email',
+  ];
 
   constructor(
     private funcionarioService: FuncionarioService,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.searchInput.nativeElement.focus();
   }
@@ -65,24 +83,21 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     this.verifyMessage();
   }
 
-
   // requisita a lista de funcionarios
   getAllFuncionarios() {
     this.funcionarioService.getAllFuncionarios().subscribe(
-      data => {
+      (data) => {
         if (Object.keys(data).length === 0) {
           this.isFuncionarioNotEmpty = false;
           this.isLoading = false;
           this.showEmptyMessage = true;
-        }
-        else {
+        } else {
           this.isLoading = false;
           this.funcionarios = data;
           this.buildTable();
         }
       },
-      error => {
-        console.log(error);
+      (error) => {
         this.isLoading = false;
         this.buildMessage('Erro ao tentar listar os funcionarios', 1);
       }
@@ -102,7 +117,8 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
 
   // Varificação de caractere
   onlyLetters(event) {
-    if (event.charCode == 32 || // espaço
+    if (
+      event.charCode == 32 || // espaço
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
       (event.charCode > 191 && event.charCode <= 255) // letras com acentos
@@ -112,7 +128,6 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       alert('Apenas Letras');
       return false;
     }
-
   }
 
   // função para verificar se o que foi digitado é um numero ou não
@@ -137,8 +152,6 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
   /*Função que troca o campo de pesquisa de acordo com o valor recebido*/
   onChangeSearchSelector(value: number) {
     if (value === 1) {
@@ -150,8 +163,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       this.searchInput.nativeElement.setAttribute('maxlength', '45');
       this.placeholder = 'Buscar por Nome';
-    }
-    else if (value === 2) {
+    } else if (value === 2) {
       if (this.input !== value) {
         this.searchText = '';
         this.getAllFuncionarios();
@@ -160,8 +172,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       this.searchInput.nativeElement.setAttribute('maxlength', '11');
       this.placeholder = 'Buscar por CPF';
-    }
-    else if (value === 3) {
+    } else if (value === 3) {
       if (this.input !== value) {
         this.searchText = '';
         this.getAllFuncionarios();
@@ -170,8 +181,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       this.searchInput.nativeElement.setAttribute('maxlength', '11');
       this.placeholder = 'Buscar por CRM';
-    }
-    else if (value === 4) {
+    } else if (value === 4) {
       if (this.input !== value) {
         this.searchText = '';
         this.getAllFuncionarios();
@@ -180,8 +190,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.input = value;
       this.searchInput.nativeElement.setAttribute('maxlength', '11');
       this.placeholder = 'Buscar por Celular';
-    }
-    else if (value === 5) {
+    } else if (value === 5) {
       if (this.input !== value) {
         this.searchText = '';
         this.getAllFuncionarios();
@@ -189,8 +198,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.searchInput.nativeElement.focus();
       this.input = value;
       this.placeholder = 'Buscar por Matricula';
-    }
-    else {
+    } else {
       if (this.input !== value) {
         this.searchText = '';
         this.getAllFuncionarios();
@@ -209,16 +217,12 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     }
     // pesquisa por cpf
     else if (this.input === 2) {
-
       this.onSearchByCPF();
-
     }
     // pesquisa por crm
     else if (this.input === 3) {
       this.onSearchByCRM();
-    }
-    else if (this.input === 4) {
-
+    } else if (this.input === 4) {
       this.onSearchByCelular();
     }
     // pesquisa por matricula
@@ -235,20 +239,18 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   onSearchByName() {
     if (this.searchText !== '') {
       this.funcionarioService.findByName(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
         }
       );
@@ -260,23 +262,20 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
 
   // Requisita a lista de funcionarios pelo cpf
   onSearchByCPF() {
-
     if (this.searchText !== '') {
       this.funcionarioService.findByCPF(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
         }
       );
@@ -288,23 +287,20 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
 
   // Requisita a lista de funcionarios pelo crm
   onSearchByCRM() {
-
     if (this.searchText !== '') {
       this.funcionarioService.findByCRM(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
         }
       );
@@ -316,23 +312,20 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
 
   // Requisita a lista de funcionarios pelo celular
   onSearchByCelular() {
-
     if (this.searchText !== '') {
       this.funcionarioService.findByCelular(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
             this.showEmptyMessage = true;
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
         }
       );
@@ -344,25 +337,20 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
 
   // Requisita a lista de funcionarios pela matricula
   onSearchByMatricula() {
-
     if (this.searchText !== '') {
       this.funcionarioService.findByMatricula(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
-
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
-
         }
       );
     } else {
@@ -376,20 +364,17 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     this.showEmptyMessage = false;
     if (this.searchText !== '') {
       this.funcionarioService.findByEspecialidade(this.searchText).subscribe(
-        data => {
+        (data) => {
           if (Object.keys(data).length === 0) {
             this.isFuncionarioNotEmpty = false;
-
-          }
-          else {
+          } else {
             this.funcionarios = data;
             this.buildTable();
             this.isFuncionarioNotEmpty = true;
             this.showEmptyMessage = false;
           }
         },
-        error => {
-          console.log(error);
+        (error) => {
           this.buildMessage('Erro ao tentar pesquisar', 1);
         }
       );
@@ -398,7 +383,6 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
       this.showEmptyMessage = false;
     }
   }
-
 
   // Verifica no service se existe alguma mensagem para ser mostrada
   verifyMessage() {
@@ -416,8 +400,8 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
-    }
+      verticalPosition: 'top',
+    };
 
     /*
       type = 0: Mensagem de sucesso
@@ -434,7 +418,4 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
     }
     this.snackBar.open(message, undefined, snackbarConfig);
   }
-
-
-
 }

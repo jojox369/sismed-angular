@@ -4,7 +4,7 @@
       <span> <strong>Edição | </strong> Exame </span>
 
       <button type="submit" mat-stroked-button class="btn-success float-right" title="Atualizar exame"
-        [disabled]="frm.invalid" *ngIf="isEditing">
+        *ngIf="isEditing">
         <fa-icon [icon]="faCheck"></fa-icon> Salvar
       </button>
 
@@ -37,25 +37,25 @@
         <h5 fxLayoutAlign="center start">Informações do Paciente</h5>
         <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input type="text" matInput [value]="paciente.nome !== undefined ? paciente.nome : ''" disabled />
+          <input type="text" matInput [value]="exame.paciente.nome !== undefined ? exame.paciente.nome : ''" disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Prontuário</mat-label>
           <input [value]="
-              paciente.prontuario !== undefined ? paciente.prontuario : ''
+              exame.paciente.prontuario !== undefined ? exame.paciente.prontuario : ''
             " matInput disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Cônvenio</mat-label>
           <input [value]="
-              paciente.tipoConvenio !== undefined
-                ? paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
-                  ? paciente.tipoConvenio.convenio.nome
-                  : paciente.tipoConvenio.convenio.nome +
+              exame.paciente.tipoConvenio !== undefined
+                ? exame.paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
+                  ? exame.paciente.tipoConvenio.convenio.nome
+                  : exame.paciente.tipoConvenio.convenio.nome +
                     ' - ' +
-                    paciente.tipoConvenio.nome
+                    exame.paciente.tipoConvenio.nome
                 : ''
             " matInput disabled />
         </mat-form-field>
@@ -63,10 +63,10 @@
         <mat-form-field appearance="fill">
           <mat-label>CPF</mat-label>
           <input [value]="
-              paciente.cpf !== undefined
-                ? paciente.cpf === null
+              exame.paciente.cpf !== undefined
+                ? exame.paciente.cpf === null
                   ? 'Não Cadastrado'
-                  : paciente.cpf
+                  : exame.paciente.cpf
                 : ''
             " matInput disabled />
         </mat-form-field>
@@ -74,10 +74,10 @@
         <mat-form-field appearance="fill">
           <mat-label>RG</mat-label>
           <input [value]="
-              paciente.rg !== undefined
-                ? paciente.rg === null
+              exame.paciente.rg !== undefined
+                ? exame.paciente.rg === null
                   ? 'Não Cadastrado'
-                  : paciente.rg
+                  : exame.paciente.rg
                 : ''
             " matInput disabled />
         </mat-form-field>
@@ -85,8 +85,8 @@
         <mat-form-field appearance="fill">
           <mat-label>Data de Nascimento</mat-label>
           <input [value]="
-              paciente.dataNascimento !== undefined
-                ? (paciente.dataNascimento | date: 'dd/MM/yyyy')
+              exame.paciente.dataNascimento !== undefined
+                ? (exame.paciente.dataNascimento | date: 'dd/MM/yyyy')
                 : 'Não cadastrado'
             " matInput disabled />
         </mat-form-field>
@@ -97,7 +97,7 @@
         <h5 fxLayoutAlign="center start">Informações do Laboratório</h5>
         <mat-form-field appearance="fill">
           <mat-label>Laboratório</mat-label>
-          <mat-select formControlName="laboratorio" required (selectionChange)="getLaboratorioDetails()">
+          <mat-select formControlName="laboratorioId" required (selectionChange)="getLaboratorioDetails()">
             <mat-option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.id">{{ laboratorio.nome }}
             </mat-option>
           </mat-select>
@@ -106,25 +106,25 @@
         <mat-form-field appearance="fill">
           <mat-label>Telefone</mat-label>
           <input [value]="
-              laboratorio.telefone_fixo !== undefined
-                ? (laboratorio.telefone_fixo | telefone)
+              exame.laboratorio.telefoneFixo !== undefined
+                ? (exame.laboratorio.telefoneFixo | telefone)
                 : ''
             " matInput disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input [value]="laboratorio.email !== undefined ? laboratorio.email : ''" matInput disabled />
+          <input [value]="exame.laboratorio.email !== undefined ? exame.laboratorio.email : ''" matInput disabled />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Convênio</mat-label>
-          <mat-select formControlName="tipo_convenio" required>
+          <mat-select formControlName="tipoConvenioId" required>
             <mat-option *ngFor="let tipo of laboratorioTipos" [value]="tipo.id">
               {{
-                tipo.id === 1
-                  ? tipo.nome
-                  : tipo.convenio.nome + " - " + tipo.nome
+              tipo.id === 1
+              ? tipo.nome
+              : tipo.convenio.nome + " - " + tipo.nome
               }}
             </mat-option>
           </mat-select>
@@ -142,23 +142,23 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Quem Recebeu</mat-label>
-          <input (keyup)="toUpperCase($event)" matInput formControlName="funcionario_laboratorio" autocomplete="off"
+          <input (keyup)="toUpperCase($event)" matInput formControlName="funcionarioLaboratorio" autocomplete="off"
             required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Coleta</mat-label>
-          <input type="date" matInput formControlName="data_coleta" required />
+          <input type="date" matInput formControlName="dataColeta" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de envio</mat-label>
-          <input type="date" matInput formControlName="data_envio" required />
+          <input type="date" matInput formControlName="dataEnvio" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Retorno</mat-label>
-          <input type="date" matInput formControlName="data_retorno" />
+          <input type="date" matInput formControlName="dataRetorno" />
         </mat-form-field>
 
         <mat-form-field appearance="fill">

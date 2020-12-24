@@ -38,7 +38,7 @@ export class LaboratorioTipoConvenioService {
   ): Observable<TipoConvenioPaciente[]> {
     return this.http
       .get<TipoConvenioPaciente[]>(
-        baseUrl + 'conveniosTiposAccepted/laboratorio/' + laboratorioId + '/',
+        `${baseUrl}laboratorioTconvenio/tiposAceitos/todos/${laboratorioId}/`,
         { headers: this.httpHeaders }
       )
       .pipe(
