@@ -7,8 +7,8 @@ import {
 import { Paciente } from 'src/app/models/paciente';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -37,7 +37,6 @@ export class SearchDialogComponent implements OnInit {
 
   preCadastro = false;
 
-  loading = true;
 
   myControl = new FormControl();
   options;
@@ -48,32 +47,29 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     private pacienteService: PacienteService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.getAll();
+    this.filterPatients()
   }
 
-  getAll() {
-    this.pacienteService.getAllPacientes().subscribe(
-      (data) => {
-        this.onGetPacienteList(data);
-        this.loading = false;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
 
-  onGetPacienteList(data) {
-    this.options = data;
+
+  filterPatients() {
+
 
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map((value) =>
-        value.length >= 1 ? this.onChooseSearchMethod(value) : []
-      )
+
+      switchMap(value => {
+        if (value !== '') {
+          // lookup from github
+          return this.onChooseSearchMethod(value);
+        } else {
+          // if no value is pressent, return null
+          return of(null);
+        }
+      })
     );
   }
 
@@ -114,65 +110,43 @@ export class SearchDialogComponent implements OnInit {
   }
 
   // função que escolhe qual metodo de pesquisa chamar baseado no valor da variavel input
-  onChooseSearchMethod(value: string) {
+  onChooseSearchMethod(value: string): Observable<Paciente> {
     // Pesquisa por nome
     if (this.input === 1) {
-      const filterValue = value.toLowerCase();
-      const results = this.options.filter((option) =>
-        option.nome.toLowerCase().includes(filterValue)
+      const patients = this.pacienteService.getPacienteByName(value).pipe(
+        map(results => results),
+        catchError(_ => {
+          return of(null);
+        })
       );
-
-      if (results.length) {
-        this.preCadastro = false;
-      } else {
-        this.preCadastro = true;
-      }
-      return results;
+      return patients
     }
     // pesquisa por prontuario
     else if (this.input === 2) {
-      const filterValue = value;
-      const results = this.options.filter((option) =>
-        option.prontuario.toString().includes(filterValue)
-      );
-      if (results.length) {
-        this.preCadastro = false;
-      } else {
-        this.preCadastro = true;
-      }
-      return results;
+      return this.pacienteService.getPacienteByProntuario(+value).pipe(
+        map(results => results),
+        catchError(_ => {
+          return of(null);
+        })
+      )
     }
     // pesquisa por cpf
     else if (this.input === 3) {
-      const filterValue = value;
-
-      const results = this.options.filter((option) => {
-        if (option.cpf) {
-          return option.cpf.includes(filterValue);
-        }
-      });
-      if (results.length) {
-        this.preCadastro = false;
-      } else {
-        this.preCadastro = true;
-      }
-      return results;
+      return this.pacienteService.getPacienteByCpf(value).pipe(
+        map(results => results),
+        catchError(_ => {
+          return of(null);
+        })
+      )
     }
     // pesquisa por telefone
     else {
-      const filterValue = value;
-
-      const results = this.options.filter((option) => {
-        if (option.celular) {
-          return option.celular.includes(filterValue);
-        }
-      });
-      if (results.length !== 0) {
-        this.preCadastro = false;
-      } else {
-        this.preCadastro = true;
-      }
-      return results;
+      return this.pacienteService.getPacienteByTelefone(value).pipe(
+        map(results => results),
+        catchError(_ => {
+          return of(null);
+        })
+      )
     }
   }
 

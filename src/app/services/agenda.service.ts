@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { Agenda, Agendar } from '../models/agenda';
 import { map } from 'rxjs/operators';
 import baseUrl from '../url';
+import { Paciente } from '../models/paciente';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -83,23 +86,17 @@ export class AgendaService {
     );
   }
 
-  // verefica se ja existe um agendamento para um medico
-  verifyAgendamento(date, time, medicoId): Observable<any> {
-    return this.http.get(
-      baseUrl + 'verify/' + date + '/' + time + '/' + medicoId + '/',
-      { headers: this.httpHeaders }
-    );
-  }
-
   deleteAgendamento(agendamentoId): Observable<any> {
     return this.http.delete(baseUrl + 'agenda/' + agendamentoId + '/', {
       headers: this.httpHeaders,
     });
   }
 
-  getAgendamentoById(id: string) {
-    return this.http.get(baseUrl + 'agendamento/' + id + '/', {
-      headers: this.httpHeaders,
-    });
+
+
+  agendamentoPreCadastro(agendamentoPreCadastro): Observable<any> {
+    return this.http.post(`${baseUrl}agenda/preCadastro/`, agendamentoPreCadastro,
+      { headers: this.httpHeaders }
+    )
   }
 }

@@ -101,8 +101,9 @@ export class AgendaPreRegisterComponent implements OnInit {
       procedimento: [this.agendamento.procedimento, Validators.required],
       tipoConvenio: [this.agendamento.tipoConvenio, Validators.required],
       pagou: [this.agendamento.pagou],
-      primeira_vez: [this.agendamento.primeiraVez],
+      primeiVez: [this.agendamento.primeiraVez],
       compareceu: [this.agendamento.compareceu],
+
     });
 
     this.formPaciente = this.fb.group({
@@ -127,7 +128,7 @@ export class AgendaPreRegisterComponent implements OnInit {
 
     this.formAgenda.controls.compareceu.setValue(1);
     this.formAgenda.controls.pagou.setValue(1);
-    this.formAgenda.controls.primeira_vez.setValue(1);
+    this.formAgenda.controls.primeiVez.setValue(1);
     this.formAgenda.controls.tipoConvenio.disable();
     this.formAgenda.controls.procedimento.disable();
     this.formAgenda.controls.data.disable();
@@ -235,63 +236,33 @@ export class AgendaPreRegisterComponent implements OnInit {
 
   save() {
     this.loadingDataMessage = 'Agendando paciente';
-    this.formPaciente.controls.prontuario.enable();
+
     this.formPaciente.controls.tipoConvenio.setValue(
       this.formAgenda.controls.tipoConvenio.value
     );
     this.formPaciente.controls.nome.setValue(
       this.formPaciente.controls.nome.value.toUpperCase()
     );
+    this.formAgenda.controls.paciente.setValue(+this.formPaciente.controls.prontuario.value)
 
-    this.pacienteService
-      .preCadastro(this.formPaciente.value)
-      .subscribe((data) => {
-        this.formAgenda.controls.paciente.setValue(data.id);
-        this.agendaService.agendar(this.formAgenda.value).subscribe(
-          (data) => {
-            this.agendaService.message =
-              'Paciente agendado para ' +
-              this.formatDateTime(data.data, data.hora);
 
-            this.router.navigate(['/agenda']);
-          },
-          (error) => {
-            this.isLoading = false;
-            this.buildMessage('Erro ao tentar salvar o agendamento', 1);
+    this.agendaService.agendamentoPreCadastro({ agenda: this.formAgenda.value, paciente: this.formPaciente.value }).subscribe(
+      (data) => {
+        this.agendaService.message =
+          'Paciente agendado para ' +
+          this.formatDateTime(data.data, data.hora);
 
-          }
-        );
-      });
+        this.router.navigate(['/agenda']);
+      },
+      (error) => {
+        this.isLoading = false;
+        this.buildMessage('Erro ao tentar salvar o agendamento', 1);
+
+      }
+    );
   }
 
-  // Verifica se o medico ja possui agendamento para o dia e hora selecionados;
-  verifyAgendamento(frm: FormGroup) {
-    this.isLoading = true;
-    this.loadingDataMessage = 'Verificando disponibilidade do médico';
-    this.agendaService
-      .verifyAgendamento(
-        this.formAgenda.controls.data.value,
-        this.formAgenda.controls.hora.value,
-        this.formAgenda.controls.funcionario.value
-      )
-      .subscribe(
-        (data) => {
-          if (Object.keys(data).length == 0) {
-            this.save();
-          } else {
-            this.buildMessage(
-              'Médico já possui agendamento para essa data e hora',
-              1
-            );
-            this.isLoading = false;
-          }
-        },
-        (error) => {
 
-          this.buildMessage('Erro ao verificar a disponibilidade do médico', 1);
-        }
-      );
-  }
 
   // formata a data e a hora do agendamento e forma uma string para a mensagem de sucesso no agendamento
   formatDateTime(date: string, time: string): string {
@@ -329,9 +300,9 @@ export class AgendaPreRegisterComponent implements OnInit {
   }
 
   getProntuario() {
-    this.pacienteService.lastId().subscribe(
+    this.pacienteService.nextProntuario().subscribe(
       (data) => {
-        this.formPaciente.controls.prontuario.setValue(data['response']);
+        this.formPaciente.controls.prontuario.setValue(data.proximoProntuario);
       },
       (error) => {
 

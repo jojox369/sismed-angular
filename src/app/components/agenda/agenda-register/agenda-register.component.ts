@@ -271,34 +271,7 @@ export class AgendaRegisterComponent implements OnInit {
 
   }
 
-  // Verifica se o medico ja possui agendamento para o dia e hora selecionados;
-  verifyAgendamento(frm: FormGroup) {
-    this.isLoading = true;
-    this.loadingDataMessage = 'Verificando disponibilidade do médico';
-    this.agendaService
-      .verifyAgendamento(
-        this.formAgenda.controls.data.value,
-        this.formAgenda.controls.hora.value,
-        this.formAgenda.controls.funcionario.value
-      )
-      .subscribe(
-        (data) => {
-          if (Object.keys(data).length == 0) {
-            this.save();
-          } else {
-            this.buildMessage(
-              'Médico já possui agendamento para essa data e hora',
-              1
-            );
-            this.isLoading = false;
-          }
-        },
-        (error) => {
 
-          this.buildMessage('Erro ao verificar a disponibilidade do médico', 1);
-        }
-      );
-  }
 
   // formata a data e a hora do agendamento e forma uma string para a mensagem de sucesso no agendamento
   formatDateTime(date: string, time: string): string {

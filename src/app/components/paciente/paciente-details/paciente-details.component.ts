@@ -266,7 +266,7 @@ export class PacienteDetailsComponent implements OnInit {
         );
     }
 
-    this.pacienteService.upadatePaciente(this.formPaciente.value).subscribe(
+    this.pacienteService.updatePaciente(this.formPaciente.value).subscribe(
       (data) => {
         this.paciente = data;
         this.isEditing = false;

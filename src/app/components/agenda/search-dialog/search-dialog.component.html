@@ -7,7 +7,7 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
   <h2 mat-dialog-title>Novo Agendamento</h2>
 
-  <form fxLayout="row" fxLayoutAlign="start center" class="container" *ngIf="!loading">
+  <form fxLayout="row" fxLayoutAlign="start center" class="container">
     <mat-form-field style="width: 90%" appearance="fill">
       <span matPrefix>
         <fa-icon [icon]="faSearch"></fa-icon> &nbsp;
@@ -18,16 +18,17 @@
       <input type="text" [placeholder]="placeholder" #searchInput matInput [formControl]="myControl"
         [matAutocomplete]="auto" (keyup)="toUpperCase($event)" />
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
-          [routerLink]="['/agenda/agendar', option.prontuario]" mat-dialog-close>
+        <mat-option *ngFor="let patient of filteredOptions | async" [value]="patient.prontuario"
+          [routerLink]="['/agenda/agendar', patient.prontuario]" mat-dialog-close>
           {{
-            option.prontuario + '-' + option.nome +
-              " - " +
-              (option.cpf === null ? "CPF não cadastrado" : (option.cpf | CPF))
+          patient.prontuario + '-' + patient.nome +
+          " - " +
+          (patient.cpf === null ? "CPF não cadastrado" : (patient.cpf | CPF))
           }}
         </mat-option>
 
-        <mat-option *ngIf="preCadastro" [routerLink]="['/agenda/preCadastro']" mat-dialog-close [value]="0">
+        <mat-option *ngIf="(filteredOptions | async)?.length === 0" [routerLink]="['/agenda/preCadastro']"
+          mat-dialog-close value="pre-cadastro">
           Pre cadastro
         </mat-option>
         <span> </span>
@@ -57,9 +58,5 @@
       </div>
     </div>
   </form>
-  <div>
-    <!--Spinner que aparece enquando a lista não é carregada-->
-    <mat-spinner *ngIf="loading"></mat-spinner>
-    <span style="margin-top: 10px" *ngIf="loading">Carregando dados</span>
-  </div>
+
 </div>
