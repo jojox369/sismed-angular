@@ -21,8 +21,6 @@ import { FuncionarioTipoConvenioListComponent } from '../funcionario-tipo-conven
 import { FuncionarioTipoConvenioRegisterComponent } from '../funcionario-tipo-convenio-register/funcionario-tipo-convenio-register.component';
 import { FuncionarioTipoConvenioDeleteComponent } from '../funcionario-tipo-convenio-delete/funcionario-tipo-convenio-delete.component';
 import { LogSave } from 'src/app/models/log';
-import { LogService } from 'src/app/services/log.service';
-import { UserService } from 'src/app/services/user.service';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { UserLogged } from 'src/app/models/user';
 
@@ -32,43 +30,43 @@ import { UserLogged } from 'src/app/models/user';
   styleUrls: ['./funcionario-details.component.css'],
 })
 export class FuncionarioDetailsComponent implements OnInit {
-  // Icone de exluir
+
   faTimes = faTimes;
 
-  // Icone de salvar
+
   faCheck = faCheck;
 
-  // Icone de voltar
+
   faChevronLeft = faChevronLeft;
 
-  // Icone de editar
+
   faPencilAlt = faPencilAlt;
 
-  // Icone de cancelar edição
+
   faBan = faBan;
 
-  // Icone de adicionar
+
   faPlus = faPlus;
 
-  // Icone de listar
+
   faList = faList;
 
-  // Icone de troca de senha
+
   faKey = faKey;
 
   /*Recupera o id do convenio para realizar a requisição a API */
   funcionarioId = this.route.snapshot.paramMap.get('funcionarioId');
 
-  // faz o controle dos campos de funcionario
+
   formFuncionario: FormGroup;
 
-  // Controla a exibição dos campos de CRM e Especialidade
+
   isADoctor = false;
 
-  // Controla a edição do formulário
+
   isEditing = false;
 
-  // Recebe os dados informados no formulario
+
   funcionario: Funcionario;
 
   dataInicio: string;
@@ -86,10 +84,8 @@ export class FuncionarioDetailsComponent implements OnInit {
   loadingDataMessage: string = 'Carregando Dados ... ';
 
   constructor(
-    private logService: LogService,
     private funcionarioService: FuncionarioService,
     private enderecoService: EnderecoService,
-    private userService: UserService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private fb: FormBuilder,
@@ -101,7 +97,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     this.getFuncionario();
   }
 
-  // recupera os dados do funcionario;
+
   getFuncionario() {
     this.funcionarioService.getFuncionario(this.funcionarioId).subscribe(
       (data) => {
@@ -118,7 +114,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     );
   }
 
-  // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
+
   createForm() {
     this.formFuncionario = this.fb.group({
       id: [this.funcionario.id],
@@ -283,89 +279,24 @@ export class FuncionarioDetailsComponent implements OnInit {
     }
 
 
+
+    if (
+      this.dataInicio !== this.formFuncionario.controls.dataInicio.value
+    ) {
+
+    }
+
     this.funcionarioService
-      .updateFuncionario(this.formFuncionario.value)
-      .subscribe(
+      .updateFuncionario(this.formFuncionario.value).subscribe(
         (data) => {
           this.isLoading = false;
           this.funcionario = data;
           this.formFuncionario.get('endereco.estado').disable();
-          this.createForm();
+
           this.isEditing = false;
           this.buildMessage('Funcionário atualizado com sucesso!', 0);
-          if (
-            this.dataInicio !== this.formFuncionario.controls.dataInicio.value
-          ) {
+          this.createForm();
 
-            this.log = new LogSave();
-            this.log.data = this.getDate();
-            this.log.hora = new Date().toLocaleTimeString();
-            this.log.funcionarioId = this.user.id;
-            this.log.evento = 'EDIÇÃO';
-            this.log.descricao =
-              'ALTERAÇÃO NA DATA DE CONTRATAÇÃO DO FUNCIONÁRIO ' +
-              this.funcionario.nome +
-              '. DA DATA ' +
-              this.formatDate(this.dataInicio) +
-              ' PARA A DATA ' +
-              this.formatDate(this.formFuncionario.controls.dataInicio.value);
-            this.logService.save(this.log).subscribe(
-              (data) => { },
-              (error) => {
-                this.buildMessage(
-                  'Erro ao tentar salvar o registro de evento',
-                  1
-                );
-              }
-            );
-          }
-
-          if (
-            this.dataTermino !==
-            this.formFuncionario.controls.dataTermino.value
-          ) {
-            if (this.dataTermino !== null) {
-              this.log = new LogSave();
-              this.log.data = this.getDate();
-              this.log.hora = new Date().toLocaleTimeString();
-              this.log.funcionarioId = this.user.id;
-              this.log.evento = 'EDIÇÃO';
-              this.log.descricao =
-                'ALTERAÇÃO NA DATA DE DISPENSA DO FUNCIONÁRIO ' +
-                this.funcionario.nome +
-                '. DA DATA ' +
-                this.formatDate(this.dataTermino) +
-                ' PARA A DATA ' +
-                this.formatDate(
-                  this.formFuncionario.controls.dataTermino.value
-                );
-              this.logService.save(this.log).subscribe((error) => {
-                this.buildMessage(
-                  'Erro ao tentar salvar o registro de evento',
-                  1
-                );
-              });
-            } else {
-              this.log = new LogSave();
-              this.log.data = this.getDate();
-              this.log.hora = new Date().toLocaleTimeString();
-              this.log.funcionarioId = this.user.id;
-              this.log.evento = 'EDIÇÃO';
-              this.log.descricao =
-                'ALTERAÇÃO NA DATA DE DISPENSA DO FUNCIONÁRIO ' +
-                this.funcionario.nome +
-                '. DE DATA DE DISPENSA NÃO CADASTRADA PARA A DATA ' +
-                this.formatDate(
-                  this.formFuncionario.controls.dataTermino.value
-                );
-              this.logService.save(this.log).subscribe((error) => {
-                this.buildMessage(
-                  'Erro ao tentar salvar o registro de evento',
-                  1
-                );
-              });
-            }
-          }
         },
         (error) => {
           this.isLoading = false;
@@ -382,26 +313,10 @@ export class FuncionarioDetailsComponent implements OnInit {
         this.loadingDataMessage = 'Excluindo funcionário';
         this.funcionarioService.deleteFuncionario(this.funcionarioId).subscribe(
           (data) => {
-            this.log = new LogSave();
-            this.log.data = this.getDate();
-            this.log.hora = new Date().toLocaleTimeString();
-            this.log.funcionarioId = this.user.id;
-            this.log.evento = 'EXCLUSÃO';
-            this.log.descricao =
-              'EXCLUSÃO DO FUNCIONÁRIO ' + this.funcionario.nome;
-            this.logService.save(this.log).subscribe(
-              (data) => {
-                this.router.navigate(['funcionarios']);
-                this.funcionarioService.message =
-                  'Funcionário(a) excluido(a) com sucesso!';
-              },
-              (error) => {
-                this.buildMessage(
-                  'Erro ao tentar salvar o registro de evento',
-                  1
-                );
-              }
-            );
+            this.router.navigate(['funcionarios']);
+            this.funcionarioService.message =
+              'Funcionário(a) excluido(a) com sucesso!';
+
 
           },
           (error) => {
@@ -454,7 +369,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     this.isEditing = true;
   }
 
-  // função para bloquear os campos de edição
+
   cancelEditing() {
     this.isEditing = false;
     this.formFuncionario.get('endereco.estado').disable();
@@ -466,13 +381,13 @@ export class FuncionarioDetailsComponent implements OnInit {
     event.target.value = event.target.value.toUpperCase();
   }
 
-  // Varificação de caractere
+
   onlyLetters(event) {
     if (
-      event.charCode == 32 || // espaço
+      event.charCode == 32 ||
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
-      (event.charCode > 191 && event.charCode <= 255) // letras com acentos
+      (event.charCode > 191 && event.charCode <= 255)
     ) {
       return true;
     } else {
@@ -481,9 +396,9 @@ export class FuncionarioDetailsComponent implements OnInit {
     }
   }
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
+
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',

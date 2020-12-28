@@ -14,7 +14,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Paciente, PacientePost } from 'src/app/models/paciente';
+import { Paciente } from 'src/app/models/paciente';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
 import { PacienteService } from 'src/app/services/paciente.service';
@@ -25,8 +25,6 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
-import { LogSave } from 'src/app/models/log';
-import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'app-paciente-details',
@@ -35,49 +33,49 @@ import { LogService } from 'src/app/services/log.service';
 })
 export class PacienteDetailsComponent implements OnInit {
   mask = '(00) 0000-0000';
-  // Icone de exluir
+
   faTimes = faTimes;
 
-  // Icone de salvar
+
   faCheck = faCheck;
 
-  // Icone de voltar
+
   faChevronLeft = faChevronLeft;
 
-  // Icone de editar
+
   faPencilAlt = faPencilAlt;
 
-  // Icone de cancelar edição
+
   faBan = faBan;
 
-  // Icone de adicionar
+
   faPlus = faPlus;
 
-  // Icone de listar
+
   faList = faList;
 
   /*Recupera o id do convenio para realizar a requisição a API */
   pacienteId = this.route.snapshot.paramMap.get('id');
 
-  // faz o controle dos campos de funcionario
+
   formPaciente: FormGroup;
 
-  // Controla a exibição dos campos de CRM e Especialidade
+
   isADoctor = false;
 
-  // Controla a edição do formulário
+
   isEditing = false;
 
-  // Recebe os dados informados no formulario
+
   paciente: Paciente;
 
-  // Recebe a lista de convenios para serem listadas no formulário
+
   convenios: Convenio[];
 
   //Recebe uma lista de tipos de convenio apos um convenio ser selecionado
   tiposConvenio: TipoConvenio[];
 
-  // controla o select de convenio
+
   convenioFormControl: FormControl;
 
   user = JSON.parse(sessionStorage.getItem('user'));
@@ -98,7 +96,6 @@ export class PacienteDetailsComponent implements OnInit {
     private convenioService: ConvenioService,
     private tipoConvenioService: TipoConvenioService,
     private enderecoService: EnderecoService,
-    private logService: LogService
   ) { }
 
   ngOnInit(): void {
@@ -135,7 +132,7 @@ export class PacienteDetailsComponent implements OnInit {
 
 
 
-  // Controla o formulario pegando ou setando valores nos campos e também fazendo validações
+
   createForm() {
     this.formPaciente = this.fb.group({
 
@@ -301,21 +298,7 @@ export class PacienteDetailsComponent implements OnInit {
         this.loadingDataMessage = 'Excluindo paciente';
         this.pacienteService.deletePaciente(Number(this.pacienteId)).subscribe(
           (data) => {
-            let log = new LogSave();
-            log.data = this.getDate();
-            log.hora = new Date().toLocaleTimeString();
-            log.funcionarioId = this.user.id;
-            log.evento = 'EXCLUSÃO';
-            log.descricao = 'EXCLUSÃO DO paciente ' + this.paciente.nome;
-            this.logService.save(log).subscribe(
-              (data) => { },
-              (error) => {
-                this.buildMessage(
-                  'Erro ao tentar salvar o registro de evento',
-                  1
-                );
-              }
-            );
+
             this.pacienteService.message = 'Paciente excluido com sucesso!';
             this.router.navigate(['/pacientes']);
           },
@@ -332,13 +315,13 @@ export class PacienteDetailsComponent implements OnInit {
     event.target.value = event.target.value.toUpperCase();
   }
 
-  // Varificação de caractere
+
   onlyLetters(event) {
     if (
-      event.charCode == 32 || // espaço
+      event.charCode == 32 ||
       (event.charCode > 64 && event.charCode < 91) ||
       (event.charCode > 96 && event.charCode < 123) ||
-      (event.charCode > 191 && event.charCode <= 255) // letras com acentos
+      (event.charCode > 191 && event.charCode <= 255)
     ) {
       return true;
     } else {
@@ -395,9 +378,9 @@ export class PacienteDetailsComponent implements OnInit {
       );
   }
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
+
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',

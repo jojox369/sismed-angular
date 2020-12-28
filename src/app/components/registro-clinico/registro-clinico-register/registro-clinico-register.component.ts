@@ -4,14 +4,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 
 import { Registroclinico } from 'src/app/models/registroclinico';
 import { PacienteService } from 'src/app/services/paciente.service';
-import { AgendaService } from 'src/app/services/agenda.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, } from '@angular/router';
 import { Paciente } from 'src/app/models/paciente';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
-import { TipoConvenioService } from 'src/app/services/tipo-convenio.service';
 
 import { RegistroclinicoService } from 'src/app/services/registroclinico.service';
-import { ConvenioService } from 'src/app/services/convenio.service';
 import { Convenio } from 'src/app/models/convenio';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';

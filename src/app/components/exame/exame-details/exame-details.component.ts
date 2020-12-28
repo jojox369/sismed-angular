@@ -8,14 +8,11 @@ import { PacienteService } from 'src/app/services/paciente.service';
 import { ExameService } from 'src/app/services/exame.service';
 import { LaboratorioService } from 'src/app/services/laboratorio.service';
 import { LaboratorioTipoConvenioService } from 'src/app/services/laboratorio-tipo-convenio.service';
-import { Paciente } from 'src/app/models/paciente';
 import { Laboratorio } from 'src/app/models/laboratorio';
 import { TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
 import { Exame } from 'src/app/models/exame';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
-import { LogSave } from 'src/app/models/log';
 import { LogService } from 'src/app/services/log.service';
-import { Funcionario } from 'src/app/models/funcionario';
 
 @Component({
   selector: 'app-exame-details',
@@ -175,84 +172,6 @@ export class ExameDetailsComponent implements OnInit {
   }
 
   update() {
-
-    /*
-    passar para o back-end
-    let log = new LogSave();
-
-    if (this.exameForm.controls.data_retorno.value !== null) {
-      if (this.dataRetorno !== null && this.exameForm.controls.data_retorno.value !== this.dataRetorno) {
-        log.data = this.getDate();
-        log.hora = new Date().toLocaleTimeString();
-        log.funcionarioId = this.user.id;
-        log.evento = 'EDIÇÃO';
-        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
-          this.formatDate(this.dataRetorno) + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
-        this.logService.save(log).subscribe(
-
-          error => {
-            this.buildMessage('erro ao tentar salvar registro de evento', 1);
-          }
-        );
-      } else if (this.dataRetorno === null) {
-        log.data = this.getDate();
-        log.hora = new Date().toLocaleTimeString();
-        log.funcionarioId = this.user.id;
-        log.evento = 'EDIÇÃO';
-        log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DE RETORNO PENDENTE'
-          + ' PARA A DATA ' + this.formatDate(this.exameForm.controls.data_retorno.value);
-        this.logService.save(log).subscribe(
-          error => {
-            this.buildMessage('erro ao tentar salvar registro de evento', 1);
-          }
-        );
-      }
-    } else if (this.dataRetorno !== null && this.exameForm.controls.data_retorno.value === null) {
-      log.data = this.getDate();
-      log.hora = new Date().toLocaleTimeString();
-      log.funcionarioId = this.user.id;
-      log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE RETORNO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
-        this.formatDate(this.dataRetorno) + ' PARA DATA DE RETORNO PENDENTE';
-      this.logService.save(log).subscribe(
-        error => {
-
-          this.buildMessage('erro ao tentar salvar registro de evento', 1);
-        }
-      );
-    }
-
-    if (this.dataColeta !== this.exameForm.controls.data_coleta.value) {
-      log.data = this.getDate();
-      log.hora = new Date().toLocaleTimeString();
-      log.funcionarioId = this.user.id;
-      log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE COLETA DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
-        this.formatDate(this.dataColeta) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_coleta.value);
-      this.logService.save(log).subscribe(
-        error => {
-          this.buildMessage('erro ao tentar salvar registro de evento', 1);
-        }
-      );
-    }
-
-    if (this.dataEnvio !== this.exameForm.controls.data_envio.value) {
-      log.data = this.getDate();
-      log.hora = new Date().toLocaleTimeString();
-      log.funcionarioId = this.user.id;
-      log.evento = 'EDIÇÃO';
-      log.descricao = 'ALTERAÇÃO NA DATA DE ÊNVIO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome + '. DA DATA ' +
-        this.formatDate(this.dataEnvio) + ' PARA DATA ' + this.formatDate(this.exameForm.controls.data_envio.value);
-      this.logService.save(log).subscribe(
-
-        error => {
-          this.buildMessage('erro ao tentar salvar registro de evento', 1);
-        }
-      );
-    } */
-
-
-
     this.exameForm.controls.nome.setValue(this.exameForm.controls.nome.value.toUpperCase());
     this.exameForm.controls.descricao.setValue(this.exameForm.controls.descricao.value.toUpperCase());
     this.exameForm.controls.funcionarioLaboratorio.setValue(this.exameForm.controls.funcionarioLaboratorio.value.toUpperCase());
@@ -279,17 +198,6 @@ export class ExameDetailsComponent implements OnInit {
       if (result === 'true') {
         this.exameService.delete(this.exameId).subscribe(
           (data) => {
-            /*  let log = new LogSave
-             log.data = this.getDate();
-             log.hora = new Date().toLocaleTimeString();
-             log.funcionarioId = this.user.id;
-             log.evento = 'EXCLUSÃO';
-             log.descricao = 'EXCLUSÃO DO EXAME ' + this.exame.nome + ' DO PACIÊNTE ' + this.exame.paciente.nome;
-             this.logService.save(log).subscribe(
-               error => {
-                 this.buildMessage('erro ao tentar salvar registro de evento', 1);
-               }
-             ); */
             this.exameService.message = 'Exame excluido com sucesso!';
             this.router.navigate(['exames']);
           },

@@ -81,7 +81,7 @@ export class ExameListComponent implements OnInit {
 
     this.exameService.getAll().subscribe(
       data => {
-        console.log(data)
+
         if (Object.keys(data).length === 0) {
           this.isExameNotEmpty = false;
           this.isLoading = false;

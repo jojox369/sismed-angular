@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Agenda, Agendar } from 'src/app/models/agenda';
+import { Agenda } from 'src/app/models/agenda';
 import { Funcionario } from 'src/app/models/funcionario';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';
@@ -33,7 +33,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { LogService } from 'src/app/services/log.service';
 import { CompareDates } from 'src/app/function';
-import { LogSave } from 'src/app/models/log';
 
 @Component({
   selector: 'app-agenda-details',
@@ -41,61 +40,61 @@ import { LogSave } from 'src/app/models/log';
   styleUrls: ['./agenda-details.component.css'],
 })
 export class AgendaDetailsComponent implements OnInit {
-  // Icone de exluir
+
   faTimes = faTimes;
 
-  // Icone de salvar
+
   faCheck = faCheck;
 
-  // Icone de voltar
+
   faChevronLeft = faChevronLeft;
 
-  // Icone de editar
+
   faPencilAlt = faPencilAlt;
 
-  // Icone de cancelar edição
+
   faBan = faBan;
 
-  // Icone de adicionar
+
   faPlus = faPlus;
 
-  // Icone de listar
+
   faList = faList;
 
-  // Variavel que recupera o id do medico da url
+
   medicoId = this.route.snapshot.paramMap.get('medicoId');
 
-  // Variavel que recupera o id do agendamento da url
+
   agendamentoId = this.route.snapshot.paramMap.get('agendamentoId');
 
-  // Variavel que recebe os dados do agendamento
+
   agendamento: Agenda;
 
-  // variavel que recebe a lista de medicos
+
   medicos: Funcionario[];
 
-  // Variavel que recebe todos os convenios aceitos pelo medico
+
   convenios: Convenio[];
 
-  // Variavel que recebe todos os tipos de convenio aceitos pelo medico
+
   tipos: TipoConvenio[];
 
-  // Receve as informações do paciente
+
   paciente: Paciente;
 
-  // Variavel que recebe todos os procedimentos de um convenio
+
   procedimentos: Procedimento[];
 
-  // recebe os dados do formulario
+
   formAgenda: FormGroup;
 
-  // Recebe o id do convenio selecionado
+
   convenioControl = new FormControl('', Validators.required);
 
-  // Controla a exibição das informações do paciente
+
   showFields: boolean;
 
-  // Controla a edição do formulário
+
   isEditing: boolean;
 
   isLoading: boolean = true;
@@ -104,7 +103,7 @@ export class AgendaDetailsComponent implements OnInit {
 
   loadingDataMessage: string = 'Carregando Dados ...';
 
-  // Guarda a data do baco de dados para verificação na hora da edição
+
   dataAgendamento;
 
 
@@ -156,7 +155,7 @@ export class AgendaDetailsComponent implements OnInit {
     this.getMedicoDetails();
   }
 
-  // Metodo para pegar as informações do agendamento
+
   getAgendamento() {
     this.agendaService
       .getAgendamento(this.agendamentoId)
@@ -185,7 +184,7 @@ export class AgendaDetailsComponent implements OnInit {
       );
   }
 
-  // Metodo para pegar a lista de medicos
+
   getMedicos() {
     this.funcionarioService.getMedicos().subscribe(
       (data) => {
@@ -197,7 +196,7 @@ export class AgendaDetailsComponent implements OnInit {
     );
   }
 
-  // Metodo para pegar os convenios aceitos pelo medico
+
   getConvenios() {
     this.funcionarioTipoConvenioService
       .getAcceptedConvenios(this.formAgenda.controls.funcionario.value)
@@ -217,7 +216,7 @@ export class AgendaDetailsComponent implements OnInit {
 
 
 
-  // Metodo para pegar os detalhes do medico selecionado
+
   getMedicoDetails() {
     this.getConvenios();
 
@@ -237,7 +236,7 @@ export class AgendaDetailsComponent implements OnInit {
       );
   }
 
-  // Metodo que pega todos os tipos de convenio aceitos pelo medico
+
   getTiposConvenio() {
     this.funcionarioTipoConvenioService
       .getAcceptedTipos(
@@ -252,7 +251,7 @@ export class AgendaDetailsComponent implements OnInit {
       );
   }
 
-  // Metodo que pega todos os procedimentos a partir de um convenio
+
   getProcedimentos() {
     this.procedimentoService.getAll(this.convenioControl.value).subscribe(
       (data) => {
@@ -269,7 +268,7 @@ export class AgendaDetailsComponent implements OnInit {
     this.convenioControl.enable();
   }
 
-  // função para bloquear os campos de edição
+
   cancelEditing() {
     this.isEditing = false;
     this.convenioControl.disable();
@@ -306,6 +305,7 @@ export class AgendaDetailsComponent implements OnInit {
         this.formAgenda.controls.observacao.value.toUpperCase()
       );
     }
+    console.log(this.formAgenda.value)
     this.agendaService.updateAgendamento(this.formAgenda.value).subscribe(
       (data) => {
         this.buildMessage(
@@ -316,28 +316,6 @@ export class AgendaDetailsComponent implements OnInit {
         this.isLoading = false;
         this.convenioControl.disable();
         this.formAgenda.disable();
-        /* if (this.formAgenda.controls.data.value !== this.dataAgendamento) {
-          let logSave = new LogSave();
-          logSave.data = this.getDate();
-          logSave.hora = this.getTime();
-          logSave.funcionario = this.user.id;
-          logSave.evento = 'EDIÇÃO';
-          logSave.descricao =
-            'ALTERAÇÃO NA DATA DO AGENDAMENTO DO PACIENTE ' +
-            this.paciente.nome +
-            '. Do dia: ' +
-            this.formatDate(this.dataAgendamento) +
-            ' para o dia: ' +
-            this.formatDate(this.formAgenda.controls.data.value);
-          this.logService.save(logSave).subscribe(
-            (data) => { },
-            (error) => {
-              this.buildMessage('erro ao tentar salvar registro de evento', 1);
-            }
-          );
-        } */
-
-
       },
       (error) => {
         if (error.status === 409) {
@@ -378,9 +356,9 @@ export class AgendaDetailsComponent implements OnInit {
   }
 
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
+
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
