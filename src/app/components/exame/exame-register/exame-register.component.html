@@ -24,7 +24,7 @@
             [matAutocomplete]="auto" (keyup)="toUpperCase($event)" (keypress)="onlyLetters($event)" />
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let paciente of filteredPacientes | async" [value]="paciente.nome"
-              (onSelectionChange)="getPacienteDetails(paciente.id)">
+              (onSelectionChange)="getPacienteDetails(paciente.prontuario)">
               {{ paciente.nome }}
             </mat-option>
           </mat-autocomplete>
@@ -41,7 +41,7 @@
           <mat-label>Cônvenio</mat-label>
           <input [value]="
               paciente.tipoConvenio !== undefined
-                ? paciente.tipoConvenio.convenio.nome === 'PARTICULAR'
+                ? paciente.tipoConvenio.convenio.nome === 'PARTICULAR' || paciente.tipoConvenio.convenio.nome === 'NÃO INFORMADO'
                   ? paciente.tipoConvenio.convenio.nome
                   : paciente.tipoConvenio.convenio.nome +
                     ' - ' +
@@ -87,7 +87,7 @@
         <h5 fxLayoutAlign="center start">Informações do Laboratório</h5>
         <mat-form-field appearance="fill">
           <mat-label>Laboratório</mat-label>
-          <mat-select formControlName="laboratorio" required (selectionChange)="getLaboratorioDetails()">
+          <mat-select formControlName="laboratorioId" required (selectionChange)="getLaboratorioDetails()">
             <mat-option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.id">{{ laboratorio.nome }}
             </mat-option>
           </mat-select>
@@ -109,7 +109,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Convênio</mat-label>
-          <mat-select formControlName="tipoConvenio" required>
+          <mat-select formControlName="tipoConvenioId" required>
             <mat-option *ngFor="let tipo of laboratorioTipos" [value]="tipo.id">
               {{
               tipo.id === 1
@@ -133,18 +133,18 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Quem Recebeu</mat-label>
-          <input (keyup)="toUpperCase($event)" matInput formControlName="funcionario_laboratorio" autocomplete="off"
+          <input (keyup)="toUpperCase($event)" matInput formControlName="funcionarioLaboratorio" autocomplete="off"
             required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de Coleta</mat-label>
-          <input type="date" matInput formControlName="data_coleta" required />
+          <input type="date" matInput formControlName="dataColeta" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de envio</mat-label>
-          <input type="date" matInput formControlName="data_envio" required />
+          <input type="date" matInput formControlName="dataEnvio" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill">

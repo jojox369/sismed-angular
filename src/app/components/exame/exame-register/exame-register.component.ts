@@ -1,19 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { ExameService } from 'src/app/services/exame.service';
 import { Paciente } from 'src/app/models/paciente';
-import { Exame, ExameDetail } from 'src/app/models/exame';
+import { Exame } from 'src/app/models/exame';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { Laboratorio } from 'src/app/models/laboratorio';
 import { LaboratorioService } from 'src/app/services/laboratorio.service';
 import { LaboratorioTipoConvenioService } from 'src/app/services/laboratorio-tipo-convenio.service';
-import { TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
+import { TipoConvenio, TipoConvenioPaciente } from 'src/app/models/tipo-convenio';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { Funcionario } from 'src/app/models/funcionario';
+import { of } from 'rxjs';
 @Component({
   selector: 'app-exame-register',
   templateUrl: './exame-register.component.html',
@@ -62,26 +64,31 @@ export class ExameRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.paciente = new Paciente;
     this.laboratorio = new Laboratorio;
+    this.filterPacientes();
     this.createForm();
   }
   createForm() {
     this.exame = new Exame();
+    this.exame.tipoConvenio = new TipoConvenio();
+    this.exame.funcionario = new Funcionario();
+    this.exame.laboratorio = new Laboratorio();
+    this.exame.paciente = new Paciente();
 
     this.exameForm = this.fb.group({
       nome: [this.exame.nome, Validators.required],
       descricao: [this.exame.descricao, Validators.required],
       dataColeta: [this.exame.dataColeta, Validators.required],
       dataEnvio: [this.exame.dataEnvio, Validators.required],
-      funcionario_laboratorio: [this.exame.funcionario_laboratorio, Validators.required],
-      funcionarioId: [this.exame.funcionario],
+      funcionarioLaboratorio: [this.exame.funcionarioLaboratorio, Validators.required],
       valor: [this.exame.valor, Validators.required],
+      funcionarioId: [this.exame.funcionario.id],
       tipoConvenioId: [this.exame.tipoConvenio.id, Validators.required],
-      pacienteId: [this.exame.paciente, Validators.required],
-      laboratorioId: [this.exame.laboratorio, Validators.required]
+      pacienteId: [this.exame.paciente.prontuario, Validators.required],
+      laboratorioId: [this.exame.laboratorio.id, Validators.required]
     });
 
     this.exameForm.controls.funcionarioId.setValue(this.user.id);
-    this.getPacientes();
+    // this.getPacientes();
     this.exameForm.controls.laboratorioId.disable();
     this.exameForm.controls.tipoConvenioId.disable();
 
@@ -89,43 +96,43 @@ export class ExameRegisterComponent implements OnInit {
 
   }
 
-  getPacientes() {
-    this.pacienteService.getAllPacientes().subscribe(
-      data => {
-        this.pacientes = data;
-        this.filterPacientes();
-
-      },
-      error => {
-        console.log(error);
-        this.buildMessage('Erro ao tentar recuperar a lista de pacientes', 1);
-      }
-    );
-  }
 
   filterPacientes() {
 
     this.filteredPacientes = this.pacienteName.valueChanges
       .pipe(
+
         startWith(''),
-        map(value => value.length >= 1 ? this.filter(value) : [])
+
+        switchMap(value => {
+          if (value !== '') {
+            // lookup from github
+            return this.filter(value);
+          } else {
+            // if no value is pressent, return null
+            return of(null);
+          }
+        })
       )
   }
 
-  filter(value: string) {
+  filter(value: string): Observable<Paciente> {
+    return this.pacienteService.getPacienteByName(value).pipe(
+      map(results => results),
+      catchError(_ => {
+        return of(null);
+      })
+    )
 
-    const filterValue = value.toLowerCase();
-    const results = this.pacientes.filter(option => option.nome.toLowerCase().includes(filterValue));
-    return results;
   }
 
 
   getPacienteDetails(pacienteId) {
 
-    this.exameForm.controls.paciente.setValue(pacienteId);
-    this.pacienteService.getPacienteDetails(pacienteId).subscribe(
+    this.exameForm.controls.pacienteId.setValue(pacienteId);
+    this.pacienteService.getPaciente(pacienteId).subscribe(
       data => {
-        this.paciente = data[0];
+        this.paciente = data;
         this.getLaboratorios();
 
       },
@@ -141,7 +148,7 @@ export class ExameRegisterComponent implements OnInit {
     this.laboratorioService.getByTipoConvenio(this.paciente.tipoConvenio.id).subscribe(
       data => {
         this.laboratorios = data;
-        this.exameForm.controls.laboratorio.enable();
+        this.exameForm.controls.laboratorioId.enable();
       },
       error => {
         console.log(error);
@@ -152,10 +159,10 @@ export class ExameRegisterComponent implements OnInit {
   }
 
   getLaboratorioDetails() {
-    this.laboratorioService.getById(this.exameForm.controls.laboratorio.value).subscribe(
+    this.laboratorioService.getById(this.exameForm.controls.laboratorioId.value).subscribe(
       data => {
         this.laboratorio = data;
-        this.exameForm.controls.tipo_convenio.enable();
+        this.exameForm.controls.tipoConvenioId.enable();
       },
       error => {
         console.log(error);
@@ -163,7 +170,7 @@ export class ExameRegisterComponent implements OnInit {
       }
     );
 
-    this.laboratorioTipoConvenioService.getAcceptedConveniosTipos(this.exameForm.controls.laboratorio.value).subscribe(
+    this.laboratorioTipoConvenioService.getAcceptedConveniosTipos(this.exameForm.controls.laboratorioId.value).subscribe(
       data => {
         this.laboratorioTipos = data.filter(tipo => tipo.id === 1 || tipo.id === this.paciente.tipoConvenio.id);
 
@@ -181,7 +188,7 @@ export class ExameRegisterComponent implements OnInit {
   save(frm: FormGroup) {
     this.exameForm.controls.nome.setValue(this.exameForm.controls.nome.value.toUpperCase());
     this.exameForm.controls.descricao.setValue(this.exameForm.controls.descricao.value.toUpperCase());
-    this.exameForm.controls.funcionario_laboratorio.setValue(this.exameForm.controls.funcionario_laboratorio.value.toUpperCase());
+    this.exameForm.controls.funcionarioLaboratorio.setValue(this.exameForm.controls.funcionarioLaboratorio.value.toUpperCase());
     this.exameService.save(this.exameForm.value).subscribe(
       data => {
         this.router.navigate(['/exames']);

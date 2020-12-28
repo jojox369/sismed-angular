@@ -1,4 +1,3 @@
-import { ExameDetail } from './../models/exame';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -37,7 +36,7 @@ export class ExameService {
   }
 
 
-  update(exame: ExameDetail): Observable<any> {
+  update(exame: Exame): Observable<any> {
     return this.http.put(`${baseUrl}exame/`, exame, {
       headers: this.httpHeaders,
     });
@@ -51,8 +50,8 @@ export class ExameService {
   }
 
 
-  save(exame: ExameDetail): Observable<any> {
-    return this.http.post(`${baseUrl}exame/`, {
+  save(exame: Exame): Observable<any> {
+    return this.http.post(`${baseUrl}exame/`, exame, {
       headers: this.httpHeaders,
     });
   }

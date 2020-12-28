@@ -27,7 +27,7 @@ export class ExameListComponent implements OnInit {
   // variavel que captura o que esta sendo digitado
   searchText = '';
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError = false;
 
   // Variavel que controla a mensagem de dado não encontrado
@@ -92,7 +92,7 @@ export class ExameListComponent implements OnInit {
         }
       },
       error => {
-        console.log(error);
+        this.hasError = true;
         this.isLoading = false;
         this.buildMessage('Erro ao tentar listar os exames', 1);
       }
@@ -175,7 +175,7 @@ export class ExameListComponent implements OnInit {
           this.buildTable();
         },
         error => {
-          console.log(error);
+          this.hasError = true;
         }
       );
     }
@@ -187,7 +187,7 @@ export class ExameListComponent implements OnInit {
           this.buildTable();
         },
         error => {
-          console.log(error);
+          this.hasError = true;
         }
       );
     }
@@ -199,7 +199,7 @@ export class ExameListComponent implements OnInit {
           this.buildTable();
         },
         error => {
-          console.log(error);
+          this.hasError = true;
         }
       );
     }
@@ -211,7 +211,7 @@ export class ExameListComponent implements OnInit {
           this.buildTable();
         },
         error => {
-          console.log(error);
+          this.hasError = true;
         }
       );
     }
@@ -223,7 +223,7 @@ export class ExameListComponent implements OnInit {
           this.buildTable();
         },
         error => {
-          console.log(error);
+          this.hasError = true;
         }
       );
     }

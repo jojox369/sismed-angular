@@ -65,12 +65,7 @@ export class PacienteService {
       .pipe(map((data) => new Paciente().deserializable(data)));
   }
 
-  getPacienteDetails(prontuario: string): Observable<Paciente> {
-    return this.http.get<Paciente>(
-      baseUrl + 'paciente/details/' + prontuario + '/',
-      { headers: this.httpHeaders }
-    );
-  }
+
 
   savePaciente(paciente: PacientePost) {
     return this.http.post(baseUrl + 'paciente/', paciente, {
