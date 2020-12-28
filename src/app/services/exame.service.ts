@@ -57,68 +57,27 @@ export class ExameService {
   }
 
 
-  getByPaciente(pacienteName): Observable<Exame[]> {
-    return this.http
-      .get<Exame[]>(baseUrl + 'exames/paciente/' + pacienteName + '/', {
-        headers: this.httpHeaders,
-      })
-      .pipe(
-        map((data) => data.map((data) => new Exame().deserializable(data)))
-      );
-  }
-
-
-  getByName(exameName): Observable<Exame[]> {
-    return this.http
-      .get<Exame[]>(baseUrl + 'exames/name/' + exameName + '/', {
-        headers: this.httpHeaders,
-      })
-      .pipe(
-        map((data) => data.map((data) => new Exame().deserializable(data)))
-      );
-  }
-
-  getByDataColeta(dataColeta): Observable<Exame[]> {
-    return this.http
-      .get<Exame[]>(baseUrl + 'exames/dataColeta/' + dataColeta + '/', {
-        headers: this.httpHeaders,
-      })
-      .pipe(
-        map((data) => data.map((data) => new Exame().deserializable(data)))
-      );
-  }
-
-
-  getByPacienteExame(pacienteName, exameName): Observable<Exame[]> {
-    return this.http
-      .get<Exame[]>(
-        baseUrl +
-        'exames/paciente/' +
-        pacienteName +
-        '/exame/' +
-        exameName +
-        '/',
-        { headers: this.httpHeaders }
-      )
-      .pipe(
-        map((data) => data.map((data) => new Exame().deserializable(data)))
-      );
-  }
-
-
-  getByExameDataColeta(exameName, dataColeta): Observable<Exame[]> {
-    return this.http
-      .get<Exame[]>(
-        baseUrl +
-        'exames/name/' +
-        exameName +
-        '/dataColeta/' +
-        dataColeta +
-        '/',
-        { headers: this.httpHeaders }
-      )
-      .pipe(
-        map((data) => data.map((data) => new Exame().deserializable(data)))
-      );
+  search(pacienteName: string, dataColeta: string, exameName: string): Observable<Exame[]> {
+    let url = `${baseUrl}exame/pesquisa/composta?`;
+    if (pacienteName) {
+      url += `pacienteNome=${pacienteName}`;
+    }
+    if (dataColeta) {
+      if (pacienteName) {
+        url += `&dataColeta=${dataColeta}`;
+      } else {
+        url += `dataColeta=${dataColeta}`
+      }
+    }
+    if (exameName) {
+      if (pacienteName || dataColeta) {
+        url += `&exame=${exameName}`;
+      } else {
+        url += `exame=${exameName}`
+      }
+    }
+    return this.http.get<Exame[]>(url, { headers: this.httpHeaders }).pipe(
+      map((data) => data.map((data) => new Exame().deserializable(data)))
+    );
   }
 }

@@ -78,14 +78,18 @@ export class ExameListComponent implements OnInit {
   }
 
   getAllExames() {
+
     this.exameService.getAll().subscribe(
       data => {
+        console.log(data)
         if (Object.keys(data).length === 0) {
           this.isExameNotEmpty = false;
           this.isLoading = false;
           this.showEmptyMessage = true;
         }
         else {
+          this.isExameNotEmpty = true;
+          this.showEmptyMessage = false;
           this.isLoading = false;
           this.exames = data;
           this.buildTable();
@@ -167,67 +171,32 @@ export class ExameListComponent implements OnInit {
   }
 
   searchData() {
-    // busca apenas por paciente
-    if (this.searchText !== '' && this.exameName === '' && this.dataColeta === '') {
-      this.exameService.getByPaciente(this.pacienteName).subscribe(
+    if (this.pacienteName || this.dataColeta || this.exameName) {
+      this.exameService.search(this.pacienteName, this.dataColeta, this.exameName).subscribe(
         data => {
-          this.exames = data;
-          this.buildTable();
+          if (Object.keys(data).length === 0) {
+            this.isExameNotEmpty = false;
+            this.isLoading = false;
+            this.showEmptyMessage = true;
+          }
+          else {
+            this.isExameNotEmpty = true;
+            this.showEmptyMessage = false;
+            this.isLoading = false;
+            this.exames = data;
+            this.buildTable();
+          }
         },
         error => {
           this.hasError = true;
+          this.isLoading = false;
+          this.buildMessage('Erro ao tentar listar os exames', 1);
         }
       );
-    }
-    // Busca apenas por nome de exame
-    else if (this.searchText !== '' && this.pacienteName === '' && this.dataColeta === '') {
-      this.exameService.getByName(this.exameName).subscribe(
-        data => {
-          this.exames = data;
-          this.buildTable();
-        },
-        error => {
-          this.hasError = true;
-        }
-      );
-    }
-    // Busca apenas por data de coleta
-    else if (this.searchText !== '' && this.pacienteName === '' && this.exameName === '') {
-      this.exameService.getByDataColeta(this.dataColeta).subscribe(
-        data => {
-          this.exames = data;
-          this.buildTable();
-        },
-        error => {
-          this.hasError = true;
-        }
-      );
-    }
-    // busca apenas por paciente e exame
-    else if (this.searchText !== '' && this.dataColeta === '') {
-      this.exameService.getByPacienteExame(this.pacienteName, this.exameName).subscribe(
-        data => {
-          this.exames = data;
-          this.buildTable();
-        },
-        error => {
-          this.hasError = true;
-        }
-      );
-    }
-    // busca por exame e data
-    else if (this.searchText !== '' && this.pacienteName === '') {
-      this.exameService.getByExameDataColeta(this.exameName, this.dataColeta).subscribe(
-        data => {
-          this.exames = data;
-          this.buildTable();
-        },
-        error => {
-          this.hasError = true;
-        }
-      );
-    }
 
+    } else {
+      this.getAllExames()
+    }
 
   }
 
@@ -235,7 +204,7 @@ export class ExameListComponent implements OnInit {
 
   clearSearch() {
     this.getAllExames();
-    this.searchText = '';
+    this.searchText;
     this.exameName = '';
     this.pacienteName = '';
     this.dataColeta = '';
