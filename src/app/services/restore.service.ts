@@ -14,10 +14,10 @@ export class RestoreService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
-  restoreTables(table, date): Observable<any> {
-    return this.http.get(baseUrl + 'restore/' + table + '/' + 'date/' + date, {
+  restoreTables(restoreConfig): Observable<any> {
+    return this.http.post(`${baseUrl}restore/`, restoreConfig, {
       headers: this.httpHeaders,
     });
   }

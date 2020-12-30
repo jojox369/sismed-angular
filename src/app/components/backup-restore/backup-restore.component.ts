@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 interface Table {
   id: string;
   nome: string;
-  hasError: boolean;
+  selected: boolean;
 }
 
 @Component({
@@ -27,7 +27,7 @@ interface Table {
 })
 export class BackupRestoreComponent implements OnInit {
   // guarda as informações da tabela
-  tables = [];
+  tables: Table[] = [];
   tablesSelectedNames = [];
   allSelected: boolean = false;
   showTables: boolean = false;
@@ -47,6 +47,7 @@ export class BackupRestoreComponent implements OnInit {
   log: LogSave;
   user = JSON.parse(sessionStorage.getItem('user'));
   action: string;
+  responseError = true;
 
   constructor(
     private backupService: BackupService,
@@ -88,45 +89,45 @@ export class BackupRestoreComponent implements OnInit {
   }
 
   getTables() {
-    this.tables.push({ id: 'SismedAgenda', nome: 'Agenda', selected: false });
+    this.tables.push({ id: 'sismed_agenda', nome: 'Agenda', selected: false });
     this.tables.push({
-      id: 'SismedPaciente',
-      nome: 'Paciênte',
+      id: 'sismed_paciente',
+      nome: 'Paciente',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedFuncionario',
+      id: 'sismed_funcionario',
       nome: 'Funcionário',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedConvenio',
+      id: 'sismed_convenio',
       nome: 'Convênio',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedTipoConvenio',
+      id: 'sismed_tipo_convenio',
       nome: 'Tipo de Convenio',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedProcedimento',
+      id: 'sismed_procedimento',
       nome: 'Procedimento',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedRegistroClinico',
+      id: 'sismed_registro_clinico',
       nome: 'Registro Cliníco',
       selected: false,
     });
     this.tables.push({
-      id: 'SismedLaboratorio',
+      id: 'sismed_laboratorio',
       nome: 'Laboratorios',
       selected: false,
     });
-    this.tables.push({ id: 'SismedExame', nome: 'Exame', selected: false });
+    this.tables.push({ id: 'sismed_exame', nome: 'Exame', selected: false });
     this.tables.push({
-      id: 'SismedLog',
+      id: 'sismed_log',
       nome: 'Registro de Evento',
       selected: false,
     });
@@ -156,58 +157,48 @@ export class BackupRestoreComponent implements OnInit {
     this.awaitResponse = true;
     this.allSelected = false;
 
-    let count = 0;
+
     const tablesSelected = this.tables
-      .filter((ch) => {
-        return ch.selected;
+      .filter((table) => {
+        return table.selected;
       })
-      .map((ch) => {
-        return { id: ch.id, nome: ch.nome, hasError: false };
+      .map((table) => {
+        return table.id;
       });
 
-    for (const table of tablesSelected) {
-      this.tablesSelectedNames.push(table);
-      if (this.actionControl.value === 1) {
-        this.action = 'REALIZANDO CÓPIA DE SEGURANÇA';
-        this.backupService.generateBackup(table.id).subscribe(
+
+    if (this.actionControl.value === 1) {
+      this.action = 'REALIZANDO CÓPIA DE SEGURANÇA';
+      this.backupService.generateBackup(tablesSelected).subscribe(
+        (data) => {
+          this.showNewOperationButton = true;
+          this.responseError = false;
+          this.awaitResponse = false;
+        },
+        (error) => {
+          this.showNewOperationButton = true;
+          this.buildMessage('Erro ao tentar realizar o backup', 1);
+        }
+      );
+    } else {
+      this.action = 'RESTAURANDO DADOS';
+      const data = this.restoreDateControl.value;
+      this.restoreService
+        .restoreTables({ tabelas: tablesSelected, data })
+        .subscribe(
           (data) => {
-            count++;
+            this.showNewOperationButton = true;
+            this.responseError = false;
             this.awaitResponse = false;
-            if (data['response'] === '1') {
-              table.hasError = true;
-            }
-            if (count === tablesSelected.length) {
-              this.showNewOperationButton = true;
-              this.generateLog('BACKUP MANUAL', tablesSelected);
-            }
           },
           (error) => {
             this.showNewOperationButton = true;
-            this.buildMessage('Erro ao tentar realizar o backup', 1);
+            this.buildMessage('Erro ao tentar realizar o restore', 1);
           }
         );
-      } else {
-        this.action = 'RESTAURANDO DADOS';
-        this.restoreService
-          .restoreTables(table.id, this.restoreDateControl.value)
-          .subscribe(
-            (data) => {
-              count++;
-              this.awaitResponse = false;
-              if (data['response'] === '1') {
-                table.hasError = true;
-              }
-              if (count === tablesSelected.length) {
-                this.generateLog('BACKUP MANUAL', tablesSelected);
-              }
-            },
-            (error) => {
-              this.showNewOperationButton = true;
-              this.buildMessage('Erro ao tentar realizar o restore', 1);
-            }
-          );
-      }
     }
+
+
   }
   getDate(): string {
     const todayDate = new Date().toLocaleDateString().split('/');
@@ -215,14 +206,8 @@ export class BackupRestoreComponent implements OnInit {
   }
 
   generateLog(eventType: string, tablesSelected: Table[]) {
-    const tablesSuccessful = tablesSelected
-      .filter((t) => {
-        return !t.hasError;
-      })
-      .map((table) => {
-        return ' ' + table.nome.toUpperCase();
-      });
-    this.log = new LogSave();
+
+    /* this.log = new LogSave();
     this.log.data = this.getDate();
     this.log.hora = new Date().toLocaleTimeString();
     this.log.funcionarioId = this.user.id;
@@ -238,7 +223,7 @@ export class BackupRestoreComponent implements OnInit {
 
         this.buildMessage('Erro ao tentar salvar o registro de evento', 1);
       }
-    );
+    ); */
   }
 
   resetPage() {

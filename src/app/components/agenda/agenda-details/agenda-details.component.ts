@@ -305,7 +305,7 @@ export class AgendaDetailsComponent implements OnInit {
         this.formAgenda.controls.observacao.value.toUpperCase()
       );
     }
-    console.log(this.formAgenda.value)
+
     this.agendaService.updateAgendamento(this.formAgenda.value).subscribe(
       (data) => {
         this.buildMessage(

@@ -153,11 +153,6 @@ export class FuncionarioTipoConvenioDeleteComponent implements OnInit {
           this.showNewOperationButton = true;
         }
       );
-
-
-
-
-
   }
 
   newOperation() {

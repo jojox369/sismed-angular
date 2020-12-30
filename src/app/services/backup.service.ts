@@ -4,6 +4,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { UserService } from './user.service';
 import baseUrl from '../url';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,10 +17,10 @@ export class BackupService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
-  generateBackup(table: string): Observable<any> {
-    return this.http.get(baseUrl + 'backup/' + table + '/', {
+  generateBackup(tabelas: string[]): Observable<any> {
+    return this.http.post(`${baseUrl}backup/`, tabelas, {
       headers: this.httpHeaders,
     });
   }
