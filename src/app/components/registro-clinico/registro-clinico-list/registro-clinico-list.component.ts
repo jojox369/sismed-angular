@@ -23,7 +23,7 @@ export class RegistroClinicoListComponent implements OnInit {
 
   registros: Registroclinico[];
 
-  registrosFilter: Registroclinico[];
+
 
   paginaAtual = 1;
 
@@ -37,7 +37,7 @@ export class RegistroClinicoListComponent implements OnInit {
 
   itemsPerPage: number = 10;
 
-  itensLength: number;
+
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -71,8 +71,8 @@ export class RegistroClinicoListComponent implements OnInit {
     this.registroClinicoService.getRegistros().subscribe(
       data => {
         this.registros = data;
-        this.registrosFilter = this.registros;
-        this.itensLength = this.registros.length;
+
+
         this.buildTable();
       },
       error => {

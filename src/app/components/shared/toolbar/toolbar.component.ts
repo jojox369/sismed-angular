@@ -28,7 +28,7 @@ export class ToolbarComponent implements OnInit {
   clock: string;
   faUserCircle = faUserCircle;
   currentUrl;
-  constructor(private router: Router, private dialog: MatDialog) {}
+  constructor(private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getDate();
@@ -75,7 +75,7 @@ export class ToolbarComponent implements OnInit {
     if (this.user.perfil !== 2) {
       this.navLinks.push({
         path: '/registroclinico',
-        label: 'Regsitros Clínicos',
+        label: 'Registros Clínicos',
         icon: faFileMedical,
         title: 'Listar Registros Clinícos',
       });

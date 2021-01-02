@@ -73,7 +73,7 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   constructor(
     private funcionarioService: FuncionarioService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.searchInput.nativeElement.focus();
   }
@@ -87,18 +87,19 @@ export class FuncionarioListComponent implements OnInit, AfterViewInit {
   getAllFuncionarios() {
     this.funcionarioService.getAllFuncionarios().subscribe(
       (data) => {
+        this.funcionarios = data;
+        this.buildTable();
+
         if (Object.keys(data).length === 0) {
           this.isFuncionarioNotEmpty = false;
-          this.isLoading = false;
           this.showEmptyMessage = true;
-        } else {
-          this.isLoading = false;
-          this.funcionarios = data;
-          this.buildTable();
         }
+        this.isLoading = false;
+
       },
       (error) => {
         this.isLoading = false;
+        this.hasError = true;
         this.buildMessage('Erro ao tentar listar os funcionarios', 1);
       }
     );

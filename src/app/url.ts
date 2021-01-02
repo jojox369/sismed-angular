@@ -1,4 +1,4 @@
-let appMode = 'production';
+let appMode = 'development';
 const baseUrl =
   appMode === 'development'
     ? 'http://localhost:3000/'

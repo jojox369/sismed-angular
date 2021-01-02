@@ -7,34 +7,42 @@ import { Agenda } from './agenda';
 
 export class Relatorio implements Deserializable {
 
-    id: number;
-    valor: number;
-    data: Date;
-    hora: string;
-    paciente: number;
-    convenio: number;
-    procedimento: number;
-    funcionario: number;
-    agendamento: number;
+  id: number;
+  valor: number;
+  data: Date;
+  hora: string;
+  paciente: number;
+  convenio: number;
+  procedimento: number;
+  funcionario: number;
+  agendamento: number;
 
-    deserializable(input: any): this {
-        return Object.assign(this, input);
-    }
+  deserializable(input: any): this {
+    return Object.assign(this, input);
+  }
 }
 
 export class RelatorioList implements Deserializable {
 
-    id: number;
-    valor: number;
-    data: Date;
-    hora: string;
-    paciente: Paciente;
-    convenio: Convenio;
-    procedimento: Procedimento;
-    funcionario: Funcionario;
-    agendamento: Agenda;
 
-    deserializable(input: any): this {
-        return Object.assign(this, input);
+
+  dados: [
+    {
+      id: number;
+      valor: number;
+      data: Date;
+      hora: string;
+      paciente: Paciente;
+      convenio: Convenio;
+      procedimento: Procedimento;
+      funcionario: Funcionario;
+      agendamento: Agenda;
     }
+  ];
+
+  total: number;
+
+  deserializable(input: any): this {
+    return Object.assign(this, input);
+  }
 }

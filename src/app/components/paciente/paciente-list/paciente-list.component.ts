@@ -65,17 +65,21 @@ export class PacienteListComponent implements OnInit {
   getAllPacientes() {
     this.pacienteService.getAllPacientes().subscribe(
       data => {
+        this.pacientes = data;
+        this.buildTable();
+
         if (Object.keys(data).length === 0) {
           this.isPacientesEmpty = true;
+          this.showEmptyMessage = true;
         } else {
-          this.isLoading = false;
           this.isPacientesEmpty = false;
-          this.pacientes = data;
-          this.buildTable()
         }
+        this.isLoading = false;
+
       },
       error => {
-
+        this.hasError = true;
+        this.isLoading = false;
         this.buildMessage('Erro ao tentar carregar a lista de pacientes', 1)
       }
     );
@@ -142,7 +146,7 @@ export class PacienteListComponent implements OnInit {
     if (this.searchText != "") {
       this.pacienteService.getPacienteByName(this.searchText).subscribe(
         data => {
-          if (Object.keys(data).length === 0) this.isPacientesNotFound = true;
+          if (Object.keys(data).length === 0) { this.isPacientesNotFound = true; }
           else {
             this.pacientes = data;
             this.buildTable();

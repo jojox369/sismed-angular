@@ -37,7 +37,7 @@ export class LaboratorioListComponent implements OnInit {
   // variavel que captura o que esta sendo digitado
   searchText = '';
 
-  // Variavel que controla a mensagem de erro 
+  // Variavel que controla a mensagem de erro
   hasError = false;
 
   // Variavel que controla a mensagem de dado não encontrado
@@ -65,16 +65,22 @@ export class LaboratorioListComponent implements OnInit {
   getLaboratorios() {
     this.laboratorioService.getAll().subscribe(
       data => {
+        this.laboratorios = data;
+        this.buildTable();
+
         if (Object.keys(data).length === 0) {
           this.isLaboratoriosNotEmpty = false;
+          this.showEmptyMessage = true;
         } else {
           this.laboratorios = data;
-          this.buildTable();
-          this.isLoading = false;
         }
+        this.isLoading = false;
+
       },
       error => {
-        console.log(error);
+        this.buildMessage('Erro ao tentar carregar laboratórios', 1);
+        this.hasError = true;
+        this.isLoading = false;
       }
     );
   }

@@ -137,21 +137,20 @@ export class AgendaListComponent implements OnInit {
       .getAgendamentos(this.medicoId, this.data_agendamento)
       .subscribe(
         (data) => {
+          this.agendamentos = data;
+          this.buildTable();
 
           if (Object.keys(data).length === 0) {
             this.isAgendaNotEmpty = false;
-            this.isLoading = false;
             this.showEmptyMessage = true;
-            this.agendamentos = data;
-            this.buildTable();
           } else {
-            this.isLoading = false;
-            this.agendamentos = data;
             this.convertTime();
             this.buildTable();
             this.editable = CompareDates(this.agendamentos[0].data.toString());
 
           }
+          this.isLoading = false;
+
         },
         (error) => {
           this.isLoading = false;

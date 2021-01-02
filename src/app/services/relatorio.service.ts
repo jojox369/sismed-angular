@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from './user.service';
-import { Relatorio } from '../models/relatorio';
+import { Relatorio, RelatorioList } from '../models/relatorio';
 import { Observable } from 'rxjs';
 import baseUrl from '../url';
 
@@ -25,73 +25,10 @@ export class RelatorioService {
     });
   }
 
-  //Pega agenda de custos para saber se o agendamento ja foi finalizado
-  getReport(date: String): Observable<any> {
-    return this.http.get(baseUrl + 'report/' + date + '/', {
+  generate(relatorio): Observable<RelatorioList> {
+
+    return this.http.post<RelatorioList>(`${baseUrl}relatorio/`, relatorio, {
       headers: this.httpHeaders,
     });
-  }
-
-  //retorna lista de acordo com a consulta passada
-  getAllReport(query: String): Observable<any> {
-    return this.http.get(baseUrl + 'report/list/' + query + '/', {
-      headers: this.httpHeaders,
-    });
-  }
-
-  //Retorna lista de relatorio entre um periodo de datas e pelo id do paciente
-  getAllReportByPeriodEPaciente(dataIni, dataFim, prontuario): Observable<any> {
-    return this.http.get(
-      baseUrl +
-      'report/periodo/' +
-      dataIni +
-      '/' +
-      dataFim +
-      '/paciente/' +
-      prontuario +
-      '/',
-      { headers: this.httpHeaders }
-    );
-  }
-
-  //Retorna lista de relatorio entre um periodo de datas
-  getAllReportByPeriodo(dataIni, dataFim): Observable<any> {
-    return this.http.get(baseUrl + 'report/' + dataIni + '/' + dataFim + '/', {
-      headers: this.httpHeaders,
-    });
-  }
-
-  //Retorna lista de relatorio entre um periodo de datas e pelo id do convenio
-  getAllReportByPeriodEConvenio(dataIni, dataFim, convenioId): Observable<any> {
-    return this.http.get(
-      baseUrl +
-      'report/periodo/' +
-      dataIni +
-      '/' +
-      dataFim +
-      '/convenio/' +
-      convenioId +
-      '/',
-      { headers: this.httpHeaders }
-    );
-  }
-
-  //Retorna lista de relatorio entre um periodo de datas e pelo id do funcionario
-  getAllReportByPeriodoEFuncinario(
-    dataIni,
-    dataFim,
-    funcionarioId
-  ): Observable<any> {
-    return this.http.get(
-      baseUrl +
-      'report/periodo/' +
-      dataIni +
-      '/' +
-      dataFim +
-      '/funcionario/' +
-      funcionarioId +
-      '/',
-      { headers: this.httpHeaders }
-    );
   }
 }

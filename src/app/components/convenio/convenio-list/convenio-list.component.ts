@@ -66,14 +66,14 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
     private convenioService: ConvenioService,
     private route: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getConvenios();
     this.verifyMessage();
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   /* Função que faz a requisição dos dados para a api.
   Caso ele consiga os dados, o modelo recebe esses dados para serem apresentados;
@@ -81,19 +81,18 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
   getConvenios() {
     this.convenioService.getAll().subscribe(
       (data) => {
+        this.buildTable();
+        this.convenios = data;
         if (Object.keys(data).length === 0) {
-          this.isLoading = false;
           this.convenioIsEmpty = true;
           this.showEmptyMessage = true;
         } else {
-          this.convenios = data;
-          this.buildTable();
-          this.isLoading = false;
           this.convenioIsEmpty = false;
         }
+        this.isLoading = false;
+
       },
       (error) => {
-        console.log('Erro ao carregar dados');
         this.isLoading = false;
         this.hasError = true;
         this.buildMessage('Erro ao tentar carregar a lista', 1);
@@ -174,7 +173,7 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
           }
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
       );
@@ -201,7 +200,7 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
           }
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
       );
@@ -228,7 +227,7 @@ export class ConvenioListComponent implements OnInit, AfterViewInit {
           }
         },
         (error) => {
-          console.log(error);
+
           this.buildMessage('Erro ao tentar pesquisar', 0);
         }
       );
