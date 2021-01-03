@@ -24,6 +24,7 @@ export class Funcionario implements Deserializable {
   endereco: Endereco;
   perfilId: number;
   codigo: string;
+  senha: string;
 
 
   deserializable(input: any): this {

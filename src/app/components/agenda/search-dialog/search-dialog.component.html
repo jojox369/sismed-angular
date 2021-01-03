@@ -12,12 +12,16 @@
       <span matPrefix>
         <fa-icon [icon]="faSearch"></fa-icon> &nbsp;
       </span>
+
       <button mat-icon-button [matMenuTriggerFor]="menu" matSuffix>
         <fa-icon [icon]="faSortDown"></fa-icon>
       </button>
+
       <input type="text" [placeholder]="placeholder" #searchInput matInput [formControl]="myControl"
         [matAutocomplete]="auto" (keyup)="toUpperCase($event)" />
+
       <mat-autocomplete #auto="matAutocomplete">
+
         <mat-option *ngFor="let patient of filteredOptions | async" [value]="patient.prontuario"
           [routerLink]="['/agenda/agendar', patient.prontuario]" mat-dialog-close>
           {{
@@ -31,7 +35,8 @@
           mat-dialog-close value="pre-cadastro">
           Pre cadastro
         </mat-option>
-        <span> </span>
+
+
       </mat-autocomplete>
     </mat-form-field>
 

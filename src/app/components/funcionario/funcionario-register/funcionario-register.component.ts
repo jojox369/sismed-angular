@@ -31,6 +31,10 @@ export class FuncionarioRegisterComponent implements OnInit {
   // Recebe os dados do formulario
   funcionario: Funcionario;
 
+  loadingDataMessage: string;
+
+  isLoading: boolean;
+
   user = JSON.parse(sessionStorage.getItem('user'));
 
   @ViewChild('numberInput') numberInput: ElementRef;
@@ -69,7 +73,7 @@ export class FuncionarioRegisterComponent implements OnInit {
       nacionalidade: [this.funcionario.nacionalidade, Validators.required],
       telefoneFixo: [this.funcionario.telefoneFixo, Validators.required],
       celular: [this.funcionario.celular, Validators.required],
-      senha: ['', Validators.required],
+      senha: [this.funcionario.senha, Validators.required],
       email: [this.funcionario.email, Validators.required],
       sexo: [this.funcionario.sexo, Validators.required],
       estadoCivil: [this.funcionario.estadoCivil, Validators.required],
@@ -90,6 +94,25 @@ export class FuncionarioRegisterComponent implements OnInit {
   }
 
   save(frm: FormGroup) {
+    this.isLoading = true;
+    this.loadingDataMessage = 'Atualizando as informações do paciente';
+    if (this.funcionario.orgaoEmissor) {
+      this.formFuncionario.controls.orgaoEmissor.setValue(
+        this.formFuncionario.controls.orgaoEmissor.value.toUpperCase()
+      )
+    }
+
+    if (this.funcionario.email) {
+      this.formFuncionario.controls.email.setValue(
+        this.formFuncionario.controls.email.value.toUpperCase()
+      )
+    }
+
+    if (this.funcionario.naturalidade) {
+      this.formFuncionario.controls.naturalidade.setValue(
+        this.formFuncionario.controls.naturalidade.value.toUpperCase()
+      )
+    }
     this.formFuncionario.controls.nome.setValue(this.formFuncionario.value.nome.toUpperCase());
     this.formFuncionario.controls.naturalidade.setValue(this.formFuncionario.value.naturalidade.toUpperCase());
     this.formFuncionario.get('endereco.logradouro').setValue(this.formFuncionario.get('endereco.logradouro').value.toUpperCase());
@@ -99,17 +122,15 @@ export class FuncionarioRegisterComponent implements OnInit {
     this.formFuncionario.get('endereco.complemento').setValue(this.formFuncionario.get('endereco.complemento').value.toUpperCase());
     this.funcionarioService.saveFuncionario(this.formFuncionario.value).subscribe(
       data => {
-        const user = { username: data.cpf, password: this.formFuncionario.controls.senha.value };
-        this.userService.save(user).subscribe(
-          data => {
-            this.funcionarioService.message = 'Funcionario cadastrado com sucesso!';
-            this.router.navigate(['funcionarios']);
-          }
-        );
+
+        this.funcionarioService.message = 'Funcionario cadastrado com sucesso!';
+        this.router.navigate(['funcionarios']);
+
+
 
       },
       error => {
-        console.log(error);
+
         this.buildMessage('Erro ao tentar cadastrar o funcionario', 1);
       }
     );
@@ -143,7 +164,7 @@ export class FuncionarioRegisterComponent implements OnInit {
     Também habilita os campos de crm e especialidade
   */
   funcionarioType() {
-    if (this.formFuncionario.controls.perfil.value === 1) {
+    if (this.formFuncionario.controls.perfilId.value === 1) {
       this.isADoctor = true;
     } else {
       this.formFuncionario.controls.crm.setValue(null);

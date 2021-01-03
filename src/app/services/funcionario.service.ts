@@ -11,7 +11,7 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class FuncionarioService {
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   token = this.userService.token;
   message: string;
@@ -19,10 +19,10 @@ export class FuncionarioService {
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  // Função que retorna uma lista com todos os funcionarios
+
   getAllFuncionarios(): Observable<Funcionario[]> {
     return this.http
-      .get<Funcionario[]>(baseUrl + 'funcionario/', {
+      .get<Funcionario[]>(`${baseUrl}funcionario/`, {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -32,19 +32,20 @@ export class FuncionarioService {
       );
   }
 
-  // Função que retorna as informações de um funcionario
+
   getFuncionario(funcionarioId): Observable<Funcionario> {
     return this.http
-      .get<Funcionario>(baseUrl + 'funcionario/' + funcionarioId + '/', {
+      .get<Funcionario>(`${baseUrl}funcionario/${funcionarioId}/`, {
+
         headers: this.httpHeaders,
       })
       .pipe(map((data) => new Funcionario().deserializable(data)));
   }
 
-  // Função que retorna uma lista com todos os medicos
+
   getMedicos(): Observable<Funcionario[]> {
     return this.http
-      .get<Funcionario[]>(baseUrl + 'funcionario/listar/medicos/', {
+      .get<Funcionario[]>(`${baseUrl}funcionario/listar/medicos/`, {
         headers: this.httpHeaders,
       })
       .pipe(
@@ -54,64 +55,66 @@ export class FuncionarioService {
       );
   }
 
-  // Função que atualiza um funcionario
+
   updateFuncionario(funcionario): Observable<any> {
-    return this.http.put(baseUrl + 'funcionario/', funcionario, {
+    return this.http.put(`${baseUrl}funcionario/`, funcionario, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função que salva um novo funcionario
+
   saveFuncionario(funcionario): Observable<any> {
-    return this.http.post(baseUrl + 'funcionario/', funcionario, {
+    console.log(funcionario)
+    return this.http.post(`${baseUrl}funcionario/`, funcionario, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função para exlcuir un funcionario
+
   deleteFuncionario(funcinoarioId) {
     return this.http.delete(baseUrl + 'funcionario/' + funcinoarioId + '/', {
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pelo nome do funcionario
-  findByName(name): Observable<any> {
-    return this.http.get(baseUrl + 'funcionario/nome/' + name + '/', {
+
+  findByName(nome): Observable<any> {
+    return this.http.get(`${baseUrl}funcionario/nome/${nome}/`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pelo cpf do funcionario
+
 
   findByCPF(cpf): Observable<any> {
-    return this.http.get(baseUrl + 'funcionario/cpf/' + cpf + '/', {
+    return this.http.get(`${baseUrl}funcionario/cpf/${cpf}/`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pelo crm do funcionario
+
   findByCRM(crm): Observable<any> {
-    return this.http.get(baseUrl + 'funcionario/crm/' + crm + '/', {
+    return this.http.get(`${baseUrl}funcionario/crm/${crm}/`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pela matricula(id) do funcionario
+
   findByMatricula(matricula): Observable<any> {
-    return this.http.get(baseUrl + 'funcionario/matricula/' + matricula + '/', {
+    return this.http.get(`${baseUrl}funcionario/matricula/${matricula}/`, {
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pelo celular do funcionario
+
   findByCelular(celular): Observable<any> {
-    return this.http.get(baseUrl + 'funcionario/celular/' + celular + '/', {
+    return this.http.get(`${baseUrl}funcionario/celular/${celular}/`, {
+
       headers: this.httpHeaders,
     });
   }
 
-  // Função de pesquisa pela especialidade do funcionario
+
   findByEspecialidade(especialidade): Observable<any> {
     return this.http.get(
       baseUrl + 'funcionario/especialidade/' + especialidade + '/',
@@ -131,5 +134,9 @@ export class FuncionarioService {
       baseUrl + 'funcionario/code/' + cpf + '/',
       { headers: { 'Content-Type': 'application/json' } }
     );
+  }
+
+  updatePassword(funcionario): Observable<any> {
+    return this.http.post(`${baseUrl}funcionario/atualizarSenha/`, funcionario, { headers: this.httpHeaders })
   }
 }

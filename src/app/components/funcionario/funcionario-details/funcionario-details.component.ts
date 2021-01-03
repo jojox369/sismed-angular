@@ -359,7 +359,7 @@ export class FuncionarioDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(ChangePasswordComponent, {
       height: '600px',
       width: '650px',
-      data: this.funcionario.cpf,
+      data: this.funcionario.id,
     });
   }
 

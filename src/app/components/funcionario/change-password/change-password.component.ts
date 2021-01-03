@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { Validators, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { UserService } from 'src/app/services/user.service';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FuncionarioService } from 'src/app/services/funcionario.service';
 
 @Component({
   selector: 'app-change-password',
@@ -11,9 +11,9 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./change-password.component.css'],
 })
 export class ChangePasswordComponent implements OnInit {
-  passwordControl;
+  passwordControl = new FormControl();
 
-  repeatPasswordControl;
+  repeatPasswordControl = new FormControl();
 
   faCheck = faCheck;
 
@@ -21,49 +21,52 @@ export class ChangePasswordComponent implements OnInit {
 
   isLoading: boolean;
 
+  buttonDislabed = true;
+
   loadingDataMessage: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public cpf: string,
+    @Inject(MAT_DIALOG_DATA) public id: number,
     private snackBar: MatSnackBar,
-    private userService: UserService,
+    private funcionarioService: FuncionarioService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
+
+  verifyPasswords() {
+    if (this.passwordControl.value && this.repeatPasswordControl.value) {
+      this.buttonDislabed = false;
+    }
+    if (this.passwordControl.value != this.repeatPasswordControl.value || !this.passwordControl.value || !this.repeatPasswordControl.value) {
+      this.buttonDislabed = true;
+    } else {
+      this.buttonDislabed = false;
+    }
+
+  }
+  onChooseSearchMethod(value: any): any {
+    throw new Error('Method not implemented.');
+  }
 
   changePassword() {
     this.isLoading = true;
     this.loadingDataMessage = 'Atualizando sua senha';
-    if (this.passwordControl !== this.repeatPasswordControl) {
-      this.buildMessage('Senha não são iguais', 1);
-      this.isLoading = false;
-    } else {
-      this.userService.getUsers().subscribe(
-        (data) => {
-          for (const user of data) {
-            if (user.username === this.cpf) {
-              const userUpdated = {
-                username: this.cpf,
-                password: this.passwordControl,
-              };
-              this.userService.updatePassword(user.id, userUpdated).subscribe(
-                (data) => {
-                  this.buildMessage('Senha atualizada com sucesso', 0);
-                  this.dialog.closeAll();
-                },
-                (error) => {
-                  this.buildMessage('Erro ao tentar atualizar a senha', 1);
-                }
-              );
-            }
-          }
-        },
-        (error) => {
-          this.buildMessage('Erro ao tentar atualizar a senha', 1);
-        }
-      );
-    }
+    const data = { id: this.id, senha: this.passwordControl.value }
+
+    this.funcionarioService.updatePassword(data).subscribe(
+      data => {
+        this.buildMessage('Senha atualizada com sucesso', 0);
+        this.dialog.closeAll();
+      },
+      error => {
+        this.buildMessage('Erro ao tentar atualizar a senha', 1);
+
+      }
+    )
+
   }
 
   // monta a mensagem que vai ser exibida na pagina
