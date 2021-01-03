@@ -95,7 +95,7 @@ export class FuncionarioRegisterComponent implements OnInit {
 
   save(frm: FormGroup) {
     this.isLoading = true;
-    this.loadingDataMessage = 'Atualizando as informações do paciente';
+    this.loadingDataMessage = 'Atualizando as informações do funcionário';
     if (this.funcionario.orgaoEmissor) {
       this.formFuncionario.controls.orgaoEmissor.setValue(
         this.formFuncionario.controls.orgaoEmissor.value.toUpperCase()

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppComponent } from 'src/app/app.component';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-
+import { TokenStorageService } from 'src/app/services/token-storage-service.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private appComponent: AppComponent,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private tokenStorage: TokenStorageService
   ) { }
 
   ngOnInit(): void {
@@ -42,20 +43,15 @@ export class LoginComponent implements OnInit {
     this.loadingDataMessage = 'Verificando credenciais';
     this.userService.login(this.formUser.value).subscribe(
       (data) => {
-
-        const token = data.token;
-        // pega o token da resposta e coloca na variavel token do service
-        sessionStorage.setItem('token', token);
         const user = {
           id: data.id,
           perfil: data.perfil,
           nome: data.nome,
           cpf: data.cpf,
         };
-        sessionStorage.setItem('user', JSON.stringify(user));
-        sessionStorage.setItem('logged', 'true');
-        this.appComponent.verifyLogged();
-        this.router.navigate(['/home']);
+        this.tokenStorage.saveToken(data.token);
+        this.tokenStorage.saveUser(user);
+        this.reloadPage();
 
       },
       (error) => {
@@ -69,21 +65,13 @@ export class LoginComponent implements OnInit {
     this.appComponent.changePassword = true;
   }
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
     };
-
-    /*
-      type = 0: Mensagem de sucesso
-      type = 1: Mensagem de erro
-      type = 3: Mensagem de warning
-    */
-
     if (type === 0) {
       snackbarConfig.panelClass = 'success-snackbar';
     } else if (type === 1) {
@@ -92,5 +80,9 @@ export class LoginComponent implements OnInit {
       snackbarConfig.panelClass = 'warning-snackbar';
     }
     this.snackBar.open(message, undefined, snackbarConfig);
+  }
+
+  reloadPage(): void {
+    window.location.reload();
   }
 }

@@ -5,7 +5,7 @@ import {
   Validators,
   FormBuilder,
 } from '@angular/forms';
-import { Paciente, PacientePost } from 'src/app/models/paciente';
+import { Paciente } from 'src/app/models/paciente';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Convenio } from 'src/app/models/convenio';
 import { TipoConvenio } from 'src/app/models/tipo-convenio';

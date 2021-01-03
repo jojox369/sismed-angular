@@ -4,6 +4,7 @@ import {
   faCalendarAlt, faUser, faUserMd, faNotesMedical, faVial, faBriefcaseMedical, faStream, faScroll, faFileDownload,
   faFileUpload, faHome, faFileMedical
 } from '@fortawesome/free-solid-svg-icons';
+import { TokenStorageService } from './services/token-storage-service.service';
 import { UserService } from './services/user.service';
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit {
   faFileMedical = faFileMedical;
 
   // Variavel que informa se tem um usuario logado ou não;
-  logged: boolean;
+  isLoggedIn: boolean;
 
   changePassword: boolean;
 
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit {
   public showOverlay: boolean = true;
 
   constructor(
+    private tokenStorageService: TokenStorageService
   ) {
 
   }
@@ -48,12 +50,8 @@ export class AppComponent implements OnInit {
   }
 
   verifyLogged() {
-    const logged = sessionStorage.getItem('logged');
-    if (logged === 'true') {
-      this.logged = true;
-    } else {
-      this.logged = false;
-    }
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
   }
 
 

@@ -1,4 +1,4 @@
-<div *ngIf="logged && !changePassword">
+<div *ngIf="isLoggedIn && !changePassword">
   <div class="topnav">
     <app-toolbar></app-toolbar>
   </div>
@@ -12,12 +12,12 @@
 </div>
 
 
-<div style="padding: 2%;" *ngIf="!logged">
+<div style="padding: 2%;" *ngIf="!isLoggedIn">
   <ng-container style="margin: 0.5%">
     <mat-card>
-      <app-login *ngIf="!logged && !changePassword"></app-login>
+      <app-login *ngIf="!isLoggedIn && !changePassword"></app-login>
 
-      <app-forgot-password *ngIf="!logged && changePassword"></app-forgot-password>
+      <app-forgot-password *ngIf="!isLoggedIn && changePassword"></app-forgot-password>
     </mat-card>
   </ng-container>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faUserCircle, faIdCard, faScroll, faStream, faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { TokenStorageService } from 'src/app/services/token-storage-service.service';
 
 interface User {
   id: number;
@@ -32,6 +33,8 @@ export class UserDialogComponent implements OnInit {
 
   userFunction;
   constructor(
+    private tokenStorage: TokenStorageService
+
   ) { }
 
   ngOnInit(): void {
@@ -55,10 +58,8 @@ export class UserDialogComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('token');
-    sessionStorage.setItem('logged', 'false');
-    location.reload();
+    this.tokenStorage.signOut();
+    window.location.reload();
   }
 
 }

@@ -282,3 +282,6 @@
   </mat-card-content>
 
 </form>
+<div id="loading-data" fxLayoutAlign="space-between center" fxLayout="column" *ngIf="isLoading">
+  <app-loading-data [message]="loadingDataMessage"></app-loading-data>
+</div>
