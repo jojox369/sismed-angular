@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserService } from './user.service';
+import { TokenStorageService } from './token-storage-service.service';
 import { Relatorio, RelatorioList } from '../models/relatorio';
 import { Observable } from 'rxjs';
 import baseUrl from '../url';
@@ -9,13 +9,13 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class RelatorioService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
   /*Metodo que salva relatorio de acordo com as informações do agendamento */
   saveReport(relatorio: Relatorio): Observable<any> {

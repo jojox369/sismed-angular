@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Agenda, Agendar } from '../models/agenda';
 import { map } from 'rxjs/operators';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 
 
@@ -12,14 +13,17 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class AgendaService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
 
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorageService
+  ) { }
 
   // Faz requisição a API, que retorna uma lista com todos os agendamentos
   getAllAgendamentos(medicoId): Observable<Agenda[]> {

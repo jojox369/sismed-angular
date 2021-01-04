@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { FuncionarioService } from 'src/app/services/funcionario.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
-import { Funcionario } from 'src/app/models/funcionario';
+
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,122 +16,150 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class ForgotPasswordComponent implements OnInit {
   faCheck = faCheck;
+  faTimes = faTimes;
+  faExclamationTriangle = faExclamationTriangle;
   userForm: FormGroup;
   changePasswordForm: FormGroup;
   showUserForm: boolean = true;
   loadingEmail: boolean;
   showChangePasswordForm: boolean;
-  userLoginInformations;
+  user: User;
   codeDataBase: string;
-
+  buttonDisabled = true;
+  showHeader = true;
+  showWrongCodeHeader = false
+  isLoading;
+  loadingDataMessage;
+  showSuccessUpdatedMessage = false;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private funcionarioService: FuncionarioService,
     private userService: UserService,
-    private router: Router,
-    private appComponent: AppComponent
-  ) {}
+
+  ) { }
+
+  logIn(): void {
+    window.location.reload()
+  }
 
   ngOnInit(): void {
     this.createform();
   }
 
-  createform() {
+  createform(): void {
     this.userForm = this.fb.group({
       cpf: ['', Validators.required],
     });
 
     this.changePasswordForm = this.fb.group({
       password: ['', Validators.required],
+      repeatPassword: ['', Validators.required],
 
       code: [
         '',
         [
           Validators.required,
-          Validators.minLength(16),
-          Validators.maxLength(16),
+          Validators.minLength(11),
+          Validators.maxLength(11),
         ],
       ],
     });
   }
 
+  verifyPasswords() {
+    if (this.changePasswordForm.controls.password.value && this.changePasswordForm.controls.repeatPassword.value) {
+      this.buttonDisabled = false;
+    }
+    if (
+      this.changePasswordForm.controls.password.value != this.changePasswordForm.controls.repeatPassword.value
+      || !this.changePasswordForm.controls.password.value
+      || !this.changePasswordForm.controls.repeatPassword.value
+      || !this.changePasswordForm.controls.code.value
+    ) {
+      this.buttonDisabled = true;
+    } else {
+      this.buttonDisabled = false;
+    }
+
+  }
+
+  resendEmail() {
+    this.showChangePasswordForm = false;
+    this.showWrongCodeHeader = false;
+    this.verifyUser()
+  }
+
+
   verifyUser() {
     this.showUserForm = false;
     this.loadingEmail = true;
-    this.funcionarioService
-      .recoverPassword(this.userForm.controls.cpf.value)
-      .subscribe((res) => {
-        if (res.status === 204) {
-          this.buildMessage('Esse CPF não possui acesso ao SISMED', 1);
-          this.loadingEmail = false;
-          this.showUserForm = true;
-        } else if (res.status === 404) {
-          this.buildMessage('Erro ao tentar verificar o CPF', 1);
+    this.userService
+      .verifyUsername(this.userForm.controls.cpf.value).subscribe(
+        data => {
           this.loadingEmail = false;
           this.showChangePasswordForm = true;
-        } else {
-          this.loadingEmail = false;
-          this.showChangePasswordForm = true;
+          this.user = data;
+          this.isLoading = false;
 
-          this.userLoginInformations = {
-            id: res.body['id'],
-            username: res.body['username'],
-          };
+        },
+        error => {
+          if (error.status === 401) {
+            this.buildMessage('Esse CPF não possui acesso ao SISMED', 1);
+          } else {
+            this.buildMessage('Erro ao tentar verificar o CPF', 1);
+          }
+          this.isLoading = false;
+          this.showUserForm = true;
+          this.loadingEmail = false;
         }
-      });
+      )
   }
 
   updatePassword() {
-    this.funcionarioService
-      .getVerificarionCode(this.userLoginInformations.username)
-      .subscribe(
-        (data) => {
-          if (data.code === this.changePasswordForm.controls.code.value) {
-            const user = {
-              username: this.userLoginInformations.username,
-              password: this.changePasswordForm.controls.password.value,
-            };
-            this.userService
-              .updatePassword(this.userLoginInformations.id, user)
-              .subscribe(
-                (data) => {
-                  this.buildMessage('senha atualizada com sucesso', 0);
-                  setTimeout(() => {
-                    this.appComponent.changePassword = false;
-                    this.router.navigate(['/']);
-                  }, 4000);
-                },
-                (error) => {
-                  console.log(error);
-                  this.buildMessage('Erro ao tentar redefinir a senha', 1);
-                }
-              );
-          } else {
-            this.buildMessage('Código informado inválido', 1);
-          }
-        },
-        (error) => {
-          console.log(error);
-          this.buildMessage('Erro ao tentar atualizar a senha', 1);
+    this.showChangePasswordForm = false;
+    this.showWrongCodeHeader = false;
+    this.isLoading = true;
+
+    this.loadingDataMessage = 'Atualizando sua senha';
+    const updatePassword = {
+      id: this.user.id,
+      senha: this.changePasswordForm.controls.password.value,
+      codigo: this.changePasswordForm.controls.code.value
+
+    };
+
+    this.userService.updatePassword(updatePassword).subscribe(
+      data => {
+        this.showSuccessUpdatedMessage = true;
+        this.isLoading = false;
+        setTimeout(() => {
+          window.location.reload()
+        }, 4000);
+
+      },
+      err => {
+
+        if (err.error) {
+          this.buildMessage('Código inválido', 1);
         }
-      );
+        this.showHeader = false;
+        this.isLoading = false;
+        this.showChangePasswordForm = true;
+        this.showWrongCodeHeader = true;
+      }
+    )
   }
 
-  // monta a mensagem que vai ser exibida na pagina
+
   buildMessage(message: string, type: number) {
-    // configurações da mensagem de confirmação
+
     let snackbarConfig: MatSnackBarConfig = {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
     };
 
-    /*
-      type = 0: Mensagem de sucesso
-      type = 1: Mensagem de erro
-      type = 3: Mensagem de warning
-    */
+
 
     if (type === 0) {
       snackbarConfig.panelClass = 'success-snackbar';

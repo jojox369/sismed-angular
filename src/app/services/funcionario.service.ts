@@ -4,16 +4,19 @@ import { Observable } from 'rxjs';
 import { Funcionario } from '../models/funcionario';
 import { map } from 'rxjs/operators';
 import { UserService } from './user.service';
-import { Config } from '@fortawesome/fontawesome-svg-core';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FuncionarioService {
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorageService
+  ) { }
 
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
@@ -122,19 +125,6 @@ export class FuncionarioService {
     );
   }
 
-  recoverPassword(cpf): Observable<HttpResponse<Config>> {
-    return this.http.get<Config>(baseUrl + 'recover/password/' + cpf + '/', {
-      headers: { 'Content-Type': 'application/json' },
-      observe: 'response',
-    });
-  }
-
-  getVerificarionCode(cpf): Observable<any> {
-    return this.http.get<Funcionario>(
-      baseUrl + 'funcionario/code/' + cpf + '/',
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-  }
 
   updatePassword(funcionario): Observable<any> {
     return this.http.post(`${baseUrl}funcionario/atualizarSenha/`, funcionario, { headers: this.httpHeaders })

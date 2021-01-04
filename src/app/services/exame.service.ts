@@ -5,17 +5,18 @@ import { UserService } from './user.service';
 import { Exame } from '../models/exame';
 import { map } from 'rxjs/operators';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExameService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
 
   getAll(): Observable<Exame[]> {

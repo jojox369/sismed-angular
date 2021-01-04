@@ -27,4 +27,5 @@ form{
 .forgotPassword{
   margin-top: 1rem;
   text-decoration: none;
+  cursor: pointer;
 }

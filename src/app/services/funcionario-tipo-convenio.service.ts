@@ -5,17 +5,18 @@ import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { Convenio } from '../models/convenio';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FuncionarioTipoConvenioService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
 
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
   // Retorna uma lista de convenios aceitos pelo medico
   getAcceptedConvenios(funcionarioId): Observable<Convenio[]> {

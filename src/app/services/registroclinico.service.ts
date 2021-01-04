@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserService } from './user.service';
+import { TokenStorageService } from './token-storage-service.service';
 import { Registroclinico, RegistroclinicoDetails } from '../models/registroclinico';
 import baseUrl from '../url';
 
@@ -10,13 +10,13 @@ import baseUrl from '../url';
   providedIn: 'root',
 })
 export class RegistroclinicoService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
   getRegistros(): Observable<Registroclinico[]> {
     return this.http

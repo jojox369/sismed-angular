@@ -21,7 +21,7 @@ export class ChangePasswordComponent implements OnInit {
 
   isLoading: boolean;
 
-  buttonDislabed = true;
+  buttonDisabled = true;
 
   loadingDataMessage: string;
 
@@ -38,12 +38,12 @@ export class ChangePasswordComponent implements OnInit {
 
   verifyPasswords() {
     if (this.passwordControl.value && this.repeatPasswordControl.value) {
-      this.buttonDislabed = false;
+      this.buttonDisabled = false;
     }
     if (this.passwordControl.value != this.repeatPasswordControl.value || !this.passwordControl.value || !this.repeatPasswordControl.value) {
-      this.buttonDislabed = true;
+      this.buttonDisabled = true;
     } else {
-      this.buttonDislabed = false;
+      this.buttonDisabled = false;
     }
 
   }

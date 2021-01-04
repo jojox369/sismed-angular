@@ -3,8 +3,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Paciente, PacientePost } from '../models/paciente';
-import { UserService } from './user.service';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 interface ProximoProntuario {
   proximoProntuario: string;
@@ -14,13 +14,13 @@ interface ProximoProntuario {
   providedIn: 'root',
 })
 export class PacienteService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
   getAllPacientes(): Observable<Paciente[]> {
     return this.http

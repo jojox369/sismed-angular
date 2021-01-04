@@ -5,17 +5,21 @@ import { Observable } from 'rxjs';
 import { Log, LogSave } from '../models/log';
 import { map } from 'rxjs/operators';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LogService {
-  constructor(private http: HttpClient, private userService: UserService) {}
 
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
+
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
+
+
 
   getLogs(): Observable<Log[]> {
     return this.http

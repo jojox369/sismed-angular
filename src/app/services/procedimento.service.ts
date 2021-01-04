@@ -3,20 +3,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Procedimento } from 'src/app/models/procedimento';
 import { map } from 'rxjs/operators';
-import { UserService } from './user.service';
+import { TokenStorageService } from './token-storage-service.service';
 import baseUrl from '../url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcedimentoService {
-  constructor(private http: HttpClient, private userService: UserService) { }
-
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
+
+
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
+
 
 
   getAll(convenioId): Observable<Procedimento[]> {

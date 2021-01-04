@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppComponent } from 'src/app/app.component';
 import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/token-storage-service.service'
 @Component({
   selector: 'app-login',
@@ -17,11 +15,11 @@ export class LoginComponent implements OnInit {
 
   loadingDataMessage: string;
 
+  isLogin = true;
+
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    private appComponent: AppComponent,
-    private router: Router,
     private snackBar: MatSnackBar,
     private tokenStorage: TokenStorageService
   ) { }
@@ -55,14 +53,19 @@ export class LoginComponent implements OnInit {
 
       },
       (error) => {
-        this.buildMessage('Usuário e senha inválidos', 1);
+        if (error.status === 401) {
+          this.buildMessage('Esse CPF não possui acesso ao SISMED', 1);
+        } else {
+          this.buildMessage('Erro ao tentar verificar o CPF', 1);
+        }
         this.isLoading = false;
       }
     );
   }
 
   changePassword() {
-    this.appComponent.changePassword = true;
+    this.isLogin = false;
+
   }
 
 

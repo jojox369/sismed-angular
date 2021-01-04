@@ -7,18 +7,19 @@ import { Convenio } from '../models/convenio';
 import { map } from 'rxjs/operators';
 import { TipoConvenioPaciente } from '../models/tipo-convenio';
 import baseUrl from '../url';
+import { TokenStorageService } from './token-storage-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LaboratorioTipoConvenioService {
-  token = this.userService.token;
+  token = this.tokenStorage.getToken();
 
   message: string;
   httpHeaders = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', this.token);
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { }
 
 
   getAcceptedConvenios(laboratorioId: string): Observable<Convenio[]> {
