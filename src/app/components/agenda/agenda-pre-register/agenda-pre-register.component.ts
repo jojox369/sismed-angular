@@ -113,7 +113,7 @@ export class AgendaPreRegisterComponent implements OnInit {
       rg: [this.paciente.rg],
       dataNascimento: [this.paciente.dataNascimento],
       celular: [this.paciente.celular, Validators.required],
-      tipoConvenio: [this.paciente.tipoConvenio],
+      tipoConvenioId: [this.paciente.tipoConvenio],
 
       endereco: this.fb.group({
         cep: [this.paciente.endereco.cep, Validators.required],
@@ -237,7 +237,7 @@ export class AgendaPreRegisterComponent implements OnInit {
   save() {
     this.loadingDataMessage = 'Agendando paciente';
 
-    this.formPaciente.controls.tipoConvenio.setValue(
+    this.formPaciente.controls.tipoConvenioId.setValue(
       this.formAgenda.controls.tipoConvenio.value
     );
     this.formPaciente.controls.nome.setValue(
@@ -256,7 +256,13 @@ export class AgendaPreRegisterComponent implements OnInit {
       },
       (error) => {
         this.isLoading = false;
-        this.buildMessage('Erro ao tentar salvar o agendamento', 1);
+        if (error.status === 409) {
+
+          this.buildMessage('Médico já possui agendamento para esse dia e horário', 1);
+        } else {
+          this.buildMessage('Erro ao tentar salvar o agendamento', 1);
+
+        }
 
       }
     );
